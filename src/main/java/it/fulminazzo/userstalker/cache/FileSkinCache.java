@@ -31,7 +31,7 @@ public final class FileSkinCache extends SkinCacheImpl {
         ConfigurationSection section = config.getConfigurationSection(username);
         if (section == null) return Optional.empty();
         Long expiry = section.getLong("expiry");
-        if (expiry == null || expiry >= now()) {
+        if (expiry == null || expiry <= now()) {
             config.set(username, null);
             config.save();
             return Optional.empty();
