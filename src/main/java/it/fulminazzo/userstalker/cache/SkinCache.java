@@ -15,19 +15,19 @@ public interface SkinCache {
      * skin value and stores it in the current cache.
      *
      * @param username the username
-     * @return the user skin
+     * @return the user skin, if it was found
      * @throws SkinCacheException an exception thrown in case retrieval is not possible
      */
-    @NotNull String getUserSkin(@NotNull String username) throws SkinCacheException;
+    @NotNull Optional<String> getUserSkin(@NotNull String username) throws SkinCacheException;
 
     /**
      * Looks up for the skin value at the Mojang API endpoints.
      *
      * @param username the username
-     * @return the user skin
+     * @return the user skin, if it was found
      * @throws SkinCacheException an exception thrown in case retrieval is not possible
      */
-    @NotNull String lookupUserSkin(@NotNull String username) throws SkinCacheException;
+    @NotNull Optional<String> lookupUserSkin(@NotNull String username) throws SkinCacheException;
 
     /**
      * Searches the skin for the given username in the current cache.

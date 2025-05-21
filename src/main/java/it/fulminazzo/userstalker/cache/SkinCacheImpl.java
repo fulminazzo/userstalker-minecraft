@@ -17,17 +17,17 @@ import java.util.Optional;
 abstract class SkinCacheImpl implements SkinCache {
 
     @Override
-    public @NotNull String getUserSkin(@NotNull String username) throws SkinCacheException {
+    public @NotNull Optional<String> getUserSkin(@NotNull String username) throws SkinCacheException {
         @NotNull Optional<String> userSkin = findUserSkin(username);
-        if (userSkin.isPresent()) return userSkin.get();
-        String newUserSkin = lookupUserSkin(username);
-        storeSkin(username, newUserSkin);
-        return newUserSkin;
+        if (userSkin.isPresent()) return userSkin;
+        userSkin = lookupUserSkin(username);
+        if (userSkin.isPresent()) storeSkin(username, userSkin.get());
+        return userSkin;
     }
 
     @Override
-    public @NotNull String lookupUserSkin(@NotNull String username) throws SkinCacheException {
-        return "";
+    public @NotNull Optional<String> lookupUserSkin(@NotNull String username) throws SkinCacheException {
+        return Optional.empty();
     }
 
     /**
