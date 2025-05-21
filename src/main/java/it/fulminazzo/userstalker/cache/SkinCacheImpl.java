@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker.cache;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +42,8 @@ abstract class SkinCacheImpl implements SkinCache {
                 .map(a -> {
                     for (int i = 0; i < a.getAsJsonArray().size(); i++) {
                         JsonObject skin = a.getAsJsonArray().get(i).getAsJsonObject();
-                        if (skin.get("name").getAsString().equals("textures"))
+                        JsonElement name = skin.get("name");
+                        if (name != null && name.getAsString().equals("textures"))
                             return skin.get("value").getAsString();
                     }
                     return null;
