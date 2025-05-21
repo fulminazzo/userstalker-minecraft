@@ -15,6 +15,8 @@ import java.util.Optional;
  * A basic implementation of {@link SkinCache}.
  */
 abstract class SkinCacheImpl implements SkinCache {
+    private static final String MOJANG_API_UUID = "https://api.mojang.com/users/profiles/minecraft/%s";
+    private static final String MOJANG_API_SKIN = "https://sessionserver.mojang.com/session/minecraft/profile/%s";
 
     @Override
     public @NotNull Optional<String> getUserSkin(@NotNull String username) throws SkinCacheException {
@@ -27,7 +29,23 @@ abstract class SkinCacheImpl implements SkinCache {
 
     @Override
     public @NotNull Optional<String> lookupUserSkin(@NotNull String username) throws SkinCacheException {
-        return Optional.empty();
+        Optional<JsonObject> jsonObject = getJsonFromURL(String.format(MOJANG_API_UUID, username),
+                "querying Mojang API for player UUID");
+        if (!jsonObject.isPresent()) return Optional.empty();
+        String uuid = jsonObject.get().get("id").getAsString();
+
+        jsonObject = getJsonFromURL(String.format(MOJANG_API_SKIN, uuid),
+                "querying Mojang API for player skin");
+        return jsonObject
+                .map(j -> j.getAsJsonArray("properties"))
+                .map(a -> {
+                    for (int i = 0; i < a.getAsJsonArray().size(); i++) {
+                        JsonObject skin = a.getAsJsonArray().get(i).getAsJsonObject();
+                        if (skin.get("name").getAsString().equals("textures"))
+                            return skin.get("value").getAsString();
+                    }
+                    return null;
+                });
     }
 
     /**
