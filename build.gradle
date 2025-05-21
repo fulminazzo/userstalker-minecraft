@@ -15,6 +15,10 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        name = 'fulminazzo'
+        url = 'https://repo.fulminazzo.it/releases'
+    }
 }
 
 dependencies {
@@ -23,6 +27,9 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:26.0.2'
 
     compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
+
+    implementation 'it.fulminazzo:FulmiCollection:1.7.2'
+    implementation 'it.fulminazzo:Configurations:1.6.3'
 }
 
 processResources {
