@@ -10,6 +10,7 @@ public class TestSkinCache extends SkinCacheImpl {
     private final Map<String, String> cache;
 
     public TestSkinCache() {
+        super(1);
         this.cache = new HashMap<>();
     }
 

@@ -15,9 +15,12 @@ public final class FileSkinCache extends SkinCacheImpl {
     /**
      * Instantiates a new File skin cache.
      *
-     * @param cacheFile the cache file
+     * @param cacheFile         the cache file
+     * @param skinExpireTimeout the skin expire timeout
      */
-    public FileSkinCache(final @NotNull File cacheFile) {
+    public FileSkinCache(final @NotNull File cacheFile,
+                         final long skinExpireTimeout) {
+        super(skinExpireTimeout);
         this.config = FileConfiguration.newConfiguration(cacheFile);
     }
 
