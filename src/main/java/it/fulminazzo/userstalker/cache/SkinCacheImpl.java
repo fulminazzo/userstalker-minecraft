@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker.cache;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -15,9 +16,12 @@ import java.util.Optional;
 /**
  * A basic implementation of {@link SkinCache}.
  */
+@RequiredArgsConstructor
 abstract class SkinCacheImpl implements SkinCache {
     private static final String MOJANG_API_UUID = "https://api.mojang.com/users/profiles/minecraft/%s";
     private static final String MOJANG_API_SKIN = "https://sessionserver.mojang.com/session/minecraft/profile/%s";
+
+    protected final long skinExpireTimeout;
 
     @Override
     public @NotNull Optional<String> getUserSkin(@NotNull String username) throws SkinCacheException {
