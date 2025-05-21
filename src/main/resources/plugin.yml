@@ -1,0 +1,7 @@
+name: ${name}
+description: A Minecraft interface to interact with and log activities on the UserStalker project
+authors: [ Fulminazzo ]
+version: '${version}'
+main: ${group}.${name_lower}.${name}
+api-version: '1.13'
+website: https://github.com/fulminazzo/userstalker
