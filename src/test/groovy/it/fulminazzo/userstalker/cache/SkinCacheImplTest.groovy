@@ -11,6 +11,22 @@ class SkinCacheImplTest extends Specification {
         skinCache = new TestSkinCache()
     }
 
+    def 'test that lookupUserSkin of valid username returns expected value'() {
+        when:
+        def skin = skinCache.lookupUserSkin('Notch')
+
+        then:
+        skin.isPresent()
+    }
+
+    def 'test that lookupUserSkin of not existing player returns empty'() {
+        when:
+        def skin = skinCache.lookupUserSkin('NotExistingAtAll')
+
+        then:
+        !skin.isPresent()
+    }
+
     def 'test that getJsonFromURL returns valid Json'() {
         given:
         def url = 'https://api.github.com/repos/fulminazzo/userstalker'
