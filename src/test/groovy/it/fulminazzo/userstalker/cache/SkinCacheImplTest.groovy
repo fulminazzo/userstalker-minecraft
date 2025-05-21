@@ -16,12 +16,23 @@ class SkinCacheImplTest extends Specification {
         def url = 'https://api.github.com/repos/fulminazzo/userstalker'
 
         when:
-        def json = skinCache.getJsonFromURL(url, ACTION)
+        def json = skinCache.getJsonFromURL(url, ACTION).get()
 
         then:
         json.get('name').asString == 'userstalker'
         json.get('full_name').asString == 'fulminazzo/userstalker'
         json.get('private').asString == 'false'
+    }
+
+    def 'test that getJsonFromURL returns empty optional on 404'() {
+        given:
+        def url = 'https://api.github.com/repos/fulminazzo/notexisting'
+
+        when:
+        def json = skinCache.getJsonFromURL(url, ACTION)
+
+        then:
+        !json.isPresent()
     }
 
     def 'test that getJsonFromURL with invalid URL throws'() {
