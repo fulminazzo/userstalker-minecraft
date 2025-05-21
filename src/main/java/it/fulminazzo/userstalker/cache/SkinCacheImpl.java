@@ -35,23 +35,25 @@ abstract class SkinCacheImpl implements SkinCache {
      *
      * @param url    the url
      * @param action the action to display when throwing {@link SkinCacheException}
-     * @return the json object
+     * @return the json object if the server did not respond with a 404 status code
      * @throws SkinCacheException a wrapper exception for any error
      */
-    @NotNull JsonObject getJsonFromURL(final @NotNull String url,
-                                       final @NotNull String action) throws SkinCacheException {
+    @NotNull Optional<JsonObject> getJsonFromURL(final @NotNull String url,
+                                                 final @NotNull String action) throws SkinCacheException {
         try {
             URL actualUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) actualUrl.openConnection();
             connection.setRequestMethod("GET");
 
             int responseCode = connection.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK)
+            if (responseCode == HttpURLConnection.HTTP_NOT_FOUND)
+                return Optional.empty();
+            else if (responseCode != HttpURLConnection.HTTP_OK)
                 throw new SkinCacheException(String.format("Invalid response code when %s: %s", action, responseCode));
 
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             Gson gson = new Gson();
-            return gson.fromJson(reader, JsonObject.class);
+            return Optional.of(gson.fromJson(reader, JsonObject.class));
         } catch (MalformedURLException e) {
             throw new SkinCacheException("Invalid URL provided: " + url);
         } catch (IOException e) {
