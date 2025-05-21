@@ -1,9 +1,11 @@
 package it.fulminazzo.userstalker.cache;
 
+import it.fulminazzo.yamlparser.configuration.ConfigurationSection;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -26,13 +28,25 @@ public final class FileSkinCache extends SkinCacheImpl {
 
     @Override
     public @NotNull Optional<String> findUserSkin(@NotNull String username) {
-        return Optional.ofNullable(config.getString(username));
+        ConfigurationSection section = config.getConfigurationSection(username);
+        if (section == null) return Optional.empty();
+        Long expiry = section.getLong("expiry");
+        if (expiry == null || expiry >= now()) {
+            config.set(username, null);
+            config.save();
+            return Optional.empty();
+        } else return Optional.ofNullable(section.getString("skin"));
     }
 
     @Override
     public void storeSkin(@NotNull String username, @NotNull String skin) {
-        config.set(username, skin);
+        config.set(username + ".skin", skin);
+        config.set(username + ".expiry", now() + skinExpireTimeout);
         config.save();
+    }
+
+    private long now() {
+        return new Date().getTime();
     }
 
 }
