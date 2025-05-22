@@ -3,6 +3,8 @@ package it.fulminazzo.userstalker.client
 import it.fulminazzo.userstalker.MockFileConfiguration
 import spock.lang.Specification
 
+import java.util.logging.Logger
+
 class USApiClientBuilderTest extends Specification {
 
     private USApiClientBuilder builder
@@ -16,16 +18,17 @@ class USApiClientBuilderTest extends Specification {
         def config = new MockFileConfiguration(['userstalker-http-server': settings])
 
         when:
-        builder.configuration(config).build()
+        builder.logger(logger).configuration(config).build()
 
         then:
         noExceptionThrown()
 
         where:
-        settings << [
-                ['address': 'http://localhost'],
-                ['address': 'http://localhost', 'port': 22525]
-        ]
+        logger                              | settings
+        null                                | ['address': 'http://localhost']
+        null                                | ['address': 'http://localhost', 'port': 22525]
+        Logger.getLogger('UserStalkerTest') | ['address': 'http://localhost']
+        Logger.getLogger('UserStalkerTest') | ['address': 'http://localhost', 'port': 22525]
     }
 
     def 'test that build without ip throws'() {
