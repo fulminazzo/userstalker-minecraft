@@ -39,6 +39,22 @@ public final class SQLProfileCache extends ProfileCacheImpl {
 
     }
 
+    /**
+     * Checks if the skin_cache table exists, if not it creates it.
+     *
+     * @throws ProfileCacheException an exception thrown in case an error occurs
+     */
+    void checkSkinTableExists() throws ProfileCacheException {
+        executeStatement(
+                () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS skin_cache (" +
+                        "username VARCHAR(32) PRIMARY KEY," +
+                        "skin TEXT NOT NULL" +
+                        "expiry TIMESTAMP" +
+                        ")"),
+                PreparedStatement::executeUpdate
+        );
+    }
+
     @Override
     public @NotNull Optional<UUID> findUserUUID(@NotNull String username) throws ProfileCacheException {
         checkUUIDTableExists();
