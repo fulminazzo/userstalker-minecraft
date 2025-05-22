@@ -8,7 +8,7 @@ class FileProfileCacheTest extends Specification {
     private File cacheFile
     private FileConfiguration config
 
-    private FileProfileCache skinCache
+    private FileProfileCache cache
 
     void setup() {
         cacheFile = new File('build/resources/test/cache.json')
@@ -28,12 +28,46 @@ class FileProfileCacheTest extends Specification {
         config.set('not-specified.skin', 'skin')
         config.save()
 
-        skinCache = new FileProfileCache(cacheFile, 100 * 1000)
+        cache = new FileProfileCache(cacheFile, 100 * 1000)
+    }
+
+    def 'test that getUserSkin of non cached queries Mojang API'() {
+        given:
+        def username = 'Notch'
+        def skin = 'Skin'
+
+        when:
+        def actualSkin = cache.getUserSkin(username)
+
+        then:
+        actualSkin.isPresent()
+        actualSkin.get() != skin
+    }
+
+    def 'test that getUserSkin of cached does not query Mojang API'() {
+        given:
+        def username = 'Notch'
+        def skin = 'Skin'
+
+        and:
+        config.set('Notch.skin', skin)
+        config.set('Notch.expiry', new Date().getTime() + 100 * 1000)
+        config.save()
+
+        and:
+        cache = new FileProfileCache(cacheFile, 100 * 1000)
+
+        when:
+        def actualSkin = cache.getUserSkin(username)
+
+        then:
+        actualSkin.isPresent()
+        actualSkin.get() == skin
     }
 
     def 'test that findUserSkin of #username is as expected'() {
         when:
-        def skin = skinCache.findUserSkin(username)
+        def skin = cache.findUserSkin(username)
 
         then:
         skin.isPresent() == expected
@@ -48,7 +82,7 @@ class FileProfileCacheTest extends Specification {
 
     def 'test that storeSkin saves correct value'() {
         when:
-        skinCache.storeSkin('Alex', 'AnotherSkin')
+        cache.storeSkin('Alex', 'AnotherSkin')
         config = FileConfiguration.newConfiguration(cacheFile)
 
         then:
@@ -59,7 +93,7 @@ class FileProfileCacheTest extends Specification {
 
     def 'test that findUserUUID of username is as expected'() {
         when:
-        def uuid = skinCache.findUserUUID('not-expired')
+        def uuid = cache.findUserUUID('not-expired')
 
         then:
         uuid.isPresent()
@@ -70,7 +104,7 @@ class FileProfileCacheTest extends Specification {
         def uuid = UUID.randomUUID()
 
         when:
-        skinCache.storeUUID('Alex', uuid)
+        cache.storeUUID('Alex', uuid)
         config = FileConfiguration.newConfiguration(cacheFile)
 
         then:
