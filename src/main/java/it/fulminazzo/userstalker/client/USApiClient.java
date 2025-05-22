@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,10 +34,16 @@ public final class USApiClient {
      *
      * @param username the username
      * @param ip       the ip
+     * @throws APIClientException the exception thrown in case of any errors
      */
     public void notifyUserLogin(final @NotNull String username,
-                                final @NotNull InetSocketAddress ip) {
-
+                                final @NotNull InetSocketAddress ip) throws APIClientException {
+        UserLogin userLogin = UserLogin.builder()
+                .username(username)
+                .ip(ip.getHostName())
+                .loginDate(LocalDateTime.now())
+                .build();
+        query("POST", "", HttpURLConnection.HTTP_CREATED, null, userLogin);
     }
 
     /**
