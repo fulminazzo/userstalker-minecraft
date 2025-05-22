@@ -23,7 +23,7 @@ public abstract class LoggedBuilder<O, B extends LoggedBuilder<O, B, X>, X exten
      *
      * @return the object built by this builder
      */
-    public abstract @NotNull O build();
+    public abstract @NotNull O build() throws X;
 
     /**
      * Gets the logger.
