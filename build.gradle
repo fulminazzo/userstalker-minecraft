@@ -61,6 +61,7 @@ shadowJar {
     relocate('it.fulminazzo.yamlparser', "it.fulminazzo.${project.name}.yamlparser")
     relocate('it.fulminazzo.tagparser', "it.fulminazzo.${project.name}.tagparser")
     relocate('it.fulminazzo.fulmicollection', "it.fulminazzo.${project.name}.fulmicollection")
+    relocate('it.fulminazzo.yagl', "it.fulminazzo.${project.name}.yagl")
     relocate('com.google.gson', "it.fulminazzo.${project.name}.gson")
     relocate('com.moandjiezana.toml', "it.fulminazzo.${project.name}.toml")
     archiveFileName = "$project.name-${project.version}.jar"
