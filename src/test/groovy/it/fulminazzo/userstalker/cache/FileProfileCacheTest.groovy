@@ -22,6 +22,7 @@ class FileProfileCacheTest extends Specification {
         config.set('expired.expiry', now)
 
         config.set('not-expired.skin', 'skin')
+        config.set('not-expired.uuid', UUID.randomUUID().toString().replace('-', ''))
         config.set('not-expired.expiry', now + 100 * 1000)
 
         config.set('not-specified.skin', 'skin')
@@ -54,6 +55,27 @@ class FileProfileCacheTest extends Specification {
         config.getConfigurationSection('Alex') != null
         config.getString('Alex.skin') == 'AnotherSkin'
         config.getLong('Alex.expiry') > new Date().getTime()
+    }
+
+    def 'test that findUserUUID of username is as expected'() {
+        when:
+        def uuid = skinCache.findUserUUID('not-expired')
+
+        then:
+        uuid.isPresent()
+    }
+
+    def 'test that storeUUID saves correct value'() {
+        given:
+        def uuid = UUID.randomUUID()
+
+        when:
+        skinCache.storeUUID('Alex', uuid)
+        config = FileConfiguration.newConfiguration(cacheFile)
+
+        then:
+        config.getConfigurationSection('Alex') != null
+        config.getString('Alex.uuid') == uuid.toString().replace('-', '')
     }
 
 }
