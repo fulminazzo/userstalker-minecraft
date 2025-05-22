@@ -4,13 +4,13 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import spock.lang.Specification
 
-class SkinCacheImplTest extends Specification {
+class ProfileCacheImplTest extends Specification {
     private static final String ACTION = 'searching for userstalker repository'
 
-    private SkinCacheImpl skinCache
+    private ProfileCacheImpl skinCache
 
     void setup() {
-        skinCache = new TestSkinCache()
+        skinCache = new TestProfileCache()
     }
 
     def 'test that lookupUserSkin of valid username returns expected value'() {
@@ -31,7 +31,7 @@ class SkinCacheImplTest extends Specification {
 
     def 'test that lookupUserSkin of #jsonObject is as expected'() {
         given:
-        def skinCache = Spy(TestSkinCache)
+        def skinCache = Spy(TestProfileCache)
         skinCache.getJsonFromURL(_ as String, _ as String) >> Optional.of(jsonObject)
 
         when:
@@ -76,7 +76,7 @@ class SkinCacheImplTest extends Specification {
         skinCache.getJsonFromURL('invalid', ACTION)
 
         then:
-        def e = thrown(SkinCacheException)
+        def e = thrown(ProfileCacheException)
         e.message == 'Invalid URL provided: invalid'
     }
 
@@ -85,7 +85,7 @@ class SkinCacheImplTest extends Specification {
         skinCache.getJsonFromURL('http://localhost', ACTION)
 
         then:
-        def e = thrown(SkinCacheException)
+        def e = thrown(ProfileCacheException)
         e.message == "IOException when $ACTION: Connection refused (Connection refused)"
     }
 
@@ -94,7 +94,7 @@ class SkinCacheImplTest extends Specification {
         skinCache.getJsonFromURL('https://sessionserver.mojang.com/session/minecraft/profile/aa', ACTION)
 
         then:
-        def e = thrown(SkinCacheException)
+        def e = thrown(ProfileCacheException)
         e.message == "Invalid response code when $ACTION: 400"
     }
 

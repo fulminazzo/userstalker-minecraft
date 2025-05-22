@@ -9,9 +9,9 @@ import java.util.Date;
 import java.util.Optional;
 
 /**
- * An implementation of {@link SkinCache} that uses a file as a local cache.
+ * An implementation of {@link ProfileCache} that uses a file as a local cache.
  */
-public final class FileSkinCache extends SkinCacheImpl {
+public final class FileProfileCache extends ProfileCacheImpl {
     private final @NotNull FileConfiguration config;
 
     /**
@@ -20,8 +20,8 @@ public final class FileSkinCache extends SkinCacheImpl {
      * @param cacheFile         the cache file
      * @param skinExpireTimeout the skin expire timeout
      */
-    public FileSkinCache(final @NotNull File cacheFile,
-                         final long skinExpireTimeout) {
+    public FileProfileCache(final @NotNull File cacheFile,
+                            final long skinExpireTimeout) {
         super(skinExpireTimeout);
         this.config = FileConfiguration.newConfiguration(cacheFile);
     }

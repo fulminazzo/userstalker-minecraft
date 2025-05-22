@@ -4,11 +4,11 @@ import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils
 import spock.lang.Specification
 
-class FileSkinCacheTest extends Specification {
+class FileProfileCacheTest extends Specification {
     private File cacheFile
     private FileConfiguration config
 
-    private FileSkinCache skinCache
+    private FileProfileCache skinCache
 
     void setup() {
         cacheFile = new File('build/resources/test/cache.json')
@@ -27,7 +27,7 @@ class FileSkinCacheTest extends Specification {
         config.set('not-specified.skin', 'skin')
         config.save()
 
-        skinCache = new FileSkinCache(cacheFile, 100 * 1000)
+        skinCache = new FileProfileCache(cacheFile, 100 * 1000)
     }
 
     def 'test that findUserSkin of #username is as expected'() {

@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class TestSkinCache extends SkinCacheImpl {
+public class TestProfileCache extends ProfileCacheImpl {
     private final Map<String, String> cache;
 
-    public TestSkinCache() {
+    public TestProfileCache() {
         super(1);
         this.cache = new HashMap<>();
     }
