@@ -72,10 +72,14 @@ class MockHttpServer implements HttpHandler {
     public void handleGet(HttpExchange httpExchange, String path) throws IOException {
         if (path.equalsIgnoreCase("/valid")) sendResponse(httpExchange, "OK");
         else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, USER_LOGIN);
+        else if (path.equalsIgnoreCase("/top"))
+            sendResponse(httpExchange, showUserLogins ? USER_LOGINS_COUNT : null);
+        else if (path.equalsIgnoreCase("/month"))
+            sendResponse(httpExchange, showUserLogins ? USER_LOGINS_COUNT : null);
+        else if (path.equalsIgnoreCase("/newest"))
+            sendResponse(httpExchange, showUserLogins ? USER_LOGINS : null);
         else if (path.equalsIgnoreCase("/usernames")) sendResponse(httpExchange, usernames);
         else if (path.equalsIgnoreCase("/" + USER_LOGIN.getUsername()))
-            sendResponse(httpExchange, showUserLogins ? USER_LOGINS : null);
-        else if (path.equalsIgnoreCase("/newest"))
             sendResponse(httpExchange, showUserLogins ? USER_LOGINS : null);
         else httpExchange.sendResponseHeaders(404, 0);
     }
