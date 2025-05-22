@@ -34,6 +34,22 @@ class USApiClientTest extends Specification {
         noExceptionThrown()
     }
 
+    def 'test that getNewestUserLogins returns #expected'() {
+        given:
+        client.query('POST', "/showuserlogins", 201, null, serverResponse)
+
+        when:
+        def userLogins = client.getNewestUserLogins()
+
+        then:
+        userLogins == expected
+
+        where:
+        serverResponse || expected
+        false          || []
+        true           || MockHttpServer.USER_LOGINS
+    }
+
     def 'test that getUsernames returns #expected'() {
         given:
         client.query('POST', '/usernames', 201, null, serverResponse)
@@ -55,7 +71,7 @@ class USApiClientTest extends Specification {
         def username = 'Fulminazzo'
 
         and:
-        client.query('POST', "/$username", 201, null, serverResponse)
+        client.query('POST', "/showuserlogins", 201, null, serverResponse)
 
         when:
         def userLogins = client.getUserLogins(username)
