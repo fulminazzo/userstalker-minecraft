@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  */
 @RequiredArgsConstructor
 public final class ProfileCacheBuilder {
+    private static final String FILE_NAME = "skin_cache";
     private static final String PATH = "skin-cache";
 
     private static final CacheType DEFAULT_TYPE = CacheType.JSON;
@@ -31,18 +32,28 @@ public final class ProfileCacheBuilder {
 
     public @NotNull ProfileCache build() {
         CacheType cacheType = loadCacheType();
+        File cacheFile = new File(pluginDirectory, FILE_NAME + "." + cacheType.name().toLowerCase());
         switch (cacheType) {
             case JSON:
             case XML:
             case TOML: {
-                File file = new File(pluginDirectory, "skin_cache." + cacheType.name().toLowerCase());
-                if (!file.exists())
+                if (!cacheFile.exists())
                     try {
-                        FileUtils.createNewFile(file);
+                        FileUtils.createNewFile(cacheFile);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                return new FileProfileCache(file, getExpireTimeout());
+                return new FileProfileCache(cacheFile, getExpireTimeout());
+            }
+            case YAML: {
+                if (!cacheFile.exists()) cacheFile = new File(pluginDirectory, FILE_NAME + ".yml");
+                if (!cacheFile.exists())
+                    try {
+                        FileUtils.createNewFile(cacheFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                return new FileProfileCache(cacheFile, getExpireTimeout());
             }
             default:
                 //TODO:
