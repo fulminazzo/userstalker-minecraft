@@ -28,7 +28,7 @@ public abstract class ConfiguredBuilder<B extends ConfiguredBuilder<B, X>, X ext
      *
      * @return an optional containing the logger (if not null)
      */
-    @NotNull Optional<Logger> getLogger() {
+    protected @NotNull Optional<Logger> getLogger() {
         return Optional.ofNullable(logger);
     }
 
@@ -49,7 +49,7 @@ public abstract class ConfiguredBuilder<B extends ConfiguredBuilder<B, X>, X ext
      * @return the configuration
      * @throws X an exception thrown in case the configuration has not been provided
      */
-    @NotNull FileConfiguration getConfiguration() throws X {
+    protected @NotNull FileConfiguration getConfiguration() throws X {
         if (configuration == null) throw newException("No configuration specified");
         return configuration;
     }
@@ -75,9 +75,9 @@ public abstract class ConfiguredBuilder<B extends ConfiguredBuilder<B, X>, X ext
      * @return the value
      * @throws X the thrown in case no value is provided
      */
-    <T> @NotNull T getConfigurationValue(final @NotNull String path,
-                                         final @NotNull Class<T> clazz,
-                                         final @Nullable T orElse) throws X {
+    protected <T> @NotNull T getConfigurationValue(final @NotNull String path,
+                                                   final @NotNull Class<T> clazz,
+                                                   final @Nullable T orElse) throws X {
         String actualPath = getMainPath() + "." + path;
         T value = getConfiguration().get(actualPath, clazz);
         if (value == null)
