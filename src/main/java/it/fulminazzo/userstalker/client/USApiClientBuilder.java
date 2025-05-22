@@ -17,6 +17,7 @@ final class USApiClientBuilder {
     private static final int DEFAULT_PORT = 80;
 
     private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
+    private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to %s";
 
     private @Nullable Logger logger;
     private @Nullable FileConfiguration configuration;
@@ -93,7 +94,10 @@ final class USApiClientBuilder {
         if (value == null)
             if (orElse == null)
                 throw new APIClientException(String.format(MISSING_VALUE, actualPath));
-            else return orElse;
+            else {
+                getLogger().ifPresent(l -> l.warning(String.format(MISSING_VALUE_DEFAULT, actualPath, orElse)));
+                return orElse;
+            }
         else return value;
     }
 
