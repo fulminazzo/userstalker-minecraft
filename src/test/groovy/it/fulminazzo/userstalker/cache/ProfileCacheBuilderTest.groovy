@@ -212,7 +212,7 @@ class ProfileCacheBuilderTest extends Specification {
     }
 
     def 'test that getPluginDirectory throws if null'() {
-        when:
+        given:
         def builder = new ProfileCacheBuilder(logger, null, null)
 
         when:
@@ -223,7 +223,7 @@ class ProfileCacheBuilderTest extends Specification {
     }
 
     def 'test that getConfiguration throws if null'() {
-        when:
+        given:
         def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, null)
 
         when:
