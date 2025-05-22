@@ -18,6 +18,30 @@ class ProfileCacheBuilderTest extends Specification {
         FileUtils.createFolder(pluginDirectory)
     }
 
+    def 'test that missing database configuration throws'() {
+        given:
+        def file = mockConfiguration('database', 10,
+                dbAddress, dbType, dbName, dbUsername, dbPassword, true
+        )
+
+        and:
+        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+
+        when:
+        builder.build()
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        dbAddress   | dbType | dbName | dbUsername | dbPassword
+        null        | null   | null   | null       | null
+        'localhost' | null   | null   | null       | null
+        'localhost' | 'sql'  | null   | null       | null
+        'localhost' | 'sql'  | 'db'   | null       | null
+        'localhost' | 'sql'  | 'db'   | 'user'     | null
+    }
+
     def 'test that build creates and then reads file with type #type'() {
         given:
         def file = mockConfiguration(type, 10, true)
