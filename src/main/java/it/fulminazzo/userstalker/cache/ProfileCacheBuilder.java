@@ -72,7 +72,7 @@ public final class ProfileCacheBuilder {
      * Gets plugin directory.
      *
      * @return the plugin directory
-     * @throws ProfileCacheException the profile cache exception
+     * @throws ProfileCacheException an exception thrown in case the plugin directory has not been provided
      */
     @NotNull File getPluginDirectory() throws ProfileCacheException {
         if (pluginDirectory == null) throw new ProfileCacheException("No plugin directory specified");
@@ -94,7 +94,7 @@ public final class ProfileCacheBuilder {
      * Gets configuration.
      *
      * @return the configuration
-     * @throws ProfileCacheException the profile cache exception
+     * @throws ProfileCacheException an exception thrown in case the configuration has not been provided
      */
     @NotNull FileConfiguration getConfiguration() throws ProfileCacheException {
         if (configuration == null) throw new ProfileCacheException("No configuration specified");
