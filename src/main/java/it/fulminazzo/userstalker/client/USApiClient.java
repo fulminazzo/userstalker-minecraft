@@ -53,6 +53,7 @@ public final class USApiClient {
      * Gets the top user logins of all time.
      *
      * @return the user logins count
+     * @throws APIClientException the exception thrown in case of any errors
      */
     public @NotNull List<UserLoginCount> getTopUserLogins() throws APIClientException {
         List<?> result = query("GET", "/top", HttpURLConnection.HTTP_OK, List.class, null);
@@ -64,6 +65,7 @@ public final class USApiClient {
      * Gets the top user logins of the month.
      *
      * @return the user logins count
+     * @throws APIClientException the exception thrown in case of any errors
      */
     public @NotNull List<UserLoginCount> getMonthlyUserLogins() throws APIClientException {
         List<?> result = query("GET", "/month", HttpURLConnection.HTTP_OK, List.class, null);
@@ -75,6 +77,7 @@ public final class USApiClient {
      * Gets the newest user logins.
      *
      * @return the user logins
+     * @throws APIClientException the exception thrown in case of any errors
      */
     public @NotNull List<UserLogin> getNewestUserLogins() throws APIClientException {
         List<?> result = query("GET", "/newest", HttpURLConnection.HTTP_OK, List.class, null);
@@ -86,6 +89,7 @@ public final class USApiClient {
      * Gets all the users names that entered the server.
      *
      * @return the usernames
+     * @throws APIClientException the exception thrown in case of any errors
      */
     public @NotNull List<String> getUsernames() throws APIClientException {
         List<?> result = query("GET", "/usernames", HttpURLConnection.HTTP_OK, List.class, null);
@@ -101,6 +105,7 @@ public final class USApiClient {
      *
      * @param username the name of the user
      * @return the user logins
+     * @throws APIClientException the exception thrown in case of any errors
      */
     public @NotNull List<UserLogin> getUserLogins(final @NotNull String username) throws APIClientException {
         List<?> result = query("GET", "/" + username, HttpURLConnection.HTTP_OK, List.class, null);
