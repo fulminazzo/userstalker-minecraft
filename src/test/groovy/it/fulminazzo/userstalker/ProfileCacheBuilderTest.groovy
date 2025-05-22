@@ -1,6 +1,6 @@
 package it.fulminazzo.userstalker
 
-import it.fulminazzo.yamlparser.configuration.ConfigurationSection
+import it.fulminazzo.userstalker.cache.MockFileConfiguration
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import spock.lang.Specification
 
@@ -20,14 +20,10 @@ class ProfileCacheBuilderTest extends Specification {
         actualType == type
     }
 
-    private FileConfiguration mockConfiguration(String type, boolean section) {
-        FileConfiguration configuration = Spy()
-        if (section) {
-            ConfigurationSection skinSection = Spy()
-            skinSection.getString('type') >> type
-            configuration.getConfigurationSection('skin-cache') >> skinSection
-        }
-        return configuration
+    private static FileConfiguration mockConfiguration(String type, boolean section) {
+        def map = [:]
+        if (section) map['skin-cache.type'] = type
+        return new MockFileConfiguration(map)
     }
 
 }
