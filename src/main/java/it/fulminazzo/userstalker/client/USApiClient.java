@@ -133,7 +133,7 @@ public final class USApiClient {
                           final @Nullable Class<T> convertClass,
                           final @Nullable Object input) throws APIClientException {
         final Gson gson = new Gson();
-        final String link = String.format("http://%s:%s%s%s", address, port, API_PATH, path);
+        final String link = String.format("%s:%s%s%s", address, port, API_PATH, path);
         try {
             URL url = new URL(link);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
