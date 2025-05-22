@@ -69,8 +69,10 @@ public final class ProfileCacheBuilder {
      * Gets plugin directory.
      *
      * @return the plugin directory
+     * @throws ProfileCacheException the profile cache exception
      */
-    @NotNull File getPluginDirectory() {
+    @NotNull File getPluginDirectory() throws ProfileCacheException {
+        if (pluginDirectory == null) throw new ProfileCacheException("No plugin directory specified");
         return pluginDirectory;
     }
 
@@ -89,8 +91,10 @@ public final class ProfileCacheBuilder {
      * Gets configuration.
      *
      * @return the configuration
+     * @throws ProfileCacheException the profile cache exception
      */
-    @NotNull FileConfiguration getConfiguration() {
+    @NotNull FileConfiguration getConfiguration() throws ProfileCacheException {
+        if (configuration == null) throw new ProfileCacheException("No configuration specified");
         return configuration;
     }
 
@@ -171,8 +175,9 @@ public final class ProfileCacheBuilder {
      * If no value is provided, it will fall back to {@link #DEFAULT_TIMEOUT}.
      *
      * @return the expiry timeout
+     * @throws ProfileCacheException an exception thrown in case {@link #getConfiguration()} fails
      */
-    long getExpiryTimeout() {
+    long getExpiryTimeout() throws ProfileCacheException {
         String path = PATH + ".expire-time";
         Long expireTimeout = getConfiguration().getLong(path);
         if (expireTimeout == null) {
