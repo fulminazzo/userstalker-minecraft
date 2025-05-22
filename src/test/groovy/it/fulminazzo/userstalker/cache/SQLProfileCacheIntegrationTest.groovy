@@ -21,6 +21,28 @@ class SQLProfileCacheIntegrationTest extends Specification {
         cache = new SQLProfileCache(connection, 100 * 1000)
     }
 
+    def 'test that findUserUUID returns correct value'() {
+        given:
+        def username = 'Notch'
+        def uuid = UUID.randomUUID()
+
+        and:
+        cache.checkUUIDTableExists()
+
+        and:
+        def statement = connection.prepareStatement('INSERT INTO user_cache VALUES (?, ?)')
+        statement.setString(1, username)
+        statement.setString(2, ProfileCacheUtils.toString(uuid))
+        statement.execute()
+
+        when:
+        def actualUUID = cache.findUserUUID(username)
+
+        then:
+        actualUUID.isPresent()
+        actualUUID.get() == uuid
+    }
+
     def 'test that storeUUID saves correct value'() {
         given:
         def username = 'Notch'
