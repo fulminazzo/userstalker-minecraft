@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 /**
  * A builder that contains a {@link FileConfiguration} and a {@link Logger}.
  *
- * @param <B> the type parameter
- * @param <X> the type parameter
+ * @param <B> this builder type
+ * @param <X> the type of the exception thrown by {@link #newException(String)}
  */
 @SuppressWarnings("unchecked")
 public abstract class ConfiguredBuilder<B extends ConfiguredBuilder<B, X>, X extends Throwable> extends LoggedBuilder<B> {

@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 
 /**
  * A builder that contains a {@link Logger}.
+ *
+ * @param <B> this builder type
  */
 @SuppressWarnings("unchecked")
 public abstract class LoggedBuilder<B extends LoggedBuilder<B>> {
