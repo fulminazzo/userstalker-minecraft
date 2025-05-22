@@ -108,6 +108,7 @@ public final class USApiClient {
     /**
      * Queries the API with the given method and path.
      * The response is then converted to JSON.
+     * If the response was 404, null is returned.
      *
      * @param <T>              the type to convert to
      * @param method           the http method
@@ -137,7 +138,8 @@ public final class USApiClient {
                 }
 
             int responseCode = connection.getResponseCode();
-            if (responseCode != expectedResponse)
+            if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) return null;
+            else if (responseCode != expectedResponse)
                 throw new APIClientException(String.format("Invalid response code received from \"%s\": %s", link, responseCode));
 
             final T data;
