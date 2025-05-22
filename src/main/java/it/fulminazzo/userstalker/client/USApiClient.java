@@ -174,4 +174,13 @@ public final class USApiClient {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Instantiates a new builder to obtain an api client instance.
+     *
+     * @return the api client builder
+     */
+    static @NotNull USApiClientBuilder builder() {
+        return new USApiClientBuilder();
+    }
+
 }
