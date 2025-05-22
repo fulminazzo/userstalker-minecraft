@@ -28,7 +28,17 @@ public final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public @NotNull Optional<String> findUserSkin(@NotNull String username) throws ProfileCacheException {
-        return Optional.empty();
+        checkSkinTableExists();
+        return Optional.ofNullable(executeStatement(
+                () -> connection.prepareStatement("SELECT skin FROM skin_cache " +
+                        "WHERE username = ? AND expiry > CURRENT_TIMESTAMP"),
+                s -> {
+                    s.setString(1, username);
+                    ResultSet result = s.executeQuery();
+                    if (result.next()) return result.getString("skin");
+                    else return null;
+                }
+        ));
     }
 
     @Override
