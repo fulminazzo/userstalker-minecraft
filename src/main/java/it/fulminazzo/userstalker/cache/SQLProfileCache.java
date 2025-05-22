@@ -124,6 +124,15 @@ public final class SQLProfileCache extends ProfileCacheImpl {
         );
     }
 
+    @Override
+    public void close() throws ProfileCacheException {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new ProfileCacheException(String.format("SQLException when closing connection with database: %s", e.getMessage()));
+        }
+    }
+
     /**
      * Executes the given function as new statement.
      *

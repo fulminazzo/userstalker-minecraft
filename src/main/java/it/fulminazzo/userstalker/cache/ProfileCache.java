@@ -44,7 +44,7 @@ public interface ProfileCache {
      *
      * @param username the username
      * @param skin     the skin
-     * @throws ProfileCacheException the skin cache exception
+     * @throws ProfileCacheException an exception thrown in case of any errors
      */
     void storeUserSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException;
 
@@ -82,8 +82,15 @@ public interface ProfileCache {
      *
      * @param username the username
      * @param uuid     the uuid
-     * @throws ProfileCacheException the uuid cache exception
+     * @throws ProfileCacheException an exception thrown in case of any errors
      */
     void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException;
+
+    /**
+     * Closes the current cache.
+     *
+     * @throws ProfileCacheException an exception thrown in case of any errors
+     */
+    void close() throws ProfileCacheException;
 
 }

@@ -74,6 +74,11 @@ abstract class ProfileCacheImpl implements ProfileCache {
                 .map(ProfileCacheUtils::fromString);
     }
 
+    @Override
+    public void close() throws ProfileCacheException {
+        // By default, do nothing
+    }
+
     /**
      * Navigates the given URL and returns a {@link JsonObject} from the returned body.
      *
