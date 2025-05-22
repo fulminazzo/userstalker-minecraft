@@ -9,12 +9,20 @@ import java.util.logging.Logger;
 /**
  * A builder that contains a {@link Logger}.
  *
+ * @param <O> the type parameter
  * @param <B> this builder type
  */
 @SuppressWarnings("unchecked")
-public abstract class LoggedBuilder<B extends LoggedBuilder<B>> {
+public abstract class LoggedBuilder<O, B extends LoggedBuilder<O, B>> {
 
     private @Nullable Logger logger;
+
+    /**
+     * Builds a new object.
+     *
+     * @return the object built by this builder
+     */
+    abstract @NotNull O build();
 
     /**
      * Gets the logger.
