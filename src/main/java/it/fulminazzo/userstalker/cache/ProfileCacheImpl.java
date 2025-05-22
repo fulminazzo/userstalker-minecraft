@@ -70,7 +70,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
                 "querying Mojang API for player UUID")
                 .map(j -> j.get("id"))
                 .map(JsonElement::getAsString)
-                .map(UUID::fromString);
+                .map(ProfileCacheImpl::fromString);
     }
 
     /**
@@ -102,6 +102,23 @@ abstract class ProfileCacheImpl implements ProfileCache {
         } catch (IOException e) {
             throw new ProfileCacheException(String.format("IOException when %s: %s", action, e.getMessage()));
         }
+    }
+
+    /**
+     * Converts an undashed UUID to a {@link UUID}.
+     *
+     * @param rawUUID the raw uuid
+     * @return uuid
+     */
+    static @NotNull UUID fromString(final @NotNull String rawUUID) {
+        if (rawUUID.length() != 32) throw new IllegalArgumentException("Invalid UUID: " + rawUUID);
+        return UUID.fromString(String.format("%s-%s-%s-%s-%s",
+                rawUUID.substring(0, 8),
+                rawUUID.substring(8, 12),
+                rawUUID.substring(12, 16),
+                rawUUID.substring(16, 20),
+                rawUUID.substring(20, 32)
+        ));
     }
 
 }
