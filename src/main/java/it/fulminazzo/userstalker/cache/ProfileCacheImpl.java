@@ -106,7 +106,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
         } catch (MalformedURLException e) {
             throw new ProfileCacheException("Invalid URL provided: " + url);
         } catch (IOException e) {
-            throw new ProfileCacheException(String.format("IOException when %s: %s", action, e.getMessage()));
+            throw new ProfileCacheException(action, e);
         }
     }
 

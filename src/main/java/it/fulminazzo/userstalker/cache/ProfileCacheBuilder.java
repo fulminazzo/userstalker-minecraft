@@ -64,8 +64,8 @@ public final class ProfileCacheBuilder {
                     Connection connection = DriverManager.getConnection(jdbcPath, username, password);
                     return new SQLProfileCache(connection, getExpiryTimeout());
                 } catch (SQLException e) {
-                    throw new ProfileCacheException(String.format("SQLException while connecting with database (%s, %s, %s): %s",
-                            jdbcPath, username, password, e.getMessage()));
+                    throw new ProfileCacheException(String.format("connecting with database (%s, %s, %s)",
+                            jdbcPath, username, password), e);
                 }
             }
         }
