@@ -15,7 +15,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -111,7 +110,10 @@ public final class ProfileCacheBuilder {
 
     private @NotNull String getConfigurationString(final @NotNull String path) {
         String actualPath = PATH + "." + path;
-        return Objects.requireNonNull(configuration.getString(actualPath), String.format(MISSING_VALUE, actualPath));
+        String value = configuration.getString(actualPath);
+        if (value == null)
+            throw new IllegalArgumentException(String.format(MISSING_VALUE, actualPath));
+        else return value;
     }
 
     private enum CacheType {
