@@ -69,6 +69,8 @@ class MockHttpServer implements HttpHandler {
         else if (path.equalsIgnoreCase("/usernames")) sendResponse(httpExchange, usernames);
         else if (path.equalsIgnoreCase("/" + USER_LOGIN.getUsername()))
             sendResponse(httpExchange, showUserLogins ? USER_LOGINS : null);
+        else if (path.equalsIgnoreCase("/newest"))
+            sendResponse(httpExchange, showUserLogins ? USER_LOGINS : null);
         else httpExchange.sendResponseHeaders(404, 0);
     }
 
@@ -83,7 +85,7 @@ class MockHttpServer implements HttpHandler {
         } else if (path.equalsIgnoreCase("/usernames")) {
             usernames = readInputBody(httpExchange, List.class);
             sendResponse(httpExchange, 201, "OK");
-        } else if (path.equalsIgnoreCase("/" + USER_LOGIN.getUsername())) {
+        } else if (path.equalsIgnoreCase("/showuserlogins")) {
             showUserLogins = readInputBody(httpExchange, Boolean.class);
             sendResponse(httpExchange, 201, "OK");
         } else httpExchange.sendResponseHeaders(404, 0);
