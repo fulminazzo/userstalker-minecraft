@@ -153,10 +153,28 @@ class ProfileCacheBuilderTest extends Specification {
     }
 
     private static FileConfiguration mockConfiguration(String type, Long timeout, boolean section) {
+        return mockConfiguration(
+                type, timeout,
+                'file', 'h2', '/data/db',
+                'sa', '',
+                section)
+    }
+
+    private static FileConfiguration mockConfiguration(
+            String type, Long timeout,
+            String dbAddress, String dbType, String dbName,
+            String dbUsername, String dbPassword,
+            boolean section
+    ) {
         def map = [:]
         if (section) map['skin-cache'] = [
-                'type'       : type,
-                'expire-time': timeout
+                'type'         : type,
+                'expire-time'  : timeout,
+                'address'      : dbAddress,
+                'database-type': dbType,
+                'database'     : dbName,
+                'username'     : dbUsername,
+                'password'     : dbPassword
         ]
         return new MockFileConfiguration(map)
     }
