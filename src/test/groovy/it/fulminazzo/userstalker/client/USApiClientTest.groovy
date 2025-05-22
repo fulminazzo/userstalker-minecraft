@@ -50,6 +50,25 @@ class USApiClientTest extends Specification {
         ['Alex', 'Fulminazzo'] || ['Alex', 'Fulminazzo']
     }
 
+    def 'test that getUserLogins returns #expected'() {
+        given:
+        def username = 'Fulminazzo'
+
+        and:
+        client.query('POST', "/$username", 201, null, serverResponse)
+
+        when:
+        def userLogins = client.getUserLogins(username)
+
+        then:
+        userLogins == expected
+
+        where:
+        serverResponse || expected
+        false          || []
+        true           || MockHttpServer.USER_LOGINS
+    }
+
     def 'test that query returns valid response'() {
         when:
         def response = client.query('GET', '/valid', 200, String, null)
