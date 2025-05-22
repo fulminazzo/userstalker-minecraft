@@ -98,7 +98,7 @@ public final class USApiClient {
                           final @NotNull String path,
                           final int expectedResponse,
                           final @Nullable Class<T> convertClass) throws APIClientException {
-        final String link = String.format("http://%s:%s%s/%s", address, port, API_PATH, path);
+        final String link = String.format("http://%s:%s%s%s", address, port, API_PATH, path);
         try {
             URL url = new URL(link);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
