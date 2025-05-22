@@ -60,16 +60,20 @@ public class MockHttpServer implements HttpHandler {
             try (InputStreamReader reader = new InputStreamReader(httpExchange.getRequestBody())) {
                 Gson gson = new Gson();
                 UserLogin userLogin = gson.fromJson(reader, UserLogin.class);
-                if (userLogin.equals(USER_LOGIN)) sendResponse(httpExchange, "OK");
-                else sendResponse(httpExchange, "NOT_OK");
+                if (userLogin.equals(USER_LOGIN)) sendResponse(httpExchange, 201, "OK");
+                else sendResponse(httpExchange, 400, "NOT_OK");
             }
         } else httpExchange.sendResponseHeaders(404, 0);
     }
 
     private void sendResponse(HttpExchange httpExchange, Object response) throws IOException {
+        sendResponse(httpExchange, 200, response);
+    }
+
+    private void sendResponse(HttpExchange httpExchange, int status, Object response) throws IOException {
         String rawResponse = new Gson().toJson(response);
         httpExchange.getResponseHeaders().set("Content-Type", "application/json");
-        httpExchange.sendResponseHeaders(200, rawResponse.length());
+        httpExchange.sendResponseHeaders(status, rawResponse.length());
 
         try (OutputStream outputStream = httpExchange.getResponseBody()) {
             outputStream.write(rawResponse.getBytes());
