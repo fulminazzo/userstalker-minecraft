@@ -2,7 +2,6 @@ package it.fulminazzo.userstalker;
 
 import it.fulminazzo.userstalker.cache.FileProfileCache;
 import it.fulminazzo.userstalker.cache.ProfileCache;
-import it.fulminazzo.yamlparser.configuration.ConfigurationSection;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,9 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public final class ProfileCacheBuilder {
     private static final String PATH = "skin-cache";
+    private static final CacheType DEFAULT_TYPE = CacheType.JSON;
 
-    private static final String MISSING_TYPE = "Invalid configuration detected: missing skin-cache.type value. Defaulting to JSON";
+    private static final String MISSING_VALUE_DEFAULT = "Invalid configuration detected: missing %s value. Defaulting to %s";
 
     private final @NotNull Logger logger;
     private final @NotNull File pluginDirectory;
@@ -54,15 +54,11 @@ public final class ProfileCacheBuilder {
     }
 
     private @NotNull CacheType loadCacheType() {
-        ConfigurationSection section = configuration.getConfigurationSection(PATH);
-        if (section == null) {
-            logger.warning(MISSING_TYPE);
-            return CacheType.JSON;
-        }
-        String type = section.getString("type");
+        String path = PATH + ".type";
+        String type = configuration.getString(path);
         if (type == null) {
-            logger.warning(MISSING_TYPE);
-            return CacheType.JSON;
+            logger.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TYPE.name()));
+            return DEFAULT_TYPE;
         }
         return Arrays.stream(CacheType.values())
                 .filter(t -> t.name().equalsIgnoreCase(type))
