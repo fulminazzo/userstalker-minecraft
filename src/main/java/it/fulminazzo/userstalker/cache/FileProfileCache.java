@@ -48,7 +48,7 @@ public final class FileProfileCache extends ProfileCacheImpl {
 
     @Override
     public @NotNull Optional<UUID> findUserUUID(@NotNull String username) {
-        return Optional.ofNullable(config.getString(username + ".uuid")).map(UUID::fromString);
+        return Optional.ofNullable(config.getString(username + ".uuid")).map(ProfileCacheImpl::fromString);
     }
 
     @Override
