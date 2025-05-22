@@ -57,19 +57,20 @@ public class MockHttpServer implements HttpHandler {
 
     public void handlePost(HttpExchange httpExchange, String path) throws IOException {
         if (path.equalsIgnoreCase("/complex")) {
-            try (InputStreamReader reader = new InputStreamReader(httpExchange.getRequestBody())) {
-                Gson gson = new Gson();
-                UserLogin userLogin = gson.fromJson(reader, UserLogin.class);
-                if (userLogin.equals(USER_LOGIN)) sendResponse(httpExchange, 201, "OK");
-                else sendResponse(httpExchange, 400, "NOT_OK");
-            }
+            UserLogin userLogin = readInputBody(httpExchange, UserLogin.class);
+            if (userLogin.equals(USER_LOGIN)) sendResponse(httpExchange, 201, "OK");
+            else sendResponse(httpExchange, 400, "NOT_OK");
         } else if (path.equalsIgnoreCase("")) {
-            try (InputStreamReader reader = new InputStreamReader(httpExchange.getRequestBody())) {
-                Gson gson = new Gson();
-                gson.fromJson(reader, UserLogin.class);
-                sendResponse(httpExchange, 201, null);
-            }
+            readInputBody(httpExchange, UserLogin.class);
+            sendResponse(httpExchange, 201, null);
         } else httpExchange.sendResponseHeaders(404, 0);
+    }
+
+    private <T> T readInputBody(HttpExchange httpExchange, Class<T> clazz) throws IOException {
+        try (InputStreamReader reader = new InputStreamReader(httpExchange.getRequestBody())) {
+            Gson gson = new Gson();
+            return gson.fromJson(reader, clazz);
+        }
     }
 
     private void sendResponse(HttpExchange httpExchange, Object response) throws IOException {
