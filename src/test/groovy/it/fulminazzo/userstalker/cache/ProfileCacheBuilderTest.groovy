@@ -1,6 +1,6 @@
 package it.fulminazzo.userstalker.cache
 
-
+import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils
 import org.h2.tools.Server
