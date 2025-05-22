@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 /**
  * An implementation of {@link ProfileCache} that uses a SQL database as cache.
  */
-public final class SQLProfileCache extends ProfileCacheImpl {
+final class SQLProfileCache extends ProfileCacheImpl {
     private final @NotNull Connection connection;
 
     /**

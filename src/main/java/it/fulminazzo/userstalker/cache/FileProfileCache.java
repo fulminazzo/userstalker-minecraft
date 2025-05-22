@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * An implementation of {@link ProfileCache} that uses a file as a local cache.
  */
-public final class FileProfileCache extends ProfileCacheImpl {
+final class FileProfileCache extends ProfileCacheImpl {
     private final @NotNull FileConfiguration config;
 
     /**
