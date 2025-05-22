@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * A basic implementation of {@link ProfileCache}.
@@ -52,6 +53,24 @@ abstract class ProfileCacheImpl implements ProfileCache {
                     }
                     return null;
                 });
+    }
+
+    @Override
+    public @NotNull Optional<UUID> getUserUUID(@NotNull String username) throws ProfileCacheException {
+        @NotNull Optional<UUID> uuid = findUserUUID(username);
+        if (uuid.isPresent()) return uuid;
+        uuid = lookupUserUUID(username);
+        if (uuid.isPresent()) storeUUID(username, uuid.get());
+        return uuid;
+    }
+
+    @Override
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException {
+        return getJsonFromURL(String.format(MOJANG_API_UUID, username),
+                "querying Mojang API for player UUID")
+                .map(j -> j.get("id"))
+                .map(JsonElement::getAsString)
+                .map(UUID::fromString);
     }
 
     /**
