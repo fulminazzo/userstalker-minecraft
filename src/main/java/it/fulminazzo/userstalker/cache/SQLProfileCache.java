@@ -35,7 +35,7 @@ public final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException {
+    public void storeUserSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException {
 
     }
 
@@ -54,7 +54,7 @@ public final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
+    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
         checkUUIDTableExists();
         executeStatement(
                 () -> connection.prepareStatement("INSERT INTO uuid_cache VALUES (?, ?)"),

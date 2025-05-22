@@ -46,7 +46,7 @@ public interface ProfileCache {
      * @param skin     the skin
      * @throws ProfileCacheException the skin cache exception
      */
-    void storeSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException;
+    void storeUserSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException;
 
     /**
      * Uses {@link #findUserUUID(String)} to search for the cached value of the uuid.
@@ -84,6 +84,6 @@ public interface ProfileCache {
      * @param uuid     the uuid
      * @throws ProfileCacheException the uuid cache exception
      */
-    void storeUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException;
+    void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException;
 
 }

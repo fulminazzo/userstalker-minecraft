@@ -23,7 +23,7 @@ public class TestProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeSkin(@NotNull String username, @NotNull String skin) {
+    public void storeUserSkin(@NotNull String username, @NotNull String skin) {
         skinCache.put(username, skin);
     }
 
@@ -33,7 +33,7 @@ public class TestProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
+    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
         uuidCache.put(username, uuid);
     }
 

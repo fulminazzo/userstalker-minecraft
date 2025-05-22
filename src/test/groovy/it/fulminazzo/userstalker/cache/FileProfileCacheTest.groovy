@@ -80,9 +80,9 @@ class FileProfileCacheTest extends Specification {
         'not-existing'  || false
     }
 
-    def 'test that storeSkin saves correct value'() {
+    def 'test that storeUserSkin saves correct value'() {
         when:
-        cache.storeSkin('Alex', 'AnotherSkin')
+        cache.storeUserSkin('Alex', 'AnotherSkin')
         config = FileConfiguration.newConfiguration(cacheFile)
 
         then:
@@ -133,12 +133,12 @@ class FileProfileCacheTest extends Specification {
         uuid.isPresent()
     }
 
-    def 'test that storeUUID saves correct value'() {
+    def 'test that storeUserUUID saves correct value'() {
         given:
         def uuid = UUID.randomUUID()
 
         when:
-        cache.storeUUID('Alex', uuid)
+        cache.storeUserUUID('Alex', uuid)
         config = FileConfiguration.newConfiguration(cacheFile)
 
         then:

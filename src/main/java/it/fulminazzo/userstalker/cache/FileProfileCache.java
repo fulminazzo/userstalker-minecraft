@@ -39,7 +39,7 @@ public final class FileProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeSkin(@NotNull String username, @NotNull String skin) {
+    public void storeUserSkin(@NotNull String username, @NotNull String skin) {
         config.set(username + ".skin", skin);
         config.set(username + ".expiry", ProfileCacheUtils.now() + skinExpireTimeout);
         config.save();
@@ -51,7 +51,7 @@ public final class FileProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeUUID(@NotNull String username, @NotNull UUID uuid) {
+    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) {
         config.set(username + ".uuid", ProfileCacheUtils.toString(uuid));
         config.save();
     }

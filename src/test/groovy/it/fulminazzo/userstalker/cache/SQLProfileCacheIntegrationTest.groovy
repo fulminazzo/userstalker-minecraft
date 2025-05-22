@@ -43,13 +43,13 @@ class SQLProfileCacheIntegrationTest extends Specification {
         actualUUID.get() == uuid
     }
 
-    def 'test that storeUUID saves correct value'() {
+    def 'test that storeUserUUID saves correct value'() {
         given:
         def username = 'Notch'
         def uuid = UUID.randomUUID()
 
         when:
-        cache.storeUUID(username, uuid)
+        cache.storeUserUUID(username, uuid)
 
         and:
         def resultSet = connection
