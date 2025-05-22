@@ -56,7 +56,7 @@ class MockHttpServer implements HttpHandler {
     public void handleGet(HttpExchange httpExchange, String path) throws IOException {
         if (path.equalsIgnoreCase("/valid")) sendResponse(httpExchange, "OK");
         else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, USER_LOGIN);
-        else if (path.equalsIgnoreCase("usernames")) sendResponse(httpExchange, usernames);
+        else if (path.equalsIgnoreCase("/usernames")) sendResponse(httpExchange, usernames);
         else httpExchange.sendResponseHeaders(404, 0);
     }
 
@@ -68,7 +68,7 @@ class MockHttpServer implements HttpHandler {
         } else if (path.equalsIgnoreCase("")) {
             readInputBody(httpExchange, UserLogin.class);
             sendResponse(httpExchange, 201, null);
-        } else if (path.equalsIgnoreCase("usernames")) {
+        } else if (path.equalsIgnoreCase("/usernames")) {
             usernames = readInputBody(httpExchange, List.class);
             sendResponse(httpExchange, 201, "OK");
         } else httpExchange.sendResponseHeaders(404, 0);

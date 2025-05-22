@@ -82,7 +82,7 @@ public final class USApiClient {
      * @return the usernames
      */
     public @NotNull List<String> getUsernames() throws APIClientException {
-        List<?> result = query("GET", "usernames", HttpURLConnection.HTTP_OK, List.class, null);
+        List<?> result = query("GET", "/usernames", HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
         return result.stream()
                 .filter(Objects::nonNull)
