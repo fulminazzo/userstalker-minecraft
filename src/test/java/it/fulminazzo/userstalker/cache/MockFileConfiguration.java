@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker.cache;
 
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
+import it.fulminazzo.yamlparser.configuration.IConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -13,6 +14,7 @@ public class MockFileConfiguration extends FileConfiguration {
     public MockFileConfiguration(final @NotNull Map<?, ?> data) {
         super("build/resources/main/config.yml");
         this.data = data;
+        this.map.putAll(IConfiguration.generalToConfigMap(this, data));
     }
 
     @Override
