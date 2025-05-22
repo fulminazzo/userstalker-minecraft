@@ -33,7 +33,22 @@ public final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public void storeUserSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException {
+        @NotNull Optional<String> storedSkin = findUserSkin(username);
+        String query = storedSkin.isPresent() ?
+                "UPDATE skin_cache SET skin = ?, expiry = ? WHERE username = ?" :
+                "INSERT INTO skin_cache (skin, expiry, username) VALUES (?, ?, ?)"
+                ;
 
+        executeStatement(
+                () -> connection.prepareStatement(query),
+                s -> {
+                    s.setString(1, skin);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis() + skinExpireTimeout);
+                    s.setTimestamp(2, timestamp);
+                    s.setString(3, username);
+                    return s.executeUpdate();
+                }
+        );
     }
 
     /**
@@ -93,7 +108,7 @@ public final class SQLProfileCache extends ProfileCacheImpl {
         executeStatement(
                 () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS uuid_cache (" +
                         "username VARCHAR(32) PRIMARY KEY," +
-                        "id VARCHAR(32) NOT NULL" +
+                        "uuid VARCHAR(32) NOT NULL" +
                         ")"),
                 PreparedStatement::executeUpdate
         );
