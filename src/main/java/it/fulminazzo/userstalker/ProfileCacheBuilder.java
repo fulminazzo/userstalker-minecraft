@@ -1,10 +1,15 @@
 package it.fulminazzo.userstalker;
 
+import it.fulminazzo.userstalker.cache.FileProfileCache;
+import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.yamlparser.configuration.ConfigurationSection;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
+import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -19,7 +24,34 @@ public final class ProfileCacheBuilder {
     private static final String MISSING_TYPE = "Invalid configuration detected: missing skin-cache.type value. Defaulting to JSON";
 
     private final @NotNull Logger logger;
+    private final @NotNull File pluginDirectory;
     private final @NotNull FileConfiguration configuration;
+
+    public @NotNull ProfileCache build() {
+        CacheType cacheType = loadCacheType();
+        switch (cacheType) {
+            case JSON:
+            case XML:
+            case TOML: {
+                File file = new File(pluginDirectory, "skin_cache." + cacheType.name().toLowerCase());
+                if (!file.exists())
+                    try {
+                        FileUtils.createNewFile(file);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                return new FileProfileCache(file, getExpireTimeout());
+            }
+            default:
+                //TODO:
+                return null;
+        }
+    }
+
+    private long getExpireTimeout() {
+        //TODO:
+        return 0;
+    }
 
     private @NotNull CacheType loadCacheType() {
         ConfigurationSection section = configuration.getConfigurationSection(PATH);
