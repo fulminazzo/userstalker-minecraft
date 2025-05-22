@@ -34,6 +34,22 @@ class USApiClientTest extends Specification {
         noExceptionThrown()
     }
 
+    def 'test that getMonthlyUserLogins returns #expected'() {
+        given:
+        client.query('POST', "/showuserlogins", 201, null, serverResponse)
+
+        when:
+        def userLogins = client.getMonthlyUserLogins()
+
+        then:
+        userLogins == expected
+
+        where:
+        serverResponse || expected
+        false          || []
+        true           || MockHttpServer.USER_LOGINS_COUNT
+    }
+
     def 'test that getNewestUserLogins returns #expected'() {
         given:
         client.query('POST', "/showuserlogins", 201, null, serverResponse)
