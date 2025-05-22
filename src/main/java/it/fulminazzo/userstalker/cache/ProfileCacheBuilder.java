@@ -48,7 +48,7 @@ public final class ProfileCacheBuilder {
                     try {
                         FileUtils.createNewFile(cacheFile);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new ProfileCacheException(e.getMessage());
                     }
                 return new FileProfileCache(cacheFile, getExpireTimeout());
             }
@@ -58,7 +58,7 @@ public final class ProfileCacheBuilder {
                     try {
                         FileUtils.createNewFile(cacheFile);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new ProfileCacheException(e.getMessage());
                     }
                 return new FileProfileCache(cacheFile, getExpireTimeout());
             }
@@ -89,7 +89,7 @@ public final class ProfileCacheBuilder {
         } else return expireTimeout * 1000;
     }
 
-    private @NotNull CacheType loadCacheType() {
+    private @NotNull CacheType loadCacheType() throws ProfileCacheException {
         String path = PATH + ".type";
         String type = configuration.getString(path);
         if (type == null) {
@@ -99,16 +99,16 @@ public final class ProfileCacheBuilder {
         return Arrays.stream(CacheType.values())
                 .filter(t -> t.name().equalsIgnoreCase(type))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new ProfileCacheException(
                         "Invalid configuration detected, unknown cache type: " + type
                 ));
     }
 
-    private @NotNull String getConfigurationString(final @NotNull String path) {
+    private @NotNull String getConfigurationString(final @NotNull String path) throws ProfileCacheException {
         String actualPath = PATH + "." + path;
         String value = configuration.getString(actualPath);
         if (value == null)
-            throw new IllegalArgumentException(String.format(MISSING_VALUE, actualPath));
+            throw new ProfileCacheException(String.format(MISSING_VALUE, actualPath));
         else return value;
     }
 

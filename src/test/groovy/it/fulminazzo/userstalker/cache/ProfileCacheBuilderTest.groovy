@@ -67,7 +67,7 @@ class ProfileCacheBuilderTest extends Specification {
         builder.build()
 
         then:
-        thrown(IllegalArgumentException)
+        thrown(ProfileCacheException)
 
         where:
         dbAddress   | dbType | dbName | dbUsername | dbPassword
@@ -191,7 +191,7 @@ class ProfileCacheBuilderTest extends Specification {
         builder.loadCacheType()
 
         then:
-        thrown(IllegalArgumentException)
+        thrown(ProfileCacheException)
     }
 
     def 'test that mock returns correct type'() {
