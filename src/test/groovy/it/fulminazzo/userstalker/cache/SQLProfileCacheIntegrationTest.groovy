@@ -43,9 +43,8 @@ class SQLProfileCacheIntegrationTest extends Specification {
         actualUUID.get() == uuid
     }
 
-    def 'test that storeUserUUID saves correct value'() {
+    def 'test that storeUserUUID of #username saves correct value'() {
         given:
-        def username = 'Notch'
         def uuid = UUID.randomUUID()
 
         when:
@@ -53,12 +52,15 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
         and:
         def resultSet = connection
-                .prepareStatement('SELECT id FROM uuid_cache WHERE username = \'Notch\'')
+                .prepareStatement("SELECT uuid FROM uuid_cache WHERE username = '$username'")
                 .executeQuery()
 
         then:
         resultSet.next()
         resultSet.getString(1) == ProfileCacheUtils.toString(uuid)
+
+        where:
+        username << ['Notch', 'Steve']
     }
 
     def 'test context loads'() {
