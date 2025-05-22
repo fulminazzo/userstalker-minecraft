@@ -44,22 +44,12 @@ public final class ProfileCacheBuilder {
             case JSON:
             case XML:
             case TOML: {
-                if (!cacheFile.exists())
-                    try {
-                        FileUtils.createNewFile(cacheFile);
-                    } catch (IOException e) {
-                        throw new ProfileCacheException(e.getMessage());
-                    }
+                checkFileExists(cacheFile);
                 return new FileProfileCache(cacheFile, getExpireTimeout());
             }
             case YAML: {
                 if (!cacheFile.exists()) cacheFile = new File(pluginDirectory, FILE_NAME + ".yml");
-                if (!cacheFile.exists())
-                    try {
-                        FileUtils.createNewFile(cacheFile);
-                    } catch (IOException e) {
-                        throw new ProfileCacheException(e.getMessage());
-                    }
+                checkFileExists(cacheFile);
                 return new FileProfileCache(cacheFile, getExpireTimeout());
             }
             default: {
@@ -110,6 +100,15 @@ public final class ProfileCacheBuilder {
         if (value == null)
             throw new ProfileCacheException(String.format(MISSING_VALUE, actualPath));
         else return value;
+    }
+
+    private static void checkFileExists(final @NotNull File cacheFile) throws ProfileCacheException {
+        if (!cacheFile.exists())
+            try {
+                FileUtils.createNewFile(cacheFile);
+            } catch (IOException e) {
+                throw new ProfileCacheException(e.getMessage());
+            }
     }
 
     private enum CacheType {
