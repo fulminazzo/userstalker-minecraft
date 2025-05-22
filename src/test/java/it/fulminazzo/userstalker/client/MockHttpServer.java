@@ -63,6 +63,12 @@ public class MockHttpServer implements HttpHandler {
                 if (userLogin.equals(USER_LOGIN)) sendResponse(httpExchange, 201, "OK");
                 else sendResponse(httpExchange, 400, "NOT_OK");
             }
+        } else if (path.equalsIgnoreCase("")) {
+            try (InputStreamReader reader = new InputStreamReader(httpExchange.getRequestBody())) {
+                Gson gson = new Gson();
+                gson.fromJson(reader, UserLogin.class);
+                sendResponse(httpExchange, 201, null);
+            }
         } else httpExchange.sendResponseHeaders(404, 0);
     }
 
