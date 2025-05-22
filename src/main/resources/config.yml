@@ -1,0 +1,16 @@
+###########################################################
+#               UserStalker config.yml file               #
+###########################################################
+
+# Skin cache section.
+# These skins are then used by the plugin when opening up
+# GUIs that contain players heads.
+skin-cache:
+  # Defines how the users skins should be stored.
+  # Accepted values: YAML, JSON, TOML, XML or DATABASE
+  type: JSON
+  # Only valid if type = DATABASE
+  address: "localhost"
+  database: 'userstalker'
+  username: "sa"
+  password: ""
