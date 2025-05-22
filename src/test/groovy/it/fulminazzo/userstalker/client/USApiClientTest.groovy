@@ -86,13 +86,13 @@ class USApiClientTest extends Specification {
         response == 'OK'
     }
 
-    def 'test that query of not existing returns 404'() {
+    def 'test that query of not existing returns 405'() {
         when:
-        client.query('GET', '/not-existing', 200, null, null)
+        client.query('PUT', '/not-existing', 200, null, null)
 
         then:
         def e = thrown(APIClientException)
-        e.message.contains('404')
+        e.message.contains('405')
     }
 
     def 'test that query rethrows IOException with APIClientException'() {
