@@ -30,6 +30,11 @@ public final class ProfileCacheBuilder {
     private final @NotNull File pluginDirectory;
     private final @NotNull FileConfiguration configuration;
 
+    /**
+     * Builds the {@link ProfileCache} from the configurations in the config file.
+     *
+     * @return the profile cache
+     */
     public @NotNull ProfileCache build() {
         CacheType cacheType = loadCacheType();
         File cacheFile = new File(pluginDirectory, FILE_NAME + "." + cacheType.name().toLowerCase());
