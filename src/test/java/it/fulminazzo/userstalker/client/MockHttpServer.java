@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
 
 class MockHttpServer implements HttpHandler {
@@ -20,12 +21,21 @@ class MockHttpServer implements HttpHandler {
             .ip("127.0.0.1")
             .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 18))
             .build();
+    static final List<UserLogin> USER_LOGINS = Arrays.asList(
+            USER_LOGIN,
+            UserLogin.builder()
+                    .username("Fulminazzo")
+                    .ip("127.0.0.1")
+                    .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 52))
+                    .build()
+    );
 
     private static final String API_PATH = "/api/v1/userlogins";
 
     private final HttpServer server;
 
     private List<?> usernames;
+    private boolean showUserLogins;
 
     public MockHttpServer(int port) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -57,6 +67,8 @@ class MockHttpServer implements HttpHandler {
         if (path.equalsIgnoreCase("/valid")) sendResponse(httpExchange, "OK");
         else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, USER_LOGIN);
         else if (path.equalsIgnoreCase("/usernames")) sendResponse(httpExchange, usernames);
+        else if (path.equalsIgnoreCase("/" + USER_LOGIN.getUsername()))
+            sendResponse(httpExchange, showUserLogins ? USER_LOGIN : null);
         else httpExchange.sendResponseHeaders(404, 0);
     }
 
@@ -70,6 +82,9 @@ class MockHttpServer implements HttpHandler {
             sendResponse(httpExchange, 201, null);
         } else if (path.equalsIgnoreCase("/usernames")) {
             usernames = readInputBody(httpExchange, List.class);
+            sendResponse(httpExchange, 201, "OK");
+        } else if (path.equalsIgnoreCase("/" + USER_LOGIN.getUsername())) {
+            showUserLogins = readInputBody(httpExchange, Boolean.class);
             sendResponse(httpExchange, 201, "OK");
         } else httpExchange.sendResponseHeaders(404, 0);
     }
