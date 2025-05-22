@@ -129,7 +129,7 @@ class ProfileCacheImplTest extends Specification {
     private static JsonObject createData(Object... data) {
         Gson gson = new Gson()
         String raw = gson.toJson([
-                'id'        : 'mock-id',
+                'id'        : UUID.randomUUID().toString().replace('-', ''),
                 'properties': data
         ])
         return gson.fromJson(raw, JsonObject)
