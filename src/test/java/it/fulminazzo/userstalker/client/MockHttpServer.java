@@ -14,13 +14,14 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
-public class MockHttpServer implements HttpHandler {
-    private static final String API_PATH = "/api/v1/userlogins";
-    public static final UserLogin USER_LOGIN = UserLogin.builder()
+class MockHttpServer implements HttpHandler {
+    static final UserLogin USER_LOGIN = UserLogin.builder()
             .username("Fulminazzo")
             .ip("127.0.0.1")
             .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 18))
             .build();
+
+    private static final String API_PATH = "/api/v1/userlogins";
 
     private final HttpServer server;
 
