@@ -84,7 +84,10 @@ public final class USApiClient {
     public @NotNull List<String> getUsernames() throws APIClientException {
         List<?> result = query("GET", "usernames", HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
-        return result.stream().filter(Objects::nonNull).map(Object::toString).collect(Collectors.toList());
+        return result.stream()
+                .filter(Objects::nonNull)
+                .map(Object::toString)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -93,8 +96,13 @@ public final class USApiClient {
      * @param username the name of the user
      * @return the user logins
      */
-    public @NotNull List<UserLogin> getUserLogins(final @NotNull String username) {
-        return null;
+    public @NotNull List<UserLogin> getUserLogins(final @NotNull String username) throws APIClientException {
+        List<?> result = query("GET", username, HttpURLConnection.HTTP_OK, List.class, null);
+        if (result == null) return new ArrayList<>();
+        return result.stream()
+                .filter(Objects::nonNull)
+                .map(o -> (UserLogin) o)
+                .collect(Collectors.toList());
     }
 
     /**
