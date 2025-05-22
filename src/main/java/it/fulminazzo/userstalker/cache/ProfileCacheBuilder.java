@@ -32,6 +32,52 @@ public final class ProfileCacheBuilder {
     private @Nullable FileConfiguration configuration;
 
     /**
+     * Internal constructor, for testing purposes.
+     *
+     * @param logger          the logger
+     * @param pluginDirectory the plugin directory
+     * @param configuration   the configuration
+     */
+    ProfileCacheBuilder(final @NotNull Logger logger,
+                        final @NotNull File pluginDirectory,
+                        final @NotNull FileConfiguration configuration) {
+        logger(logger).pluginDirectory(pluginDirectory).configuration(configuration);
+    }
+
+    /**
+     * Sets the logger.
+     *
+     * @param logger the logger
+     * @return this profile cache builder
+     */
+    public @NotNull ProfileCacheBuilder logger(@Nullable Logger logger) {
+        this.logger = logger;
+        return this;
+    }
+
+    /**
+     * Sets the plugin directory.
+     *
+     * @param pluginDirectory the plugin directory
+     * @return this profile cache builder
+     */
+    public @NotNull ProfileCacheBuilder pluginDirectory(@Nullable File pluginDirectory) {
+        this.pluginDirectory = pluginDirectory;
+        return this;
+    }
+
+    /**
+     * Sets the configuration.
+     *
+     * @param configuration the configuration
+     * @return this profile cache builder
+     */
+    public @NotNull ProfileCacheBuilder configuration(@Nullable FileConfiguration configuration) {
+        this.configuration = configuration;
+        return this;
+    }
+
+    /**
      * Builds the {@link ProfileCache} from the configurations in the config file.
      *
      * @return the profile cache
