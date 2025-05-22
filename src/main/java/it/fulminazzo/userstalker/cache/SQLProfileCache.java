@@ -3,10 +3,7 @@ package it.fulminazzo.userstalker.cache;
 import it.fulminazzo.fulmicollection.interfaces.functions.FunctionException;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -59,11 +56,11 @@ public final class SQLProfileCache extends ProfileCacheImpl {
     public @NotNull Optional<UUID> findUserUUID(@NotNull String username) throws ProfileCacheException {
         checkUUIDTableExists();
         return Optional.ofNullable(executeStatement(
-                () -> connection.prepareStatement("SELECT id FROM uuid_cache WHERE username = ?"),
+                () -> connection.prepareStatement("SELECT uuid FROM uuid_cache WHERE username = ?"),
                 s -> {
                     s.setString(1, username);
                     ResultSet result = s.executeQuery();
-                    if (result.next()) return result.getString("id");
+                    if (result.next()) return result.getString("uuid");
                     else return null;
                 }
         )).map(ProfileCacheUtils::fromString);
@@ -71,12 +68,17 @@ public final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
-        checkUUIDTableExists();
+        @NotNull Optional<UUID> storedUUID = findUserUUID(username);
+        String query = storedUUID.isPresent() ?
+                "UPDATE uuid_cache SET uuid = ? WHERE username = ?" :
+                "INSERT INTO uuid_cache (uuid, username) VALUES (?, ?)"
+                ;
+
         executeStatement(
-                () -> connection.prepareStatement("INSERT INTO uuid_cache VALUES (?, ?)"),
+                () -> connection.prepareStatement(query),
                 s -> {
-                    s.setString(1, username);
-                    s.setString(2, ProfileCacheUtils.toString(uuid));
+                    s.setString(1, ProfileCacheUtils.toString(uuid));
+                    s.setString(2, username);
                     return s.executeUpdate();
                 }
         );
