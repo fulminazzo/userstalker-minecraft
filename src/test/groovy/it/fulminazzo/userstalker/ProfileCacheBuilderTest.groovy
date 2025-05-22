@@ -3,20 +3,40 @@ package it.fulminazzo.userstalker
 import it.fulminazzo.userstalker.cache.FileProfileCache
 import it.fulminazzo.userstalker.cache.MockFileConfiguration
 import it.fulminazzo.userstalker.cache.ProfileCacheException
+import it.fulminazzo.userstalker.cache.SQLProfileCache
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils
+import org.h2.tools.Server
 import spock.lang.Specification
 
 import java.util.logging.Logger
 
 class ProfileCacheBuilderTest extends Specification {
 
+    private static final File PLUGIN_DIRECTORY = new File('build/resources/test/ProfileCacheBuilderTest')
     private final Logger logger = Logger.getLogger('TestUserStalker')
-    private final File pluginDirectory = new File('build/resources/test/ProfileCacheBuilderTest')
 
     void setup() {
-        if (pluginDirectory.exists()) FileUtils.deleteFolder(pluginDirectory)
-        FileUtils.createFolder(pluginDirectory)
+        if (PLUGIN_DIRECTORY.exists()) FileUtils.deleteFolder(PLUGIN_DIRECTORY)
+        FileUtils.createFolder(PLUGIN_DIRECTORY)
+    }
+
+    def 'test that build builds SQLProfileCache on DATABASE type'() {
+        given:
+        def file = mockConfiguration('database', 10, true)
+
+        and:
+        def server = Server.createTcpServer('-tcpAllowOthers', '-ifNotExists').start()
+
+        and:
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
+
+        when:
+        def cache = builder.build()
+
+        then:
+        cache instanceof SQLProfileCache
+        server.stop()
     }
 
     def 'test that connection to invalid database throws'() {
@@ -28,7 +48,7 @@ class ProfileCacheBuilderTest extends Specification {
         )
 
         and:
-        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
         builder.build()
@@ -44,7 +64,7 @@ class ProfileCacheBuilderTest extends Specification {
         )
 
         and:
-        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
         builder.build()
@@ -66,14 +86,14 @@ class ProfileCacheBuilderTest extends Specification {
         def file = mockConfiguration(type, 10, true)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
         def firstCache = builder.build()
         def secondCache = builder.build()
 
         then:
-        new File(pluginDirectory, "${ProfileCacheBuilder.FILE_NAME}.$extension").exists()
+        new File(PLUGIN_DIRECTORY, "${ProfileCacheBuilder.FILE_NAME}.$extension").exists()
         firstCache instanceof FileProfileCache
         firstCache.config.class == expectedClass
         secondCache instanceof FileProfileCache
@@ -89,20 +109,20 @@ class ProfileCacheBuilderTest extends Specification {
 
     def 'test that build with YAML uses file with .yaml extension'() {
         given:
-        def cacheFile = new File(pluginDirectory, "${ProfileCacheBuilder.FILE_NAME}.yaml")
+        def cacheFile = new File(PLUGIN_DIRECTORY, "${ProfileCacheBuilder.FILE_NAME}.yaml")
         FileUtils.createNewFile(cacheFile)
 
         and:
         def file = mockConfiguration('YAML', 10, true)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
         def cache = builder.build()
 
         then:
-        !new File(pluginDirectory, "${ProfileCacheBuilder.FILE_NAME}.yml").exists()
+        !new File(PLUGIN_DIRECTORY, "${ProfileCacheBuilder.FILE_NAME}.yml").exists()
         cache instanceof FileProfileCache
         cache.config.class == Class.forName('it.fulminazzo.yamlparser.configuration.YAMLConfiguration')
     }
@@ -112,7 +132,7 @@ class ProfileCacheBuilderTest extends Specification {
         def file = mockConfiguration(null, timeout, true)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
         def actualTimeout = builder.getExpireTimeout()
@@ -131,7 +151,7 @@ class ProfileCacheBuilderTest extends Specification {
         def file = mockConfiguration(type, true)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
         def actualType = builder.loadCacheType()
@@ -154,7 +174,7 @@ class ProfileCacheBuilderTest extends Specification {
         def file = mockConfiguration(null, false)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
         def actualType = builder.loadCacheType()
@@ -168,7 +188,7 @@ class ProfileCacheBuilderTest extends Specification {
         def file = mockConfiguration('not-valid', true)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
         builder.loadCacheType()
@@ -198,7 +218,7 @@ class ProfileCacheBuilderTest extends Specification {
     private static FileConfiguration mockConfiguration(String type, Long timeout, boolean section) {
         return mockConfiguration(
                 type, timeout,
-                'file', 'h2', '/data/db',
+                "localhost/./$PLUGIN_DIRECTORY.path", 'h2:tcp', 'testdb',
                 'sa', '',
                 section)
     }
