@@ -5,13 +5,13 @@ import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -30,9 +30,11 @@ public final class USApiClient {
     /**
      * Notifies the API of a new user login.
      *
-     * @param player the user
+     * @param username the username
+     * @param ip       the ip
      */
-    public void notifyUserLogin(final @NotNull Player player) {
+    public void notifyUserLogin(final @NotNull String username,
+                                final @NotNull InetSocketAddress ip) {
 
     }
 
