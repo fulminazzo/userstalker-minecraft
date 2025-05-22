@@ -1,7 +1,8 @@
-package it.fulminazzo.userstalker;
+package it.fulminazzo.userstalker.client;
 
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import java.util.List;
  * This class directly interfaces with the REST API
  * of UserStalker to retrieve and share data.
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class USApiClient {
     private static final String API_PATH = "/api/v1/userlogins";
 
