@@ -65,7 +65,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
         then:
         resultSet.next()
-        resultSet.getString(1) == username
+        resultSet.getString(1) == skin
         resultSet.getTimestamp(2).after(new Timestamp(System.currentTimeMillis()))
 
         where:
