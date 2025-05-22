@@ -99,9 +99,11 @@ public final class USApiClient {
     public @NotNull List<UserLogin> getUserLogins(final @NotNull String username) throws APIClientException {
         List<?> result = query("GET", "/" + username, HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
+        Gson gson = new Gson();
         return result.stream()
                 .filter(Objects::nonNull)
-                .map(o -> (UserLogin) o)
+                .map(gson::toJson)
+                .map(o -> gson.fromJson(o, UserLogin.class))
                 .collect(Collectors.toList());
     }
 
