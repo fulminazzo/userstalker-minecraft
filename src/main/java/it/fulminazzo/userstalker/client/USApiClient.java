@@ -75,12 +75,7 @@ public final class USApiClient {
     public @NotNull List<UserLogin> getNewestUserLogins() throws APIClientException {
         List<?> result = query("GET", "/newest", HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
-        Gson gson = new Gson();
-        return result.stream()
-                .filter(Objects::nonNull)
-                .map(gson::toJson)
-                .map(o -> gson.fromJson(o, UserLogin.class))
-                .collect(Collectors.toList());
+        return convertGeneralListToListOf(result, UserLogin.class);
     }
 
     /**
@@ -106,12 +101,7 @@ public final class USApiClient {
     public @NotNull List<UserLogin> getUserLogins(final @NotNull String username) throws APIClientException {
         List<?> result = query("GET", "/" + username, HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
-        Gson gson = new Gson();
-        return result.stream()
-                .filter(Objects::nonNull)
-                .map(gson::toJson)
-                .map(o -> gson.fromJson(o, UserLogin.class))
-                .collect(Collectors.toList());
+        return convertGeneralListToListOf(result, UserLogin.class);
     }
 
     /**
@@ -163,6 +153,16 @@ public final class USApiClient {
         } catch (IOException e) {
             throw new APIClientException(String.format("%s to \"%s\"", method, link), e);
         }
+    }
+
+    private static @NotNull <T> List<T> convertGeneralListToListOf(final @NotNull List<?> list,
+                                                                   final @NotNull Class<T> clazz) {
+        Gson gson = new Gson();
+        return list.stream()
+                .filter(Objects::nonNull)
+                .map(gson::toJson)
+                .map(o -> gson.fromJson(o, clazz))
+                .collect(Collectors.toList());
     }
 
 }
