@@ -1,9 +1,5 @@
-package it.fulminazzo.userstalker;
+package it.fulminazzo.userstalker.cache;
 
-import it.fulminazzo.userstalker.cache.FileProfileCache;
-import it.fulminazzo.userstalker.cache.ProfileCache;
-import it.fulminazzo.userstalker.cache.ProfileCacheException;
-import it.fulminazzo.userstalker.cache.SQLProfileCache;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
