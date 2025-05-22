@@ -72,8 +72,15 @@ public final class USApiClient {
      *
      * @return the user logins
      */
-    public @NotNull List<UserLogin> getNewestUserLogins() {
-        return null;
+    public @NotNull List<UserLogin> getNewestUserLogins() throws APIClientException {
+        List<?> result = query("GET", "/newest", HttpURLConnection.HTTP_OK, List.class, null);
+        if (result == null) return new ArrayList<>();
+        Gson gson = new Gson();
+        return result.stream()
+                .filter(Objects::nonNull)
+                .map(gson::toJson)
+                .map(o -> gson.fromJson(o, UserLogin.class))
+                .collect(Collectors.toList());
     }
 
     /**
