@@ -2,9 +2,8 @@ package it.fulminazzo.userstalker.cache;
 
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.utils.FileUtils;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +17,6 @@ import java.util.logging.Logger;
  * A helper class to create a {@link ProfileCache} from
  * the given configuration.
  */
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class ProfileCacheBuilder {
     private static final String FILE_NAME = "skin_cache";
     private static final String PATH = "skin-cache";
@@ -29,9 +27,9 @@ public final class ProfileCacheBuilder {
     private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
     private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to %s";
 
-    private final @NotNull Logger logger;
-    private final @NotNull File pluginDirectory;
-    private final @NotNull FileConfiguration configuration;
+    private @Nullable Logger logger;
+    private @Nullable File pluginDirectory;
+    private @Nullable FileConfiguration configuration;
 
     /**
      * Builds the {@link ProfileCache} from the configurations in the config file.
