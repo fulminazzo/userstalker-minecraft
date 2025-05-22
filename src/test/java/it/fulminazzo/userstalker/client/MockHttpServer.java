@@ -68,7 +68,7 @@ class MockHttpServer implements HttpHandler {
         else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, USER_LOGIN);
         else if (path.equalsIgnoreCase("/usernames")) sendResponse(httpExchange, usernames);
         else if (path.equalsIgnoreCase("/" + USER_LOGIN.getUsername()))
-            sendResponse(httpExchange, showUserLogins ? USER_LOGIN : null);
+            sendResponse(httpExchange, showUserLogins ? USER_LOGINS : null);
         else httpExchange.sendResponseHeaders(404, 0);
     }
 
