@@ -60,7 +60,7 @@ public final class SQLProfileCache extends ProfileCacheImpl {
         executeStatement(
                 () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS skin_cache (" +
                         "username VARCHAR(32) PRIMARY KEY," +
-                        "skin TEXT NOT NULL" +
+                        "skin TEXT NOT NULL," +
                         "expiry TIMESTAMP" +
                         ")"),
                 PreparedStatement::executeUpdate
