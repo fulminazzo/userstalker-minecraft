@@ -23,6 +23,17 @@ class USApiClientTest extends Specification {
         server.stop()
     }
 
+    def 'test that notifyUserLogin does not throw'() {
+        given:
+        def ip = new InetSocketAddress('localhost', 2025)
+
+        when:
+        client.notifyUserLogin('Fulminazzo', ip)
+
+        then:
+        noExceptionThrown()
+    }
+
     def 'test that query returns valid response'() {
         when:
         def response = client.query('GET', '/valid', 200, String, null)
