@@ -4,6 +4,9 @@ import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+import java.util.logging.Logger;
+
 /**
  * A helper class to create a {@link USApiClient} from
  * the given configuration.
@@ -15,7 +18,28 @@ final class USApiClientBuilder {
 
     private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
 
+    private @Nullable Logger logger;
     private @Nullable FileConfiguration configuration;
+
+    /**
+     * Gets the logger.
+     *
+     * @return an optional containing the logger (if not null)
+     */
+    @NotNull Optional<Logger> getLogger() {
+        return Optional.ofNullable(logger);
+    }
+
+    /**
+     * Sets the logger.
+     *
+     * @param logger the logger
+     * @return this api client builder
+     */
+    public @NotNull USApiClientBuilder logger(@Nullable Logger logger) {
+        this.logger = logger;
+        return this;
+    }
 
     /**
      * Gets configuration.
