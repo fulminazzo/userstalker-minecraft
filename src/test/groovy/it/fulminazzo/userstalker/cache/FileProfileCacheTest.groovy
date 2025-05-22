@@ -91,6 +91,40 @@ class FileProfileCacheTest extends Specification {
         config.getLong('Alex.expiry') > new Date().getTime()
     }
 
+    def 'test that getUserUUID of non cached queries Mojang API'() {
+        given:
+        def username = 'Notch'
+        def uuid = UUID.randomUUID()
+
+        when:
+        def actualUUID = cache.getUserUUID(username)
+
+        then:
+        actualUUID.isPresent()
+        actualUUID.get() != uuid
+    }
+
+    def 'test that getUserUUID of cached does not query Mojang API'() {
+        given:
+        def username = 'Notch'
+        def uuid = UUID.randomUUID()
+
+        and:
+        config.set('Notch.uuid', uuid.toString().replace('-', ''))
+        config.set('Notch.expiry', new Date().getTime() + 100 * 1000)
+        config.save()
+
+        and:
+        cache = new FileProfileCache(cacheFile, 100 * 1000)
+
+        when:
+        def actualUUID = cache.getUserUUID(username)
+
+        then:
+        actualUUID.isPresent()
+        actualUUID.get() == uuid
+    }
+
     def 'test that findUserUUID of username is as expected'() {
         when:
         def uuid = cache.findUserUUID('not-expired')
