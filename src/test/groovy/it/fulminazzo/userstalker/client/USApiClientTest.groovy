@@ -1,6 +1,10 @@
 package it.fulminazzo.userstalker.client
 
+import it.fulminazzo.userstalker.domain.UserLogin
 import spock.lang.Specification
+
+import java.time.LocalDateTime
+import java.time.Month
 
 class USApiClientTest extends Specification {
     private static final int PORT = 22525
@@ -25,6 +29,20 @@ class USApiClientTest extends Specification {
 
         then:
         response == 'OK'
+    }
+
+    def 'test that query returns complex object'() {
+        given:
+        def expected = UserLogin.builder()
+                .username("Fulminazzo")
+                .ip("127.0.0.1")
+                .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 18))
+                .build()
+        when:
+        def response = client.query('GET', '/complex', 200, UserLogin)
+
+        then:
+        response == expected
     }
 
     def 'test that query of not existing returns 404'() {

@@ -4,10 +4,13 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import it.fulminazzo.userstalker.domain.UserLogin;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 public class MockHttpServer implements HttpHandler {
     private static final String API_PATH = "/api/v1/userlogins";
@@ -42,6 +45,12 @@ public class MockHttpServer implements HttpHandler {
 
     public void handleGet(HttpExchange httpExchange, String path) throws IOException {
         if (path.equalsIgnoreCase("/valid")) sendResponse(httpExchange, "OK");
+        else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, UserLogin.builder()
+                .username("Fulminazzo")
+                .ip("127.0.0.1")
+                .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 18))
+                .build()
+        );
         else httpExchange.sendResponseHeaders(404, 0);
     }
 
