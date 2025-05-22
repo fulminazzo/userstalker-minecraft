@@ -21,6 +21,24 @@ class SQLProfileCacheIntegrationTest extends Specification {
         cache = new SQLProfileCache(connection, 100 * 1000)
     }
 
+    def 'test that storeUUID saves correct value'() {
+        given:
+        def username = 'Notch'
+        def uuid = UUID.randomUUID()
+
+        when:
+        cache.storeUUID(username, uuid)
+
+        and:
+        def resultSet = connection
+                .prepareStatement('SELECT Id FROM uuid_cache WHERE Username = Notch')
+                .executeQuery()
+
+        then:
+        resultSet.next()
+        resultSet.getString(1) == ProfileCacheUtils.toString(uuid)
+    }
+
     def 'test context loads'() {
         expect:
         true
