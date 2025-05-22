@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpServer;
 import it.fulminazzo.userstalker.domain.UserLogin;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.time.LocalDateTime;
@@ -14,6 +15,11 @@ import java.time.Month;
 
 public class MockHttpServer implements HttpHandler {
     private static final String API_PATH = "/api/v1/userlogins";
+    public static final UserLogin USER_LOGIN = UserLogin.builder()
+            .username("Fulminazzo")
+            .ip("127.0.0.1")
+            .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 18))
+            .build();
 
     private final HttpServer server;
 
@@ -45,17 +51,19 @@ public class MockHttpServer implements HttpHandler {
 
     public void handleGet(HttpExchange httpExchange, String path) throws IOException {
         if (path.equalsIgnoreCase("/valid")) sendResponse(httpExchange, "OK");
-        else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, UserLogin.builder()
-                .username("Fulminazzo")
-                .ip("127.0.0.1")
-                .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 18))
-                .build()
-        );
+        else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, USER_LOGIN);
         else httpExchange.sendResponseHeaders(404, 0);
     }
 
     public void handlePost(HttpExchange httpExchange, String path) throws IOException {
-
+        if (path.equalsIgnoreCase("/complex")) {
+            try (InputStreamReader reader = new InputStreamReader(httpExchange.getRequestBody())) {
+                Gson gson = new Gson();
+                UserLogin userLogin = gson.fromJson(reader, UserLogin.class);
+                if (userLogin.equals(USER_LOGIN)) sendResponse(httpExchange, "OK");
+                else sendResponse(httpExchange, "NOT_OK");
+            }
+        } else httpExchange.sendResponseHeaders(404, 0);
     }
 
     private void sendResponse(HttpExchange httpExchange, Object response) throws IOException {
