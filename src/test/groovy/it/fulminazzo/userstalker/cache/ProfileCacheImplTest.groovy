@@ -112,7 +112,7 @@ class ProfileCacheImplTest extends Specification {
         def raw = '069a79f444e94726a5befca90e38aaf5'
 
         when:
-        def uuid = ProfileCacheImpl.fromString(raw)
+        def uuid = ProfileCacheUtils.fromString(raw)
 
         then:
         uuid == UUID.fromString('069a79f4-44e9-4726-a5be-fca90e38aaf5')
@@ -120,7 +120,7 @@ class ProfileCacheImplTest extends Specification {
 
     def 'test that fromString of invalid throws'() {
         when:
-        ProfileCacheImpl.fromString('mock')
+        ProfileCacheUtils.fromString('mock')
 
         then:
         thrown(IllegalArgumentException)
