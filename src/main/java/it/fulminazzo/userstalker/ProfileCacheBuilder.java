@@ -2,6 +2,8 @@ package it.fulminazzo.userstalker;
 
 import it.fulminazzo.userstalker.cache.FileProfileCache;
 import it.fulminazzo.userstalker.cache.ProfileCache;
+import it.fulminazzo.userstalker.cache.ProfileCacheException;
+import it.fulminazzo.userstalker.cache.SQLProfileCache;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -24,7 +30,8 @@ public final class ProfileCacheBuilder {
     private static final CacheType DEFAULT_TYPE = CacheType.JSON;
     private static final long DEFAULT_TIMEOUT = 24 * 60 * 60;
 
-    private static final String MISSING_VALUE_DEFAULT = "Invalid configuration detected: missing %s value. Defaulting to %s";
+    private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
+    private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to %s";
 
     private final @NotNull Logger logger;
     private final @NotNull File pluginDirectory;
@@ -35,7 +42,7 @@ public final class ProfileCacheBuilder {
      *
      * @return the profile cache
      */
-    public @NotNull ProfileCache build() {
+    public @NotNull ProfileCache build() throws ProfileCacheException {
         CacheType cacheType = loadCacheType();
         File cacheFile = new File(pluginDirectory, FILE_NAME + "." + cacheType.name().toLowerCase());
         switch (cacheType) {
@@ -60,9 +67,21 @@ public final class ProfileCacheBuilder {
                     }
                 return new FileProfileCache(cacheFile, getExpireTimeout());
             }
-            default:
-                //TODO:
-                return null;
+            default: {
+                String address = getConfigurationString("address");
+                String databaseType = getConfigurationString("database-type");
+                String database = getConfigurationString("database");
+                String username = getConfigurationString("username");
+                String password = getConfigurationString("password");
+                String jdbcPath = String.format("jdbc:%s://%s/%s", databaseType, address, database);
+                try {
+                    Connection connection = DriverManager.getConnection(jdbcPath, username, password);
+                    return new SQLProfileCache(connection, getExpireTimeout());
+                } catch (SQLException e) {
+                    throw new ProfileCacheException(String.format("SQLException while connecting with database (%s, %s, %s): %s",
+                            jdbcPath, username, password, e.getMessage()));
+                }
+            }
         }
     }
 
@@ -88,6 +107,11 @@ public final class ProfileCacheBuilder {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Invalid configuration detected, unknown cache type: " + type
                 ));
+    }
+
+    private @NotNull String getConfigurationString(final @NotNull String path) {
+        String actualPath = PATH + "." + path;
+        return Objects.requireNonNull(configuration.getString(actualPath), String.format(MISSING_VALUE, actualPath));
     }
 
     private enum CacheType {
