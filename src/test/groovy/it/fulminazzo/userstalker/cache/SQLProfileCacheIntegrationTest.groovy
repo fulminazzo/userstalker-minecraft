@@ -4,6 +4,7 @@ import spock.lang.Specification
 
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.SQLException
 import java.sql.Timestamp
 
 class SQLProfileCacheIntegrationTest extends Specification {
@@ -117,6 +118,31 @@ class SQLProfileCacheIntegrationTest extends Specification {
     def 'test that executeStatement wraps any exception in ProfileCacheException'() {
         when:
         cache.executeStatement(() -> connection.prepareStatement('INVALID'), s -> null)
+
+        then:
+        thrown(ProfileCacheException)
+    }
+
+    def 'test that close closes connection'() {
+        when:
+        cache.close()
+
+        then:
+        connection.closed
+    }
+
+    def 'simulate close error'() {
+        given:
+        def connection = Mock(Connection)
+        connection.close() >> {
+            throw new SQLException('')
+        }
+
+        and:
+        def cache = new SQLProfileCache(connection, 10)
+
+        when:
+        cache.close()
 
         then:
         thrown(ProfileCacheException)

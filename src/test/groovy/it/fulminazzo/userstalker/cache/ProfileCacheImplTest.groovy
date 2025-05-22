@@ -156,6 +156,14 @@ class ProfileCacheImplTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
+    def 'test that close does nothing'() {
+        when:
+        cache.close()
+
+        then:
+        noExceptionThrown()
+    }
+
     private static JsonObject createData(Object... data) {
         Gson gson = new Gson()
         String raw = gson.toJson([
