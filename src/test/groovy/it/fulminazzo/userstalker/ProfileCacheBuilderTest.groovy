@@ -11,7 +11,12 @@ import java.util.logging.Logger
 class ProfileCacheBuilderTest extends Specification {
 
     private final Logger logger = Logger.getLogger('TestUserStalker')
-    private final File pluginDirectory = new File('build/resources/test')
+    private final File pluginDirectory = new File('build/resources/test/ProfileCacheBuilderTest')
+
+    void setup() {
+        if (pluginDirectory.exists()) FileUtils.deleteFolder(pluginDirectory)
+        FileUtils.createFolder(pluginDirectory)
+    }
 
     def 'test that build creates and then reads file with type #type'() {
         given:
