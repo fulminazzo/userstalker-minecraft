@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 final class USApiClientBuilder {
     private static final String PATH = "userstalker-http-server";
 
+    private static final int DEFAULT_PORT = 80;
+
     private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
 
     private @Nullable FileConfiguration configuration;
@@ -35,6 +37,18 @@ final class USApiClientBuilder {
     public @NotNull USApiClientBuilder configuration(@Nullable FileConfiguration configuration) {
         this.configuration = configuration;
         return this;
+    }
+
+    /**
+     * Builds the {@link USApiClient} from the configurations in the config file.
+     *
+     * @return the api client
+     * @throws APIClientException the api client exception
+     */
+    public @NotNull USApiClient build() throws APIClientException {
+        String ip = getConfigurationValue("address", String.class, null);
+        int port = getConfigurationValue("port", Integer.class, DEFAULT_PORT);
+        return new USApiClient(ip, port);
     }
 
     /**
