@@ -31,6 +31,16 @@ final class ProfileCacheUtils {
     }
 
     /**
+     * Converts a {@link UUID} to an undashed UUID.
+     *
+     * @param uuid the uuid
+     * @return the raw uuid
+     */
+    public static @NotNull String toString(final @NotNull UUID uuid) {
+        return uuid.toString().replace("-", "");
+    }
+
+    /**
      * Returns the current time in milliseconds.
      *
      * @return the time
