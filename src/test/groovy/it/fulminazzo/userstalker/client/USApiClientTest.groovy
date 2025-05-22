@@ -25,7 +25,7 @@ class USApiClientTest extends Specification {
 
     def 'test that query returns valid response'() {
         when:
-        def response = client.query('GET', '/valid', 200, String)
+        def response = client.query('GET', '/valid', 200, String, null)
 
         then:
         response == 'OK'
@@ -39,7 +39,7 @@ class USApiClientTest extends Specification {
                 .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 18))
                 .build()
         when:
-        def response = client.query('GET', '/complex', 200, UserLogin)
+        def response = client.query('GET', '/complex', 200, UserLogin, null)
 
         then:
         response == expected
@@ -47,7 +47,7 @@ class USApiClientTest extends Specification {
 
     def 'test that query of not existing returns 404'() {
         when:
-        client.query('GET', '/not-existing', 200, null)
+        client.query('GET', '/not-existing', 200, null, null)
 
         then:
         def e = thrown(APIClientException)
@@ -59,7 +59,7 @@ class USApiClientTest extends Specification {
         def client = new USApiClient('localhost', 11223)
 
         when:
-        client.query('GET', '/any', 200, null)
+        client.query('GET', '/any', 200, null, null)
 
         then:
         def e = thrown(APIClientException)
@@ -71,7 +71,7 @@ class USApiClientTest extends Specification {
         def client = new USApiClient('local\\host', 11223)
 
         when:
-        client.query('GET', 'any', 200, null)
+        client.query('GET', 'any', 200, null, null)
 
         then:
         def e = thrown(APIClientException)

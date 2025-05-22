@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -93,18 +94,26 @@ public final class USApiClient {
      * @param path             the path
      * @param expectedResponse the expected response
      * @param convertClass     the convert class
+     * @param input            the data to send to the server
      * @return the response
      * @throws APIClientException the exception thrown in case of any errors
      */
     @Nullable <T> T query(final @NotNull String method,
                           final @NotNull String path,
                           final int expectedResponse,
-                          final @Nullable Class<T> convertClass) throws APIClientException {
+                          final @Nullable Class<T> convertClass,
+                          final @Nullable Object input) throws APIClientException {
+        final Gson gson = new Gson();
         final String link = String.format("http://%s:%s%s%s", address, port, API_PATH, path);
         try {
             URL url = new URL(link);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(method);
+
+            if (input != null)
+                try (OutputStream outputStream = connection.getOutputStream()) {
+                    outputStream.write(gson.toJson(input).getBytes());
+                }
 
             int responseCode = connection.getResponseCode();
             if (responseCode != expectedResponse)
@@ -113,7 +122,6 @@ public final class USApiClient {
             final T data;
             if (convertClass != null) {
                 InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-                Gson gson = new Gson();
                 data = gson.fromJson(reader, convertClass);
             } else data = null;
             connection.disconnect();
