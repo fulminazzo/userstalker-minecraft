@@ -62,6 +62,21 @@ class ProfileCacheImplTest extends Specification {
         createData(new Object(), ['name': 'textures', 'value': 'skin'], new Object()) || true
     }
 
+    def 'test that getUserUUID does not store skin if empty response after lookup'() {
+        given:
+        def skinCache = Spy(TestProfileCache)
+        skinCache.lookupUserUUID(_ as String) >> Optional.empty()
+
+        when:
+        skinCache.getUserUUID('user')
+
+        and:
+        def stored = skinCache.uuidCache.get('user')
+
+        then:
+        stored == null
+    }
+
     def 'test that lookupUserUUID of valid username returns expected value'() {
         when:
         def uuid = cache.lookupUserUUID('Notch')
