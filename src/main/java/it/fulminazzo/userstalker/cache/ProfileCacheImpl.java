@@ -35,14 +35,12 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
     @Override
     public @NotNull Optional<String> lookupUserSkin(@NotNull String username) throws ProfileCacheException {
-        Optional<JsonObject> jsonObject = getJsonFromURL(String.format(MOJANG_API_UUID, username),
-                "querying Mojang API for player UUID");
-        if (!jsonObject.isPresent()) return Optional.empty();
-        String uuid = jsonObject.get().get("id").getAsString();
+        Optional<UUID> uuid = getUserUUID(username);
+        if (!uuid.isPresent()) return Optional.empty();
 
-        jsonObject = getJsonFromURL(String.format(MOJANG_API_SKIN, uuid),
-                "querying Mojang API for player skin");
-        return jsonObject
+        String rawUUID = uuid.get().toString().replace("-", "");
+        return getJsonFromURL(String.format(MOJANG_API_SKIN, rawUUID),
+                "querying Mojang API for player skin")
                 .map(j -> j.getAsJsonArray("properties"))
                 .map(a -> {
                     for (int i = 0; i < a.getAsJsonArray().size(); i++) {
