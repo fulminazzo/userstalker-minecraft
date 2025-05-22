@@ -4,44 +4,21 @@ import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
- * This class represents a builder that contains a {@link FileConfiguration}
- * and a {@link Logger}.
+ * A builder that contains a {@link FileConfiguration} and a {@link Logger}.
  *
  * @param <B> the type parameter
  * @param <X> the type parameter
  */
 @SuppressWarnings("unchecked")
-public abstract class ConfiguredBuilder<B extends ConfiguredBuilder<B, X>, X extends Throwable> {
+public abstract class ConfiguredBuilder<B extends ConfiguredBuilder<B, X>, X extends Throwable> extends LoggedBuilder<B> {
 
     private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
     private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to %s";
 
-    private @Nullable Logger logger;
     private @Nullable FileConfiguration configuration;
-
-    /**
-     * Gets the logger.
-     *
-     * @return an optional containing the logger (if not null)
-     */
-    protected @NotNull Optional<Logger> getLogger() {
-        return Optional.ofNullable(logger);
-    }
-
-    /**
-     * Sets the logger.
-     *
-     * @param logger the logger
-     * @return this builder
-     */
-    public @NotNull B logger(@Nullable Logger logger) {
-        this.logger = logger;
-        return (B) this;
-    }
 
     /**
      * Gets configuration.
