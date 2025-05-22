@@ -1,9 +1,12 @@
 package it.fulminazzo.userstalker.cache;
 
+import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 /**
  * A general interface for handling UUID and skin caching.
@@ -92,5 +95,21 @@ public interface ProfileCache {
      * @throws ProfileCacheException an exception thrown in case of any errors
      */
     void close() throws ProfileCacheException;
+
+    /**
+     * Instantiates a new builder to obtain a profile cache instance.
+     *
+     * @param logger          the logger
+     * @param pluginDirectory the plugin directory
+     * @param configuration   the configuration to create the cache from
+     * @return the profile cache builder
+     */
+    static @NotNull ProfileCacheBuilder newBuilder(
+            final @NotNull Logger logger,
+            final @NotNull File pluginDirectory,
+            final @NotNull FileConfiguration configuration
+    ) {
+        return new ProfileCacheBuilder(logger, pluginDirectory, configuration);
+    }
 
 }
