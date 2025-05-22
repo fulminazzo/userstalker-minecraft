@@ -153,6 +153,14 @@ class USApiClientTest extends Specification {
         response == 'OK'
     }
 
+    def 'test that query of not found returns null'() {
+        when:
+        def response = client.query('GET', '/not-found', 200, Object, null)
+
+        then:
+        response == null
+    }
+
     def 'test that query of not existing returns 405'() {
         when:
         client.query('PUT', '/not-existing', 200, null, null)
