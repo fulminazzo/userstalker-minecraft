@@ -1,10 +1,13 @@
 package it.fulminazzo.userstalker.cache;
 
+import it.fulminazzo.fulmicollection.interfaces.functions.FunctionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 /**
  * An implementation of {@link ProfileCache} that uses a SQL database as cache.
@@ -42,6 +45,27 @@ public final class SQLProfileCache extends ProfileCacheImpl {
     @Override
     public void storeUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
 
+    }
+
+    /**
+     * Executes the given function as new statement.
+     *
+     * @param <T>      the type returned
+     * @param function the function to execute
+     * @return the returned value
+     * @throws ProfileCacheException a wrapper exception for any error
+     */
+    <S extends Statement, T> T executeStatement(
+            final @NotNull Callable<S> statementProvider,
+            final @NotNull FunctionException<S, T> function
+    ) throws ProfileCacheException {
+        try (S statement = statementProvider.call()) {
+            return function.apply(statement);
+        } catch (Exception e) {
+            throw new ProfileCacheException(String.format("%s when querying database: %s",
+                    e.getClass().getSimpleName(),
+                    e.getMessage()));
+        }
     }
 
 }
