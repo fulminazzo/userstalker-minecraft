@@ -27,4 +27,37 @@ class USApiClientTest extends Specification {
         response == 'OK'
     }
 
+    def 'test that query of not existing returns 404'() {
+        when:
+        client.query('GET', '/not-existing', 200, null)
+
+        then:
+        def e = thrown(APIClientException)
+        e.message.contains('404')
+    }
+
+    def 'test that query rethrows IOException with APIClientException'() {
+        given:
+        def client = new USApiClient('localhost', 11223)
+
+        when:
+        client.query('GET', '/any', 200, null)
+
+        then:
+        def e = thrown(APIClientException)
+        e.message == 'ConnectException when GET to "http://localhost:11223/api/v1/userlogins/any": Connection refused (Connection refused)'
+    }
+
+    def 'test that query of invalid link throws'() {
+        given:
+        def client = new USApiClient('local\\host', 11223)
+
+        when:
+        client.query('GET', 'any', 200, null)
+
+        then:
+        def e = thrown(APIClientException)
+        e.message == 'Invalid URL provided: http://local\\host:11223/api/v1/userloginsany'
+    }
+
 }
