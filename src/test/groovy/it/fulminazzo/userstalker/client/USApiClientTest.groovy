@@ -19,4 +19,12 @@ class USApiClientTest extends Specification {
         server.stop()
     }
 
+    def 'test that query returns valid response'() {
+        when:
+        def response = client.query('GET', '/valid', 200, String)
+
+        then:
+        response == 'OK'
+    }
+
 }
