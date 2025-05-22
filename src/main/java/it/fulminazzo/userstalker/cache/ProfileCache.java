@@ -98,7 +98,7 @@ public interface ProfileCache {
      *
      * @return the profile cache builder
      */
-    static @NotNull ProfileCacheBuilder newBuilder() {
+    static @NotNull ProfileCacheBuilder builder() {
         return new ProfileCacheBuilder();
     }
 
