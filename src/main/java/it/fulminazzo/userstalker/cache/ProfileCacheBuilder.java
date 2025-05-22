@@ -66,6 +66,15 @@ public final class ProfileCacheBuilder {
     }
 
     /**
+     * Gets plugin directory.
+     *
+     * @return the plugin directory
+     */
+    @NotNull File getPluginDirectory() {
+        return pluginDirectory;
+    }
+
+    /**
      * Sets the plugin directory.
      *
      * @param pluginDirectory the plugin directory
@@ -74,6 +83,15 @@ public final class ProfileCacheBuilder {
     public @NotNull ProfileCacheBuilder pluginDirectory(@Nullable File pluginDirectory) {
         this.pluginDirectory = pluginDirectory;
         return this;
+    }
+
+    /**
+     * Gets configuration.
+     *
+     * @return the configuration
+     */
+    @NotNull FileConfiguration getConfiguration() {
+        return configuration;
     }
 
     /**
@@ -95,7 +113,7 @@ public final class ProfileCacheBuilder {
      */
     public @NotNull ProfileCache build() throws ProfileCacheException {
         CacheType cacheType = loadCacheType();
-        File cacheFile = new File(pluginDirectory, FILE_NAME + "." + cacheType.name().toLowerCase());
+        File cacheFile = new File(getPluginDirectory(), FILE_NAME + "." + cacheType.name().toLowerCase());
         switch (cacheType) {
             case JSON:
             case XML:
@@ -104,7 +122,7 @@ public final class ProfileCacheBuilder {
                 return new FileProfileCache(cacheFile, getExpiryTimeout());
             }
             case YAML: {
-                if (!cacheFile.exists()) cacheFile = new File(pluginDirectory, FILE_NAME + ".yml");
+                if (!cacheFile.exists()) cacheFile = new File(getPluginDirectory(), FILE_NAME + ".yml");
                 checkFileExists(cacheFile);
                 return new FileProfileCache(cacheFile, getExpiryTimeout());
             }
@@ -135,7 +153,7 @@ public final class ProfileCacheBuilder {
      */
     @NotNull CacheType loadCacheType() throws ProfileCacheException {
         String path = PATH + ".type";
-        String type = configuration.getString(path);
+        String type = getConfiguration().getString(path);
         if (type == null) {
             getLogger().ifPresent(l -> l.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TYPE.name())));
             return DEFAULT_TYPE;
@@ -156,7 +174,7 @@ public final class ProfileCacheBuilder {
      */
     long getExpiryTimeout() {
         String path = PATH + ".expire-time";
-        Long expireTimeout = configuration.getLong(path);
+        Long expireTimeout = getConfiguration().getLong(path);
         if (expireTimeout == null) {
             getLogger().ifPresent(l -> l.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TIMEOUT)));
             return DEFAULT_TIMEOUT * 1000;
@@ -172,7 +190,7 @@ public final class ProfileCacheBuilder {
      */
     @NotNull String getConfigurationString(final @NotNull String path) throws ProfileCacheException {
         String actualPath = PATH + "." + path;
-        String value = configuration.getString(actualPath);
+        String value = getConfiguration().getString(actualPath);
         if (value == null)
             throw new ProfileCacheException(String.format(MISSING_VALUE, actualPath));
         else return value;
