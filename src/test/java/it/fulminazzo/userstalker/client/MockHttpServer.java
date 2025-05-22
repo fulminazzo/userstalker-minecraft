@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import it.fulminazzo.userstalker.domain.UserLogin;
+import it.fulminazzo.userstalker.domain.UserLoginCount;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,6 +29,11 @@ class MockHttpServer implements HttpHandler {
                     .ip("127.0.0.1")
                     .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 52))
                     .build()
+    );
+    static final List<UserLoginCount> USER_LOGINS_COUNT = Arrays.asList(
+            UserLoginCount.builder().username("Fulminazzo").loginCount(20).build(),
+            UserLoginCount.builder().username("Notch").loginCount(13).build(),
+            UserLoginCount.builder().username("Steve").loginCount(7).build()
     );
 
     private static final String API_PATH = "/api/v1/userlogins";
