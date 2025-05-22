@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * An implementation of {@link ProfileCache} that uses a file as a local cache.
@@ -42,6 +43,17 @@ public final class FileProfileCache extends ProfileCacheImpl {
     public void storeSkin(@NotNull String username, @NotNull String skin) {
         config.set(username + ".skin", skin);
         config.set(username + ".expiry", now() + skinExpireTimeout);
+        config.save();
+    }
+
+    @Override
+    public @NotNull Optional<UUID> findUserUUID(@NotNull String username) {
+        return Optional.ofNullable(config.getString(username + ".uuid")).map(UUID::fromString);
+    }
+
+    @Override
+    public void storeUUID(@NotNull String username, @NotNull UUID uuid) {
+        config.set(username + ".uuid", uuid.toString().replace("-", ""));
         config.save();
     }
 
