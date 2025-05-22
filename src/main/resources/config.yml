@@ -9,6 +9,9 @@ skin-cache:
   # Defines how the users skins should be stored.
   # Accepted values: YAML, JSON, TOML, XML or DATABASE
   type: JSON
+  # The amount of seconds after which the cache should
+  # be refreshed.
+  expire-time: 86400
   # Only valid if type = DATABASE
   address: "localhost"
   database: 'userstalker'
