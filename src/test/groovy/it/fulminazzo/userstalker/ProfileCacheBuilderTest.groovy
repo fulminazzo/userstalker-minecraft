@@ -2,6 +2,7 @@ package it.fulminazzo.userstalker
 
 import it.fulminazzo.userstalker.cache.FileProfileCache
 import it.fulminazzo.userstalker.cache.MockFileConfiguration
+import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils
 import spock.lang.Specification
@@ -16,6 +17,24 @@ class ProfileCacheBuilderTest extends Specification {
     void setup() {
         if (pluginDirectory.exists()) FileUtils.deleteFolder(pluginDirectory)
         FileUtils.createFolder(pluginDirectory)
+    }
+
+    def 'test that connection to invalid database throws'() {
+        given:
+        def file = mockConfiguration('database', 10,
+                'localhost:3306', 'mysql',
+                'userstalker', 'username', 'password',
+                true
+        )
+
+        and:
+        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+
+        when:
+        builder.build()
+
+        then:
+        thrown(ProfileCacheException)
     }
 
     def 'test that missing database configuration throws'() {
