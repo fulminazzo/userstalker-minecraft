@@ -4,6 +4,7 @@ import spock.lang.Specification
 
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.Timestamp
 
 class SQLProfileCacheIntegrationTest extends Specification {
     private static final String DB_URL = 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1'
@@ -19,6 +20,27 @@ class SQLProfileCacheIntegrationTest extends Specification {
         connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)
 
         cache = new SQLProfileCache(connection, 100 * 1000)
+    }
+
+    def 'test that storeUserSkin of #username saves correct value'() {
+        given:
+        def skin = 'mock-skin'
+
+        when:
+        cache.storeUserSkin(username, skin)
+
+        and:
+        def resultSet = connection
+                .prepareStatement("SELECT skin, expiry FROM skin_cache WHERE username = '$username'")
+                .executeQuery()
+
+        then:
+        resultSet.next()
+        resultSet.getString(1) == username
+        resultSet.getTimestamp(2).after(new Timestamp(System.currentTimeMillis()))
+
+        where:
+        username << ['Notch', 'Steve']
     }
 
     def 'test that findUserUUID returns correct value'() {
