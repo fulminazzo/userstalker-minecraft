@@ -13,6 +13,21 @@ class ProfileCacheImplTest extends Specification {
         cache = new TestProfileCache()
     }
 
+    def 'test that getUserSkin does not store skin if empty response after lookup'() {
+        given:
+        def skinCache = Spy(TestProfileCache)
+        skinCache.lookupUserSkin(_ as String) >> Optional.empty()
+
+        when:
+        skinCache.getUserSkin('user')
+
+        and:
+        def stored = skinCache.skinCache.get('user')
+
+        then:
+        stored == null
+    }
+
     def 'test that lookupUserSkin of valid username returns expected value'() {
         when:
         def skin = cache.lookupUserSkin('Notch')
