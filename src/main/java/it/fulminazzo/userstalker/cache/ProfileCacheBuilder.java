@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -42,6 +43,15 @@ public final class ProfileCacheBuilder {
                         final @NotNull File pluginDirectory,
                         final @NotNull FileConfiguration configuration) {
         logger(logger).pluginDirectory(pluginDirectory).configuration(configuration);
+    }
+
+    /**
+     * Gets the logger.
+     *
+     * @return an optional containing the logger (if not null)
+     */
+    @NotNull Optional<Logger> getLogger() {
+        return Optional.ofNullable(logger);
     }
 
     /**
@@ -127,7 +137,7 @@ public final class ProfileCacheBuilder {
         String path = PATH + ".type";
         String type = configuration.getString(path);
         if (type == null) {
-            logger.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TYPE.name()));
+            getLogger().ifPresent(l -> l.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TYPE.name())));
             return DEFAULT_TYPE;
         }
         return Arrays.stream(CacheType.values())
@@ -148,7 +158,7 @@ public final class ProfileCacheBuilder {
         String path = PATH + ".expire-time";
         Long expireTimeout = configuration.getLong(path);
         if (expireTimeout == null) {
-            logger.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TIMEOUT));
+            getLogger().ifPresent(l -> l.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TIMEOUT)));
             return DEFAULT_TIMEOUT * 1000;
         } else return expireTimeout * 1000;
     }
