@@ -44,7 +44,14 @@ public final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public void storeUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
-
+        executeStatement(
+                () -> connection.prepareStatement("INSERT INTO uuid_cache VALUES (?, ?)"),
+                s -> {
+                    s.setString(1, username);
+                    s.setString(2, uuid.toString().replace("-", ""));
+                    return s.executeUpdate();
+                }
+        );
     }
 
     /**
