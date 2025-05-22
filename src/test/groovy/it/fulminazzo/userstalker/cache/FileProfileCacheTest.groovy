@@ -15,7 +15,7 @@ class FileProfileCacheTest extends Specification {
         if (cacheFile.exists()) cacheFile.delete()
         FileUtils.createNewFile(cacheFile)
 
-        def now = new Date().getTime()
+        def now = System.currentTimeMillis()
 
         config = FileConfiguration.newConfiguration(cacheFile)
         config.set('expired.skin', 'skin')
@@ -51,7 +51,7 @@ class FileProfileCacheTest extends Specification {
 
         and:
         config.set('Notch.skin', skin)
-        config.set('Notch.expiry', new Date().getTime() + 100 * 1000)
+        config.set('Notch.expiry', System.currentTimeMillis() + 100 * 1000)
         config.save()
 
         and:
@@ -88,7 +88,7 @@ class FileProfileCacheTest extends Specification {
         then:
         config.getConfigurationSection('Alex') != null
         config.getString('Alex.skin') == 'AnotherSkin'
-        config.getLong('Alex.expiry') > new Date().getTime()
+        config.getLong('Alex.expiry') > System.currentTimeMillis()
     }
 
     def 'test that getUserUUID of non cached queries Mojang API'() {
@@ -111,7 +111,7 @@ class FileProfileCacheTest extends Specification {
 
         and:
         config.set('Notch.uuid', uuid.toString().replace('-', ''))
-        config.set('Notch.expiry', new Date().getTime() + 100 * 1000)
+        config.set('Notch.expiry', System.currentTimeMillis() + 100 * 1000)
         config.save()
 
         and:

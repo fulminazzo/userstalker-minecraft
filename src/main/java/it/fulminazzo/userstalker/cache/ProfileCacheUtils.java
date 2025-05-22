@@ -40,13 +40,4 @@ final class ProfileCacheUtils {
         return uuid.toString().replace("-", "");
     }
 
-    /**
-     * Returns the current time in milliseconds.
-     *
-     * @return the time
-     */
-    public static long now() {
-        return new Date().getTime();
-    }
-
 }
