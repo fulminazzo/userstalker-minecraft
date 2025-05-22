@@ -63,8 +63,10 @@ public final class USApiClient {
      *
      * @return the user logins count
      */
-    public @NotNull List<UserLoginCount> getMonthlyUserLogins() {
-        return null;
+    public @NotNull List<UserLoginCount> getMonthlyUserLogins() throws APIClientException {
+        List<?> result = query("GET", "/month", HttpURLConnection.HTTP_OK, List.class, null);
+        if (result == null) return new ArrayList<>();
+        return convertGeneralListToListOf(result, UserLoginCount.class);
     }
 
     /**
