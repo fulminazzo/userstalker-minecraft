@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +23,9 @@ abstract class ProfileCacheImpl implements ProfileCache {
     private static final String MOJANG_API_UUID = "https://api.mojang.com/users/profiles/minecraft/%s";
     private static final String MOJANG_API_SKIN = "https://sessionserver.mojang.com/session/minecraft/profile/%s";
 
+    /**
+     * The Skin expire timeout.
+     */
     protected final long skinExpireTimeout;
 
     @Override
@@ -106,7 +110,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
      * Converts an undashed UUID to a {@link UUID}.
      *
      * @param rawUUID the raw uuid
-     * @return uuid
+     * @return uuid uuid
      */
     static @NotNull UUID fromString(final @NotNull String rawUUID) {
         if (rawUUID.length() != 32) throw new IllegalArgumentException("Invalid UUID: " + rawUUID);
@@ -117,6 +121,15 @@ abstract class ProfileCacheImpl implements ProfileCache {
                 rawUUID.substring(16, 20),
                 rawUUID.substring(20, 32)
         ));
+    }
+
+    /**
+     * Returns the current time in milliseconds.
+     *
+     * @return the time
+     */
+    static long now() {
+        return new Date().getTime();
     }
 
 }

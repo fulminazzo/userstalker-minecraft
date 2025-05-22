@@ -5,7 +5,6 @@ import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,10 +54,6 @@ public final class FileProfileCache extends ProfileCacheImpl {
     public void storeUUID(@NotNull String username, @NotNull UUID uuid) {
         config.set(username + ".uuid", uuid.toString().replace("-", ""));
         config.save();
-    }
-
-    private long now() {
-        return new Date().getTime();
     }
 
 }
