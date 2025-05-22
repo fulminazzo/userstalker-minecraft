@@ -33,6 +33,7 @@ dependencies {
 
     implementation 'it.fulminazzo:FulmiCollection:1.7.2'
     implementation 'it.fulminazzo:Configurations:1.6.3'
+    implementation 'it.fulminazzo:yagl:4.3'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
