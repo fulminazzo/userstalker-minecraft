@@ -127,6 +127,20 @@ class ProfileCacheBuilderTest extends Specification {
         cache.config.class == Class.forName('it.fulminazzo.yamlparser.configuration.YAMLConfiguration')
     }
 
+    def 'test that build with no logger does not throw'() {
+        given:
+        def file = mockConfiguration(null, null, true)
+
+        and:
+        def builder = new ProfileCacheBuilder(null, PLUGIN_DIRECTORY, file)
+
+        when:
+        def cache = builder.build()
+
+        then:
+        cache instanceof FileProfileCache
+    }
+
     def 'test that getExpiryTimeout of expire time #timeout returns #expected'() {
         given:
         def file = mockConfiguration(null, timeout, true)
