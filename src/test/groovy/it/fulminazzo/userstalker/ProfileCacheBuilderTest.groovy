@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker
 import it.fulminazzo.userstalker.cache.FileProfileCache
 import it.fulminazzo.userstalker.cache.MockFileConfiguration
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
+import it.fulminazzo.yamlparser.utils.FileUtils
 import spock.lang.Specification
 
 import java.util.logging.Logger
@@ -24,16 +25,38 @@ class ProfileCacheBuilderTest extends Specification {
         def secondCache = builder.build()
 
         then:
+        new File(pluginDirectory, "${ProfileCacheBuilder.FILE_NAME}.$extension").exists()
         firstCache instanceof FileProfileCache
         firstCache.config.class == expectedClass
         secondCache instanceof FileProfileCache
         secondCache.config.class == expectedClass
 
         where:
-        type   || expectedClass
-        'json' || Class.forName('it.fulminazzo.yamlparser.configuration.JSONConfiguration')
-        'xml'  || Class.forName('it.fulminazzo.yamlparser.configuration.XMLConfiguration')
-        'toml' || Class.forName('it.fulminazzo.yamlparser.configuration.TOMLConfiguration')
+        type   | extension || expectedClass
+        'json' | 'json'    || Class.forName('it.fulminazzo.yamlparser.configuration.JSONConfiguration')
+        'xml'  | 'xml'     || Class.forName('it.fulminazzo.yamlparser.configuration.XMLConfiguration')
+        'toml' | 'toml'    || Class.forName('it.fulminazzo.yamlparser.configuration.TOMLConfiguration')
+        'yaml' | 'yml'     || Class.forName('it.fulminazzo.yamlparser.configuration.YAMLConfiguration')
+    }
+
+    def 'test that build with YAML uses file with .yaml extension'() {
+        given:
+        def cacheFile = new File(pluginDirectory, "${ProfileCacheBuilder.FILE_NAME}.yaml")
+        FileUtils.createNewFile(cacheFile)
+
+        and:
+        def file = mockConfiguration('YAML', 10, true)
+
+        and:
+        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+
+        when:
+        def cache = builder.build()
+
+        then:
+        !new File(pluginDirectory, "${ProfileCacheBuilder.FILE_NAME}.yml").exists()
+        cache instanceof FileProfileCache
+        cache.config.class == Class.forName('it.fulminazzo.yamlparser.configuration.YAMLConfiguration')
     }
 
     def 'test that getExpireTimeout of expire time #timeout returns #expected'() {
