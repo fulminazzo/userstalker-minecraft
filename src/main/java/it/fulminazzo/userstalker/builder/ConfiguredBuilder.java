@@ -9,11 +9,12 @@ import java.util.logging.Logger;
 /**
  * A builder that contains a {@link FileConfiguration} and a {@link Logger}.
  *
+ * @param <O> the type of the object built by this builder
  * @param <B> this builder type
  * @param <X> the type of the exception thrown by {@link #newException(String)}
  */
 @SuppressWarnings("unchecked")
-public abstract class ConfiguredBuilder<O, B extends ConfiguredBuilder<O, B, X>, X extends Throwable> extends LoggedBuilder<O, B> {
+public abstract class ConfiguredBuilder<O, B extends ConfiguredBuilder<O, B, X>, X extends Throwable> extends LoggedBuilder<O, B, X> {
 
     private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
     private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to %s";
@@ -73,13 +74,5 @@ public abstract class ConfiguredBuilder<O, B extends ConfiguredBuilder<O, B, X>,
      * @return the path
      */
     protected abstract @NotNull String getMainPath();
-
-    /**
-     * Creates a new exception from the given message.
-     *
-     * @param message the message
-     * @return the exception
-     */
-    protected abstract @NotNull X newException(@NotNull String message);
 
 }

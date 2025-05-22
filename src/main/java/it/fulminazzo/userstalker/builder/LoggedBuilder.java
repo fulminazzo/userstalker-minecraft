@@ -9,11 +9,12 @@ import java.util.logging.Logger;
 /**
  * A builder that contains a {@link Logger}.
  *
- * @param <O> the type parameter
+ * @param <O> the type of the object built by this builder
  * @param <B> this builder type
+ * @param <X> the type of the exception thrown by {@link #newException(String)}
  */
 @SuppressWarnings("unchecked")
-public abstract class LoggedBuilder<O, B extends LoggedBuilder<O, B>> {
+public abstract class LoggedBuilder<O, B extends LoggedBuilder<O, B, X>, X extends Throwable> {
 
     private @Nullable Logger logger;
 
@@ -22,7 +23,7 @@ public abstract class LoggedBuilder<O, B extends LoggedBuilder<O, B>> {
      *
      * @return the object built by this builder
      */
-    abstract @NotNull O build();
+    public abstract @NotNull O build();
 
     /**
      * Gets the logger.
@@ -43,5 +44,13 @@ public abstract class LoggedBuilder<O, B extends LoggedBuilder<O, B>> {
         this.logger = logger;
         return (B) this;
     }
+
+    /**
+     * Creates a new exception from the given message.
+     *
+     * @param message the message
+     * @return the exception
+     */
+    protected abstract @NotNull X newException(@NotNull String message);
 
 }
