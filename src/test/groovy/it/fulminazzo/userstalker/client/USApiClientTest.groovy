@@ -34,6 +34,22 @@ class USApiClientTest extends Specification {
         noExceptionThrown()
     }
 
+    def 'test that getUsernames returns #expected'() {
+        given:
+        client.query('POST', 'usernames', 201, null, serverResponse)
+
+        when:
+        def usernames = client.getUsernames()
+
+        then:
+        usernames == expected
+
+        where:
+        serverResponse         || expected
+        null                   || []
+        ['Alex', 'Fulminazzo'] || ['Alex', 'Fulminazzo']
+    }
+
     def 'test that query returns valid response'() {
         when:
         def response = client.query('GET', '/valid', 200, String, null)
