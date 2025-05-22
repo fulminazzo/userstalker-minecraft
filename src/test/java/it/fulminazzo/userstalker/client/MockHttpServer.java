@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
 
 public class MockHttpServer implements HttpHandler {
     private static final String API_PATH = "/api/v1/userlogins";
@@ -22,6 +23,8 @@ public class MockHttpServer implements HttpHandler {
             .build();
 
     private final HttpServer server;
+
+    private List<?> usernames;
 
     public MockHttpServer(int port) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -52,6 +55,7 @@ public class MockHttpServer implements HttpHandler {
     public void handleGet(HttpExchange httpExchange, String path) throws IOException {
         if (path.equalsIgnoreCase("/valid")) sendResponse(httpExchange, "OK");
         else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, USER_LOGIN);
+        else if (path.equalsIgnoreCase("usernames")) sendResponse(httpExchange, usernames);
         else httpExchange.sendResponseHeaders(404, 0);
     }
 
@@ -63,6 +67,9 @@ public class MockHttpServer implements HttpHandler {
         } else if (path.equalsIgnoreCase("")) {
             readInputBody(httpExchange, UserLogin.class);
             sendResponse(httpExchange, 201, null);
+        } else if (path.equalsIgnoreCase("usernames")) {
+            usernames = readInputBody(httpExchange, List.class);
+            sendResponse(httpExchange, 201, "OK");
         } else httpExchange.sendResponseHeaders(404, 0);
     }
 
