@@ -197,6 +197,28 @@ class ProfileCacheBuilderTest extends Specification {
         thrown(ProfileCacheException)
     }
 
+    def 'test that getPluginDirectory throws if null'() {
+        when:
+        def builder = new ProfileCacheBuilder(logger, null, null)
+
+        when:
+        builder.pluginDirectory
+
+        then:
+        thrown(ProfileCacheException)
+    }
+
+    def 'test that getConfiguration throws if null'() {
+        when:
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, null)
+
+        when:
+        builder.configuration
+
+        then:
+        thrown(ProfileCacheException)
+    }
+
     def 'test that checkFileExists throws wrapped ProfileCacheException'() {
         given:
         def file = Mock(File, constructorArgs: [PLUGIN_DIRECTORY, 'file.txt'])
