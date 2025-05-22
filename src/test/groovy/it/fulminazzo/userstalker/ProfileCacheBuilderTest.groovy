@@ -22,7 +22,9 @@ class ProfileCacheBuilderTest extends Specification {
 
     private static FileConfiguration mockConfiguration(String type, boolean section) {
         def map = [:]
-        if (section) map['skin-cache.type'] = type
+        if (section) map['skin-cache'] = [
+                'type': type
+        ]
         return new MockFileConfiguration(map)
     }
 
