@@ -1,6 +1,6 @@
 package it.fulminazzo.userstalker.client;
 
-import it.fulminazzo.userstalker.ConfiguredBuilder;
+import it.fulminazzo.userstalker.builder.ConfiguredBuilder;
 import org.jetbrains.annotations.NotNull;
 
 /**

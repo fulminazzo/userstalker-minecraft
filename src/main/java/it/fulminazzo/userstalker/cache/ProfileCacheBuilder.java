@@ -1,6 +1,6 @@
 package it.fulminazzo.userstalker.cache;
 
-import it.fulminazzo.userstalker.ConfiguredBuilder;
+import it.fulminazzo.userstalker.builder.ConfiguredBuilder;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.AccessLevel;

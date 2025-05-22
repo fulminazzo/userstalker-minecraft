@@ -1,4 +1,4 @@
-package it.fulminazzo.userstalker;
+package it.fulminazzo.userstalker.builder;
 
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
