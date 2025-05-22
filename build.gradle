@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'groovy'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'it.fulminazzo'
@@ -41,6 +42,32 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+shadowJar {
+    exclude 'META-INF/**'
+    exclude 'FileConfigurationStaticMethods.class'
+
+    dependencies {
+        exclude dependency('org.yaml:snakeyaml')
+    }
+
+    relocate('it.fulminazzo.yamlparser', "it.fulminazzo.${project.name}.yamlparser")
+    relocate('it.fulminazzo.tagparser', "it.fulminazzo.${project.name}.tagparser")
+    relocate('it.fulminazzo.fulmicollection', "it.fulminazzo.${project.name}.fulmicollection")
+    relocate('com.google.gson', "it.fulminazzo.${project.name}.gson")
+    relocate('com.moandjiezana.toml', "it.fulminazzo.${project.name}.toml")
+    archiveFileName = "$project.name-${project.version}.jar"
+}
+
+jar {
+    enabled = false // Required for sub projects depending on sub projects
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    archiveFileName = "$project.name-$project.version-original.jar"
+    dependsOn(shadowJar)
+    manifest {
+        attributes ('Manifest-Version': "$rootProject.version")
+    }
 }
 
 processResources {
