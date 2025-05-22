@@ -194,6 +194,20 @@ class ProfileCacheBuilderTest extends Specification {
         thrown(ProfileCacheException)
     }
 
+    def 'test that checkFileExists throws wrapped ProfileCacheException'() {
+        given:
+        def file = Mock(File, constructorArgs: [PLUGIN_DIRECTORY, 'file.txt'])
+        file.getParentFile() >> PLUGIN_DIRECTORY
+        file.exists() >> false
+        file.createNewFile() >> false
+
+        when:
+        ProfileCacheBuilder.checkFileExists(file)
+
+        then:
+        thrown(ProfileCacheException)
+    }
+
     def 'test that mock returns correct type'() {
         given:
         def type = 'test'
