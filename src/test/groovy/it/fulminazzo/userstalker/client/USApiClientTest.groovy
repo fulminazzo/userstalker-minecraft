@@ -45,6 +45,20 @@ class USApiClientTest extends Specification {
         response == expected
     }
 
+    def 'test that query is able to send complex object'() {
+        given:
+        def object = UserLogin.builder()
+                .username("Fulminazzo")
+                .ip("127.0.0.1")
+                .loginDate(LocalDateTime.of(2025, Month.MAY, 22, 22, 18))
+                .build()
+        when:
+        def response = client.query('POST', '/complex', 201, String, object)
+
+        then:
+        response == 'OK'
+    }
+
     def 'test that query of not existing returns 404'() {
         when:
         client.query('GET', '/not-existing', 200, null, null)
