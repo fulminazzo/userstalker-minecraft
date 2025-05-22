@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.cache;
 
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+@Getter
 public class TestProfileCache extends ProfileCacheImpl {
     private final Map<String, String> skinCache;
     private final Map<String, UUID> uuidCache;
