@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker
 
+import it.fulminazzo.userstalker.cache.FileProfileCache
 import it.fulminazzo.userstalker.cache.MockFileConfiguration
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import spock.lang.Specification
@@ -10,6 +11,30 @@ class ProfileCacheBuilderTest extends Specification {
 
     private final Logger logger = Logger.getLogger('TestUserStalker')
     private final File pluginDirectory = new File('build/resources/test')
+
+    def 'test that build creates and then reads file with type #type'() {
+        given:
+        def file = mockConfiguration(type, 10, true)
+
+        and:
+        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+
+        when:
+        def firstCache = builder.build()
+        def secondCache = builder.build()
+
+        then:
+        firstCache instanceof FileProfileCache
+        firstCache.config.class == expectedClass
+        secondCache instanceof FileProfileCache
+        secondCache.config.class == expectedClass
+
+        where:
+        type   || expectedClass
+        'json' || Class.forName('it.fulminazzo.yamlparser.configuration.JSONConfiguration')
+        'xml'  || Class.forName('it.fulminazzo.yamlparser.configuration.XMLConfiguration')
+        'toml' || Class.forName('it.fulminazzo.yamlparser.configuration.TOMLConfiguration')
+    }
 
     def 'test that getExpireTimeout of expire time #timeout returns #expected'() {
         given:
@@ -102,7 +127,7 @@ class ProfileCacheBuilderTest extends Specification {
     private static FileConfiguration mockConfiguration(String type, Long timeout, boolean section) {
         def map = [:]
         if (section) map['skin-cache'] = [
-                'type': type,
+                'type'       : type,
                 'expire-time': timeout
         ]
         return new MockFileConfiguration(map)
