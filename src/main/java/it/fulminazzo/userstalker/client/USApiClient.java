@@ -16,7 +16,10 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * This class directly interfaces with the REST API
@@ -78,8 +81,10 @@ public final class USApiClient {
      *
      * @return the usernames
      */
-    public @NotNull List<String> getUserNames() {
-        return null;
+    public @NotNull List<String> getUserNames() throws APIClientException {
+        List<?> result = query("GET", "usernames", HttpURLConnection.HTTP_OK, List.class, null);
+        if (result == null) return new ArrayList<>();
+        return result.stream().filter(Objects::nonNull).map(Object::toString).collect(Collectors.toList());
     }
 
     /**
