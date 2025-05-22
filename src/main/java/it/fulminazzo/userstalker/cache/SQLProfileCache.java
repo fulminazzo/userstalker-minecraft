@@ -48,7 +48,7 @@ public final class SQLProfileCache extends ProfileCacheImpl {
                 () -> connection.prepareStatement("INSERT INTO uuid_cache VALUES (?, ?)"),
                 s -> {
                     s.setString(1, username);
-                    s.setString(2, uuid.toString().replace("-", ""));
+                    s.setString(2, ProfileCacheUtils.toString(uuid));
                     return s.executeUpdate();
                 }
         );

@@ -41,7 +41,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
         Optional<UUID> uuid = getUserUUID(username);
         if (!uuid.isPresent()) return Optional.empty();
 
-        String rawUUID = uuid.get().toString().replace("-", "");
+        String rawUUID = ProfileCacheUtils.toString(uuid.get());
         return getJsonFromURL(String.format(MOJANG_API_SKIN, rawUUID),
                 "querying Mojang API for player skin")
                 .map(j -> j.getAsJsonArray("properties"))

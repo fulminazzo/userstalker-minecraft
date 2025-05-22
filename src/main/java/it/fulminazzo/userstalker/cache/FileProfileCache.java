@@ -52,7 +52,7 @@ public final class FileProfileCache extends ProfileCacheImpl {
 
     @Override
     public void storeUUID(@NotNull String username, @NotNull UUID uuid) {
-        config.set(username + ".uuid", uuid.toString().replace("-", ""));
+        config.set(username + ".uuid", ProfileCacheUtils.toString(uuid));
         config.save();
     }
 
