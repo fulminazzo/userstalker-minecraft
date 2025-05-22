@@ -38,6 +38,7 @@ dependencies {
     testRuntimeOnly 'net.bytebuddy:byte-buddy:1.17.5'
 
     testImplementation 'com.google.code.gson:gson:2.13.1'
+    testImplementation 'com.h2database:h2:2.2.224'
 }
 
 test {
