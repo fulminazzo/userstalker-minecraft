@@ -1,14 +1,13 @@
 package it.fulminazzo.userstalker.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 /**
  * Represents the number of time a user has logged in the server.
  */
 @Getter
+@EqualsAndHashCode
+@ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public final class UserLoginCount {
