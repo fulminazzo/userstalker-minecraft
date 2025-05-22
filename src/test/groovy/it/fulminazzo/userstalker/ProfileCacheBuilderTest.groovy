@@ -11,6 +11,25 @@ class ProfileCacheBuilderTest extends Specification {
     private final Logger logger = Logger.getLogger('TestUserStalker')
     private final File pluginDirectory = new File('build/resources/test')
 
+    def 'test that getExpireTimeout of expire time #timeout returns #expected'() {
+        given:
+        def file = mockConfiguration(null, timeout, true)
+
+        and:
+        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
+
+        when:
+        def actualTimeout = builder.getExpireTimeout()
+
+        then:
+        actualTimeout == expected
+
+        where:
+        timeout || expected
+        10      || 10 * 1000
+        null    || 86400 * 1000
+    }
+
     def 'test that loadCacheType of type #type returns #expected'() {
         given:
         def file = mockConfiguration(type, true)
@@ -77,9 +96,14 @@ class ProfileCacheBuilderTest extends Specification {
     }
 
     private static FileConfiguration mockConfiguration(String type, boolean section) {
+        return mockConfiguration(type, null, section)
+    }
+
+    private static FileConfiguration mockConfiguration(String type, Long timeout, boolean section) {
         def map = [:]
         if (section) map['skin-cache'] = [
-                'type': type
+                'type': type,
+                'expire-time': timeout
         ]
         return new MockFileConfiguration(map)
     }
