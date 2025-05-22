@@ -42,6 +42,7 @@ public class MockHttpServer implements HttpHandler {
 
     public void handleGet(HttpExchange httpExchange, String path) throws IOException {
         if (path.equalsIgnoreCase("/valid")) sendResponse(httpExchange, "OK");
+        else httpExchange.sendResponseHeaders(404, 0);
     }
 
     public void handlePost(HttpExchange httpExchange, String path) throws IOException {
