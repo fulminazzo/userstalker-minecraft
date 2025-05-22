@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * the given configuration.
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCacheBuilder, ProfileCacheException> {
+public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, ProfileCacheBuilder, ProfileCacheException> {
     private static final String FILE_NAME = "skin_cache";
 
     private static final CacheType DEFAULT_TYPE = CacheType.JSON;
@@ -43,33 +43,12 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCacheBui
     }
 
     /**
-     * Gets plugin directory.
-     *
-     * @return the plugin directory
-     * @throws ProfileCacheException an exception thrown in case the plugin directory has not been provided
-     */
-    @NotNull File getPluginDirectory() throws ProfileCacheException {
-        if (pluginDirectory == null) throw new ProfileCacheException("No plugin directory specified");
-        return pluginDirectory;
-    }
-
-    /**
-     * Sets the plugin directory.
-     *
-     * @param pluginDirectory the plugin directory
-     * @return this profile cache builder
-     */
-    public @NotNull ProfileCacheBuilder pluginDirectory(@Nullable File pluginDirectory) {
-        this.pluginDirectory = pluginDirectory;
-        return this;
-    }
-
-    /**
      * Builds the {@link ProfileCache} from the configurations in the config file.
      *
      * @return the profile cache
      * @throws ProfileCacheException an exception thrown in case of errors
      */
+    @Override
     public @NotNull ProfileCache build() throws ProfileCacheException {
         CacheType cacheType = loadCacheType();
         File cacheFile = new File(getPluginDirectory(), FILE_NAME + "." + cacheType.name().toLowerCase());
@@ -101,6 +80,28 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCacheBui
                 }
             }
         }
+    }
+
+    /**
+     * Gets plugin directory.
+     *
+     * @return the plugin directory
+     * @throws ProfileCacheException an exception thrown in case the plugin directory has not been provided
+     */
+    @NotNull File getPluginDirectory() throws ProfileCacheException {
+        if (pluginDirectory == null) throw new ProfileCacheException("No plugin directory specified");
+        return pluginDirectory;
+    }
+
+    /**
+     * Sets the plugin directory.
+     *
+     * @param pluginDirectory the plugin directory
+     * @return this profile cache builder
+     */
+    public @NotNull ProfileCacheBuilder pluginDirectory(@Nullable File pluginDirectory) {
+        this.pluginDirectory = pluginDirectory;
+        return this;
     }
 
     /**

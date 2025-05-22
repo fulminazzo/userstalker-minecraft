@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * @param <X> the type of the exception thrown by {@link #newException(String)}
  */
 @SuppressWarnings("unchecked")
-public abstract class ConfiguredBuilder<B extends ConfiguredBuilder<B, X>, X extends Throwable> extends LoggedBuilder<B> {
+public abstract class ConfiguredBuilder<O, B extends ConfiguredBuilder<O, B, X>, X extends Throwable> extends LoggedBuilder<O, B> {
 
     private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
     private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to %s";

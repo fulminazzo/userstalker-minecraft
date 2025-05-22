@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * A helper class to create a {@link USApiClient} from
  * the given configuration.
  */
-final class USApiClientBuilder extends ConfiguredBuilder<USApiClientBuilder, APIClientException> {
+final class USApiClientBuilder extends ConfiguredBuilder<USApiClient, USApiClientBuilder, APIClientException> {
 
     private static final int DEFAULT_PORT = 80;
 
@@ -17,6 +17,7 @@ final class USApiClientBuilder extends ConfiguredBuilder<USApiClientBuilder, API
      * @return the api client
      * @throws APIClientException the api client exception
      */
+    @Override
     public @NotNull USApiClient build() throws APIClientException {
         String ip = getConfigurationValue("address", String.class, null);
         int port = getConfigurationValue("port", Integer.class, DEFAULT_PORT);
