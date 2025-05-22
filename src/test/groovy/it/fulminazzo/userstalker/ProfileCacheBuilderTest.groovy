@@ -9,13 +9,14 @@ import java.util.logging.Logger
 class ProfileCacheBuilderTest extends Specification {
 
     private final Logger logger = Logger.getLogger('TestUserStalker')
+    private final File pluginDirectory = new File('build/resources/test')
 
     def 'test that loadCacheType of type #type returns #expected'() {
         given:
         def file = mockConfiguration(type, true)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, file)
+        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
 
         when:
         def actualType = builder.loadCacheType()
@@ -38,7 +39,7 @@ class ProfileCacheBuilderTest extends Specification {
         def file = mockConfiguration(null, false)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, file)
+        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
 
         when:
         def actualType = builder.loadCacheType()
@@ -52,7 +53,7 @@ class ProfileCacheBuilderTest extends Specification {
         def file = mockConfiguration('not-valid', true)
 
         and:
-        def builder = new ProfileCacheBuilder(logger, file)
+        def builder = new ProfileCacheBuilder(logger, pluginDirectory, file)
 
         when:
         builder.loadCacheType()
