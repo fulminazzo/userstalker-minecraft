@@ -124,7 +124,7 @@ class ProfileCacheBuilderTest extends Specification {
         cache.config.class == Class.forName('it.fulminazzo.yamlparser.configuration.YAMLConfiguration')
     }
 
-    def 'test that getExpireTimeout of expire time #timeout returns #expected'() {
+    def 'test that getExpiryTimeout of expire time #timeout returns #expected'() {
         given:
         def file = mockConfiguration(null, timeout, true)
 
@@ -132,7 +132,7 @@ class ProfileCacheBuilderTest extends Specification {
         def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
 
         when:
-        def actualTimeout = builder.getExpireTimeout()
+        def actualTimeout = builder.getExpiryTimeout()
 
         then:
         actualTimeout == expected

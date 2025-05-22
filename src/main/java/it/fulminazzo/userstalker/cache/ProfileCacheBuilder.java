@@ -36,6 +36,7 @@ public final class ProfileCacheBuilder {
      * Builds the {@link ProfileCache} from the configurations in the config file.
      *
      * @return the profile cache
+     * @throws ProfileCacheException an exception thrown in case of errors
      */
     public @NotNull ProfileCache build() throws ProfileCacheException {
         CacheType cacheType = loadCacheType();
@@ -45,12 +46,12 @@ public final class ProfileCacheBuilder {
             case XML:
             case TOML: {
                 checkFileExists(cacheFile);
-                return new FileProfileCache(cacheFile, getExpireTimeout());
+                return new FileProfileCache(cacheFile, getExpiryTimeout());
             }
             case YAML: {
                 if (!cacheFile.exists()) cacheFile = new File(pluginDirectory, FILE_NAME + ".yml");
                 checkFileExists(cacheFile);
-                return new FileProfileCache(cacheFile, getExpireTimeout());
+                return new FileProfileCache(cacheFile, getExpiryTimeout());
             }
             default: {
                 String address = getConfigurationString("address");
@@ -61,7 +62,7 @@ public final class ProfileCacheBuilder {
                 String jdbcPath = String.format("jdbc:%s://%s/%s", databaseType, address, database);
                 try {
                     Connection connection = DriverManager.getConnection(jdbcPath, username, password);
-                    return new SQLProfileCache(connection, getExpireTimeout());
+                    return new SQLProfileCache(connection, getExpiryTimeout());
                 } catch (SQLException e) {
                     throw new ProfileCacheException(String.format("SQLException while connecting with database (%s, %s, %s): %s",
                             jdbcPath, username, password, e.getMessage()));
@@ -70,16 +71,14 @@ public final class ProfileCacheBuilder {
         }
     }
 
-    private long getExpireTimeout() {
-        String path = PATH + ".expire-time";
-        Long expireTimeout = configuration.getLong(path);
-        if (expireTimeout == null) {
-            logger.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TIMEOUT));
-            return DEFAULT_TIMEOUT * 1000;
-        } else return expireTimeout * 1000;
-    }
-
-    private @NotNull CacheType loadCacheType() throws ProfileCacheException {
+    /**
+     * Loads the appropriate {@link CacheType} from the configuration file.
+     * If no value is provided, it will fall back to {@link #DEFAULT_TYPE}.
+     *
+     * @return the cache type
+     * @throws ProfileCacheException thrown in case an invalid type is provided
+     */
+    @NotNull CacheType loadCacheType() throws ProfileCacheException {
         String path = PATH + ".type";
         String type = configuration.getString(path);
         if (type == null) {
@@ -94,7 +93,29 @@ public final class ProfileCacheBuilder {
                 ));
     }
 
-    private @NotNull String getConfigurationString(final @NotNull String path) throws ProfileCacheException {
+    /**
+     * Gets the expiry timeout from the configuration file.
+     * If no value is provided, it will fall back to {@link #DEFAULT_TIMEOUT}.
+     *
+     * @return the expiry timeout
+     */
+    long getExpiryTimeout() {
+        String path = PATH + ".expire-time";
+        Long expireTimeout = configuration.getLong(path);
+        if (expireTimeout == null) {
+            logger.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TIMEOUT));
+            return DEFAULT_TIMEOUT * 1000;
+        } else return expireTimeout * 1000;
+    }
+
+    /**
+     * Gets a string value from the configuration file.
+     *
+     * @param path the path
+     * @return the string value
+     * @throws ProfileCacheException thrown in case no value is provided
+     */
+    @NotNull String getConfigurationString(final @NotNull String path) throws ProfileCacheException {
         String actualPath = PATH + "." + path;
         String value = configuration.getString(actualPath);
         if (value == null)
@@ -102,7 +123,14 @@ public final class ProfileCacheBuilder {
         else return value;
     }
 
-    private static void checkFileExists(final @NotNull File cacheFile) throws ProfileCacheException {
+    /**
+     * Checks if the given file exists.
+     * If not, it is created.
+     *
+     * @param cacheFile the cache file
+     * @throws ProfileCacheException an exception thrown in case of errors
+     */
+    static void checkFileExists(final @NotNull File cacheFile) throws ProfileCacheException {
         if (!cacheFile.exists())
             try {
                 FileUtils.createNewFile(cacheFile);
@@ -111,11 +139,29 @@ public final class ProfileCacheBuilder {
             }
     }
 
-    private enum CacheType {
+    /**
+     * An enum that represent the type of cache to adopt.
+     */
+    enum CacheType {
+        /**
+         * YAML cache type.
+         */
         YAML,
+        /**
+         * JSON cache type.
+         */
         JSON,
+        /**
+         * TOML cache type.
+         */
         TOML,
+        /**
+         * XML cache type.
+         */
         XML,
+        /**
+         * Database cache type.
+         */
         DATABASE
     }
 
