@@ -4,6 +4,7 @@ import it.fulminazzo.fulmicollection.interfaces.functions.FunctionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,7 +40,15 @@ public final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public @NotNull Optional<UUID> findUserUUID(@NotNull String username) throws ProfileCacheException {
-        return Optional.empty();
+        return Optional.ofNullable(executeStatement(
+                () -> connection.prepareStatement("SELECT Id FROM uuid_cache WHERE Username = ?"),
+                s -> {
+                    s.setString(1, username);
+                    ResultSet result = s.executeQuery();
+                    if (result.next()) return result.getString("Id");
+                    else return null;
+                }
+        )).map(ProfileCacheUtils::fromString);
     }
 
     @Override
