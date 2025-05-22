@@ -97,7 +97,7 @@ public final class USApiClient {
      * @return the user logins
      */
     public @NotNull List<UserLogin> getUserLogins(final @NotNull String username) throws APIClientException {
-        List<?> result = query("GET", username, HttpURLConnection.HTTP_OK, List.class, null);
+        List<?> result = query("GET", "/" + username, HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
         return result.stream()
                 .filter(Objects::nonNull)
