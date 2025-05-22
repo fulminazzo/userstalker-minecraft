@@ -31,7 +31,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
         and:
         def resultSet = connection
-                .prepareStatement('SELECT Id FROM uuid_cache WHERE Username = Notch')
+                .prepareStatement('SELECT id FROM uuid_cache WHERE username = \'Notch\'')
                 .executeQuery()
 
         then:
