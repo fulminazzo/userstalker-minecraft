@@ -120,7 +120,10 @@ class SQLProfileCacheIntegrationTest extends Specification {
         cache.executeStatement(() -> connection.prepareStatement('INVALID'), s -> null)
 
         then:
-        thrown(ProfileCacheException)
+        def e = thrown(ProfileCacheException)
+        e.message == 'JdbcSQLSyntaxErrorException when querying database: ' +
+                'Syntax error in SQL statement "[*]INVALID"; expected "INSERT"; ' +
+                'SQL statement:\nINVALID [42001-224]'
     }
 
     def 'test that close closes connection'() {
@@ -145,7 +148,8 @@ class SQLProfileCacheIntegrationTest extends Specification {
         cache.close()
 
         then:
-        thrown(ProfileCacheException)
+        def e = thrown(ProfileCacheException)
+        e.message == 'SQLException when closing connection with database: '
     }
 
     def 'test context loads'() {

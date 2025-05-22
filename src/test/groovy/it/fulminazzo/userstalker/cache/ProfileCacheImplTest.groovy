@@ -125,7 +125,7 @@ class ProfileCacheImplTest extends Specification {
 
         then:
         def e = thrown(ProfileCacheException)
-        e.message == "IOException when $ACTION: Connection refused (Connection refused)"
+        e.message == "ConnectException when $ACTION: Connection refused (Connection refused)"
     }
 
     def 'test that getJsonFromURL with invalid code throws'() {

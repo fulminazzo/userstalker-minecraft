@@ -39,7 +39,7 @@ class ProfileCacheBuilderTest extends Specification {
     def 'test that connection to invalid database throws'() {
         given:
         def file = mockConfiguration('database', 10,
-                'localhost:3306', 'mysql',
+                'localhost:3306', 'unknown',
                 'userstalker', 'username', 'password',
                 true
         )
@@ -51,7 +51,10 @@ class ProfileCacheBuilderTest extends Specification {
         builder.build()
 
         then:
-        thrown(ProfileCacheException)
+        def e = thrown(ProfileCacheException)
+        e.message == 'SQLException when connecting with database ' +
+                '(jdbc:unknown://localhost:3306/userstalker, username, password): ' +
+                'No suitable driver found for jdbc:unknown://localhost:3306/userstalker'
     }
 
     def 'test that missing database configuration throws'() {
@@ -197,6 +200,7 @@ class ProfileCacheBuilderTest extends Specification {
     def 'test that checkFileExists throws wrapped ProfileCacheException'() {
         given:
         def file = Mock(File, constructorArgs: [PLUGIN_DIRECTORY, 'file.txt'])
+        file.getName() >> 'file.txt'
         file.getParentFile() >> PLUGIN_DIRECTORY
         file.exists() >> false
         file.createNewFile() >> false
@@ -205,7 +209,8 @@ class ProfileCacheBuilderTest extends Specification {
         ProfileCacheBuilder.checkFileExists(file)
 
         then:
-        thrown(ProfileCacheException)
+        def e = thrown(ProfileCacheException)
+        e.message == 'There was an error while creating file "file.txt"!'
     }
 
     def 'test that mock returns correct type'() {
