@@ -109,6 +109,7 @@ public final class USApiClient {
             URL url = new URL(link);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(method);
+            connection.setDoOutput(true);
 
             if (input != null)
                 try (OutputStream outputStream = connection.getOutputStream()) {
