@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.client;
 
+import com.google.gson.Gson;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import lombok.AccessLevel;
@@ -8,6 +9,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -86,12 +92,35 @@ public final class USApiClient {
      * @param expectedResponse the expected response
      * @param convertClass     the convert class
      * @return the response
+     * @throws APIClientException the exception thrown in case of any errors
      */
     @Nullable <T> T query(final @NotNull String method,
                           final @NotNull String path,
                           final int expectedResponse,
-                          final @NotNull Class<T> convertClass) {
-        return null;
+                          final @Nullable Class<T> convertClass) throws APIClientException {
+        final String link = String.format("http://%s:%s%s/%s", address, port, API_PATH, path);
+        try {
+            URL url = new URL(link);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod(method);
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode != expectedResponse)
+                throw new APIClientException(String.format("Invalid response code received from \"%s\": %s", link, responseCode));
+
+            final T data;
+            if (convertClass != null) {
+                InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+                Gson gson = new Gson();
+                data = gson.fromJson(reader, convertClass);
+            } else data = null;
+            connection.disconnect();
+            return data;
+        } catch (MalformedURLException e) {
+            throw new APIClientException("Invalid URL provided: " + link);
+        } catch (IOException e) {
+            throw new APIClientException(String.format("%s to \"%s\"", method, link), e);
+        }
     }
 
 }
