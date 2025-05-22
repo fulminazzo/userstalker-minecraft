@@ -19,7 +19,9 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public final class ProfileCacheBuilder {
     private static final String PATH = "skin-cache";
+
     private static final CacheType DEFAULT_TYPE = CacheType.JSON;
+    private static final long DEFAULT_TIMEOUT = 24 * 60 * 60;
 
     private static final String MISSING_VALUE_DEFAULT = "Invalid configuration detected: missing %s value. Defaulting to %s";
 
@@ -49,8 +51,12 @@ public final class ProfileCacheBuilder {
     }
 
     private long getExpireTimeout() {
-        //TODO:
-        return 0;
+        String path = PATH + ".expire-time";
+        Long expireTimeout = configuration.getLong(path);
+        if (expireTimeout == null) {
+            logger.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TIMEOUT));
+            return DEFAULT_TIMEOUT * 1000;
+        } else return expireTimeout * 1000;
     }
 
     private @NotNull CacheType loadCacheType() {
