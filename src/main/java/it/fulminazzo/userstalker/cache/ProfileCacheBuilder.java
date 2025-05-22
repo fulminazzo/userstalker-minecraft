@@ -2,6 +2,7 @@ package it.fulminazzo.userstalker.cache;
 
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.utils.FileUtils;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ import java.util.logging.Logger;
  * A helper class to create a {@link ProfileCache} from
  * the given configuration.
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class ProfileCacheBuilder {
     private static final String FILE_NAME = "skin_cache";
     private static final String PATH = "skin-cache";
