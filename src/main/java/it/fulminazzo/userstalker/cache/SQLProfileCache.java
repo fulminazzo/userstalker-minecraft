@@ -4,6 +4,7 @@ import it.fulminazzo.fulmicollection.interfaces.functions.FunctionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Optional;
@@ -40,12 +41,13 @@ public final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public @NotNull Optional<UUID> findUserUUID(@NotNull String username) throws ProfileCacheException {
+        checkUUIDTableExists();
         return Optional.ofNullable(executeStatement(
-                () -> connection.prepareStatement("SELECT Id FROM uuid_cache WHERE Username = ?"),
+                () -> connection.prepareStatement("SELECT id FROM uuid_cache WHERE username = ?"),
                 s -> {
                     s.setString(1, username);
                     ResultSet result = s.executeQuery();
-                    if (result.next()) return result.getString("Id");
+                    if (result.next()) return result.getString("id");
                     else return null;
                 }
         )).map(ProfileCacheUtils::fromString);
@@ -53,6 +55,7 @@ public final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public void storeUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
+        checkUUIDTableExists();
         executeStatement(
                 () -> connection.prepareStatement("INSERT INTO uuid_cache VALUES (?, ?)"),
                 s -> {
@@ -64,10 +67,27 @@ public final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     /**
+     * Checks if the uuid_cache table exists, if not it creates it.
+     *
+     * @throws ProfileCacheException an exception thrown in case an error occurs
+     */
+    void checkUUIDTableExists() throws ProfileCacheException {
+        executeStatement(
+                () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS uuid_cache (" +
+                        "username VARCHAR(32) PRIMARY KEY," +
+                        "id VARCHAR(32) NOT NULL" +
+                        ")"),
+                PreparedStatement::executeUpdate
+        );
+    }
+
+    /**
      * Executes the given function as new statement.
      *
-     * @param <T>      the type returned
-     * @param function the function to execute
+     * @param <S>               the type parameter
+     * @param <T>               the type returned
+     * @param statementProvider the statement provider
+     * @param function          the function to execute
      * @return the returned value
      * @throws ProfileCacheException a wrapper exception for any error
      */
