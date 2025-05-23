@@ -24,7 +24,7 @@ class USAsyncApiClientTest extends Specification {
         server.stop()
     }
 
-    def 'test notifyUserLogin does not throw'() {
+    def 'test notifyUserLogin works'() {
         given:
         def username = 'Fulminazzo'
         def ip = new InetSocketAddress('localhost', 8080)
@@ -46,6 +46,32 @@ class USAsyncApiClientTest extends Specification {
 
         when:
         client.notifyUserLogin(username, ip)
+
+        then:
+        noExceptionThrown()
+    }
+
+    def 'test getUsernamesAndThen executes given function'() {
+        given:
+        def list = null
+        def expected = ['Alex', 'Fulminazzo']
+
+        and:
+        queryServer('usernames', 'POST', expected)
+
+        when:
+        client.getUsernamesAndThen(it -> list = it)
+
+        then:
+        list == expected
+    }
+
+    def 'test getUsernamesAndThen does not throw on APIClientException'() {
+        given:
+        def client = newClient('invalid')
+
+        when:
+        client.getUsernamesAndThen(null)
 
         then:
         noExceptionThrown()
