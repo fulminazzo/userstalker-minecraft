@@ -150,9 +150,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
         try (S statement = statementProvider.get()) {
             return function.apply(statement);
         } catch (SQLException e) {
-            throw new ProfileCacheException(String.format("%s when querying database: %s",
-                    e.getClass().getSimpleName(),
-                    e.getMessage()));
+            throw new ProfileCacheException("querying database", e);
         }
     }
 

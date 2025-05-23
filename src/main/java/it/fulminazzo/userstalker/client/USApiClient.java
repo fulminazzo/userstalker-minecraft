@@ -151,13 +151,11 @@ public final class USApiClient {
             else if (responseCode != expectedResponse)
                 throw new APIClientException(String.format("Invalid response code received from \"%s\": %s", link, responseCode));
 
-            final T data;
             if (convertClass != null) {
                 InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-                data = gson.fromJson(reader, convertClass);
-            } else data = null;
-            connection.disconnect();
-            return data;
+                return gson.fromJson(reader, convertClass);
+            }
+            return null;
         } catch (MalformedURLException e) {
             throw new APIClientException("Invalid URL provided: " + link);
         } catch (IOException e) {

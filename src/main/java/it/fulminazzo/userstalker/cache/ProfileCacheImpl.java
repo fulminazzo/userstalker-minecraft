@@ -103,8 +103,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             Gson gson = new Gson();
-            Optional<JsonObject> optional = Optional.of(gson.fromJson(reader, JsonObject.class));
-            return optional;
+            return Optional.of(gson.fromJson(reader, JsonObject.class));
         } catch (MalformedURLException e) {
             throw new ProfileCacheException("Invalid URL provided: " + url);
         } catch (IOException e) {
