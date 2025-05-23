@@ -116,9 +116,6 @@ class USAsyncApiClientTest extends Specification {
         def list = null
         def fallback = false
 
-        and:
-        queryServer('showuserlogins', 'POST', true)
-
         when:
         client.getUserLoginsAndThen('Fulminazzo', it -> list = it, () -> fallback = true)
 
