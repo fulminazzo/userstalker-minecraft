@@ -73,13 +73,22 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets the newest user logins.
+     * Gets the newest user logins and executes the given function.
      *
-     * @return the user logins
-     * @throws APIClientException the exception thrown in case of any errors
+     * @param function the function to executed
+     * @param orElse   the function executed in case an error occurs
      */
-    public @NotNull List<UserLogin> getNewestUserLogins() throws APIClientException {
-        return null;
+    public void getNewestUserLoginsAndThen(
+            final @NotNull Consumer<List<UserLogin>> function,
+            final @NotNull Runnable orElse
+    ) {
+        try {
+            @NotNull List<UserLogin> userLogins = client.getNewestUserLogins();
+            function.accept(userLogins);
+        } catch (APIClientException e) {
+            logger.warning(e.getMessage());
+            orElse.run();
+        }
     }
 
     /**
