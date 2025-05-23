@@ -83,7 +83,7 @@ class USAsyncApiClientTest extends Specification {
         fallback
     }
 
-    def 'test getUserLogins executes given function'() {
+    def 'test getUserLoginsAndThen executes given function'() {
         given:
         def list = null
         def fallback = false
@@ -92,14 +92,14 @@ class USAsyncApiClientTest extends Specification {
         queryServer('showuserlogins', 'POST', true)
 
         when:
-        client.getUserLogins('Fulminazzo', it -> list = it, () -> fallback = true)
+        client.getUserLoginsAndThen('Fulminazzo', it -> list = it, () -> fallback = true)
 
         then:
         list == MockHttpServer.USER_LOGINS
         !fallback
     }
 
-    def 'test getUserLogins does not throw on APIClientException'() {
+    def 'test getUserLoginsAndThen does not throw on APIClientException'() {
         given:
         def client = newClient('invalid')
 
@@ -107,7 +107,7 @@ class USAsyncApiClientTest extends Specification {
         def fallback = false
 
         when:
-        client.getUserLogins('Fulminazzo', null, () -> fallback = true)
+        client.getUserLoginsAndThen('Fulminazzo', null, () -> fallback = true)
 
         then:
         noExceptionThrown()

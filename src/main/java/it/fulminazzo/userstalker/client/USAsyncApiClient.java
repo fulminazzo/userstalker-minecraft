@@ -108,7 +108,7 @@ public abstract class USAsyncApiClient {
      * @param function the function to executed
      * @param orElse   the function executed in case an error occurs
      */
-    public void getUserLogins(
+    public void getUserLoginsAndThen(
             final @NotNull String username,
             final @NotNull Consumer<List<UserLogin>> function,
             final @NotNull Runnable orElse
