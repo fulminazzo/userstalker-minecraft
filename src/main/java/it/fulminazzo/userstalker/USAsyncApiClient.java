@@ -4,6 +4,7 @@ import it.fulminazzo.userstalker.client.APIClientException;
 import it.fulminazzo.userstalker.client.USApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
@@ -28,17 +29,32 @@ public final class USAsyncApiClient {
      * Instantiates a new async api client.
      *
      * @param plugin the plugin
-     * @throws APIClientException the api client exception
+     * @throws APIClientException an exception thrown in case of errors when building the api client
      */
     public USAsyncApiClient(final @NotNull UserStalker plugin) throws APIClientException {
-        this.plugin = plugin;
-        this.logger = plugin.getLogger();
-        this.scheduler = plugin.getServer().getScheduler();
+        this(plugin, plugin.getLogger(), plugin.getServer().getScheduler(), plugin.getConfiguration());
+    }
 
-        this.client = USApiClient.builder()
-                .logger(logger)
-                .configuration(plugin.getConfiguration())
-                .build();
+    /**
+     * Instantiates a new async api client.
+     *
+     * @param plugin        the plugin
+     * @param logger        the logger
+     * @param scheduler     the scheduler used to run asynchronous tasks
+     * @param configuration the configuration used to build the api client
+     * @throws APIClientException an exception thrown in case of errors when building the api client
+     */
+    public USAsyncApiClient(
+            final @NotNull JavaPlugin plugin,
+            final @NotNull Logger logger,
+            final @NotNull BukkitScheduler scheduler,
+            final @NotNull FileConfiguration configuration
+    ) throws APIClientException {
+        this.plugin = plugin;
+        this.logger = logger;
+        this.scheduler = scheduler;
+
+        this.client = USApiClient.builder().logger(logger).configuration(configuration).build();
     }
 
     /**
