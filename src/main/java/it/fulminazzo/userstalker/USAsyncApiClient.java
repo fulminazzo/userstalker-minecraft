@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -69,7 +68,7 @@ public final class USAsyncApiClient {
             try {
                 client.notifyUserLogin(username, ip);
             } catch (APIClientException e) {
-                logger.log(Level.SEVERE, e.getMessage(), e);
+                logger.warning(e.getMessage());
             }
         });
     }
