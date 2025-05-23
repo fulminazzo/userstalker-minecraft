@@ -20,7 +20,11 @@ class USAsyncApiClientTest extends Specification {
 
         def logger = Logger.getLogger(getClass().simpleName)
 
-        def configuration = new MockFileConfiguration([:])
+        def configuration = new MockFileConfiguration([
+                'userstalker-http-server': [
+                        'address': 'http://localhost'
+                ]
+        ])
 
         client = new USAsyncApiClient(null, logger, scheduler, configuration)
     }
