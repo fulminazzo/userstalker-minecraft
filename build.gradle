@@ -44,7 +44,7 @@ dependencies {
     testImplementation 'com.google.code.gson:gson:2.13.1'
     testImplementation 'com.h2database:h2:2.2.224'
 
-    testCompileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
+    testImplementation 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
 }
 
 test {
