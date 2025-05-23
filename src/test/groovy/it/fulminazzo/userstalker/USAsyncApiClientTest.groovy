@@ -1,6 +1,6 @@
 package it.fulminazzo.userstalker
 
-import org.bukkit.Server
+
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitScheduler
 import spock.lang.Specification
@@ -18,19 +18,11 @@ class USAsyncApiClientTest extends Specification {
             runnable.run()
         }
 
-        def server = Mock(Server)
-        server.scheduler >> scheduler
-
         def logger = Logger.getLogger(getClass().simpleName)
 
         def configuration = new MockFileConfiguration([:])
 
-        def plugin = Mock(UserStalker)
-        plugin.logger >> logger
-        plugin.configuration >> configuration
-        plugin.server >> server
-
-        client = new USAsyncApiClient(plugin)
+        client = new USAsyncApiClient(null, logger, scheduler, configuration)
     }
 
     def 'test context loads'() {
