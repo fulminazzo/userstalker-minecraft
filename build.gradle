@@ -31,7 +31,7 @@ dependencies {
 
     compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
 
-    implementation 'it.fulminazzo:FulmiCollection:1.7.2'
+    implementation 'it.fulminazzo:FulmiCollection:1.8'
     implementation 'it.fulminazzo:Configurations:1.6.3'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
