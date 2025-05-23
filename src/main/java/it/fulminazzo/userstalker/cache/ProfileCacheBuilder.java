@@ -192,7 +192,7 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
         /**
          * Database cache type.
          */
-        DATABASE
+        SQL
     }
 
 }

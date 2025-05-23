@@ -18,9 +18,9 @@ class ProfileCacheBuilderTest extends Specification {
         FileUtils.createFolder(PLUGIN_DIRECTORY)
     }
 
-    def 'test that build builds SQLProfileCache on DATABASE type'() {
+    def 'test that build builds SQLProfileCache on SQL type'() {
         given:
-        def file = mockConfiguration('database', 10, true)
+        def file = mockConfiguration('sql', 10, true)
 
         and:
         def server = Server.createTcpServer('-tcpAllowOthers', '-ifNotExists').start()
@@ -38,7 +38,7 @@ class ProfileCacheBuilderTest extends Specification {
 
     def 'test that connection to invalid database throws'() {
         given:
-        def file = mockConfiguration('database', 10,
+        def file = mockConfiguration('sql', 10,
                 'localhost:3306', 'unknown',
                 'userstalker', 'username', 'password',
                 true
