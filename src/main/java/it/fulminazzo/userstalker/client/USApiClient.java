@@ -134,9 +134,10 @@ public final class USApiClient {
                           final @Nullable Object input) throws APIClientException {
         final Gson gson = new Gson();
         final String link = String.format("%s:%s%s%s", address, port, API_PATH, path);
+        HttpURLConnection connection = null;
         try {
             URL url = new URL(link);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(method);
             connection.setDoOutput(true);
 
@@ -161,6 +162,8 @@ public final class USApiClient {
             throw new APIClientException("Invalid URL provided: " + link);
         } catch (IOException e) {
             throw new APIClientException(String.format("%s to \"%s\"", method, link), e);
+        } finally {
+            if (connection != null) connection.disconnect();
         }
     }
 
