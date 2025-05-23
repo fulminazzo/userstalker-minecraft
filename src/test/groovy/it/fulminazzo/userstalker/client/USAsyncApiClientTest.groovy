@@ -51,6 +51,34 @@ class USAsyncApiClientTest extends Specification {
         noExceptionThrown()
     }
 
+    def 'test getMonthlyUserLoginsAndThen executes given function'() {
+        given:
+        def list = null
+        def fallback = false
+
+        when:
+        client.getMonthlyUserLoginsAndThen(it -> list = it, () -> fallback = true)
+
+        then:
+        list == MockHttpServer.USER_LOGINS_COUNT
+        !fallback
+    }
+
+    def 'test getMonthlyUserLoginsAndThen does not throw on APIClientException'() {
+        given:
+        def client = newClient('invalid')
+
+        and:
+        def fallback = false
+
+        when:
+        client.getMonthlyUserLoginsAndThen(null, () -> fallback = true)
+
+        then:
+        noExceptionThrown()
+        fallback
+    }
+
     def 'test getNewestUserLoginsAndThen executes given function'() {
         given:
         def list = null
