@@ -1,7 +1,7 @@
-package it.fulminazzo.userstalker
+package it.fulminazzo.userstalker.client
 
-import it.fulminazzo.userstalker.client.MockHttpServer
-import org.bukkit.scheduler.BukkitScheduler
+import it.fulminazzo.userstalker.MockFileConfiguration
+import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
 
 import java.util.logging.Logger
@@ -62,21 +62,21 @@ class USAsyncApiClientTest extends Specification {
     }
 
     private USAsyncApiClient newClient(String host) {
-        def scheduler = Mock(BukkitScheduler)
-        scheduler.runTaskAsynchronously(_, _ as Runnable) >> { args ->
-            Runnable runnable = args[1] as Runnable
-            runnable.run()
-        }
-
         def logger = Logger.getLogger(getClass().simpleName)
 
         def configuration = new MockFileConfiguration([
                 'userstalker-http-server': [
-                        'address': host
+                        'address': host,
+                        'port': PORT
                 ]
         ])
 
-        return new USAsyncApiClient(null, logger, scheduler, configuration)
+        return new USAsyncApiClient(logger, configuration) {
+            @Override
+            protected void runAsync(@NotNull Runnable runnable) {
+                runnable.run()
+            }
+        }
     }
 
 }
