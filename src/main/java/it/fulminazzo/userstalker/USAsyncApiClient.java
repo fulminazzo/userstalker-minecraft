@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -45,11 +46,16 @@ public final class USAsyncApiClient {
      *
      * @param username the username
      * @param ip       the ip
-     * @throws APIClientException the exception thrown in case of any errors
      */
     public void notifyUserLogin(final @NotNull String username,
-                                final @NotNull InetSocketAddress ip) throws APIClientException {
-
+                                final @NotNull InetSocketAddress ip) {
+        runAsync(() -> {
+            try {
+                client.notifyUserLogin(username, ip);
+            } catch (APIClientException e) {
+                logger.log(Level.SEVERE, e.getMessage(), e);
+            }
+        });
     }
 
     /**
@@ -101,6 +107,10 @@ public final class USAsyncApiClient {
      */
     public @NotNull List<UserLogin> getUserLogins(final @NotNull String username) throws APIClientException {
         return null;
+    }
+
+    private void runAsync(final @NotNull Runnable runnable) {
+        scheduler.runTaskAsynchronously(plugin, runnable);
     }
 
 }
