@@ -53,13 +53,22 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets the top user logins of all time.
+     * Gets the top user logins of all time and executes the given function.
      *
-     * @return the user logins count
-     * @throws APIClientException the exception thrown in case of any errors
+     * @param function the function to executed
+     * @param orElse   the function executed in case an error occurs
      */
-    public @NotNull List<UserLoginCount> getTopUserLogins() throws APIClientException {
-        return null;
+    public void getTopUserLoginsAndThen(
+            final @NotNull Consumer<List<UserLoginCount>> function,
+            final @NotNull Runnable orElse
+    ) {
+        try {
+            @NotNull List<UserLoginCount> userLoginsCount = client.getTopUserLogins();
+            function.accept(userLoginsCount);
+        } catch (APIClientException e) {
+            logger.warning(e.getMessage());
+            orElse.run();
+        }
     }
 
     /**
