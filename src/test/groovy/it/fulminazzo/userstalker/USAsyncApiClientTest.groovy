@@ -1,7 +1,6 @@
 package it.fulminazzo.userstalker
 
 
-import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitScheduler
 import spock.lang.Specification
 
@@ -13,7 +12,7 @@ class USAsyncApiClientTest extends Specification {
 
     void setup() {
         def scheduler = Mock(BukkitScheduler)
-        scheduler.runTaskAsynchronously(_ as JavaPlugin, _ as Runnable) >> { args ->
+        scheduler.runTaskAsynchronously(_, _ as Runnable) >> { args ->
             Runnable runnable = args[1] as Runnable
             runnable.run()
         }
