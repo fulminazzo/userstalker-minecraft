@@ -16,7 +16,7 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-class MockHttpServer implements HttpHandler {
+public class MockHttpServer implements HttpHandler {
     static final UserLogin USER_LOGIN = UserLogin.builder()
             .username("Fulminazzo")
             .ip("127.0.0.1")
