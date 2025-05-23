@@ -54,27 +54,33 @@ class USAsyncApiClientTest extends Specification {
     def 'test getUsernamesAndThen executes given function'() {
         given:
         def list = null
-        def expected = ['Alex', 'Fulminazzo']
+        def fallback = false
 
         and:
+        def expected = ['Alex', 'Fulminazzo']
         queryServer('usernames', 'POST', expected)
 
         when:
-        client.getUsernamesAndThen(it -> list = it)
+        client.getUsernamesAndThen(it -> list = it, () -> fallback = true)
 
         then:
         list == expected
+        !fallback
     }
 
     def 'test getUsernamesAndThen does not throw on APIClientException'() {
         given:
         def client = newClient('invalid')
 
+        and:
+        def fallback = false
+
         when:
-        client.getUsernamesAndThen(null)
+        client.getUsernamesAndThen(null, () -> fallback = true)
 
         then:
         noExceptionThrown()
+        fallback
     }
 
     def 'test context loads'() {
