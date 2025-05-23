@@ -1,12 +1,15 @@
 package it.fulminazzo.userstalker
 
-
+import it.fulminazzo.userstalker.client.MockHttpServer
 import org.bukkit.scheduler.BukkitScheduler
 import spock.lang.Specification
 
 import java.util.logging.Logger
 
 class USAsyncApiClientTest extends Specification {
+    private static final int PORT = 23525
+
+    private final MockHttpServer server = new MockHttpServer(PORT)
 
     private USAsyncApiClient client
 
@@ -26,6 +29,12 @@ class USAsyncApiClientTest extends Specification {
         ])
 
         client = new USAsyncApiClient(null, logger, scheduler, configuration)
+
+        server.start()
+    }
+
+    void cleanup() {
+        server.stop()
     }
 
     def 'test context loads'() {
