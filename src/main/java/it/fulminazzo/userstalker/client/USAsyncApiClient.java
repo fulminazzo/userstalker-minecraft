@@ -85,14 +85,19 @@ public abstract class USAsyncApiClient {
     /**
      * Gets all the users names that entered the server and executes the given function.
      *
-     * @param function the function
+     * @param function the function to executed
+     * @param orElse   the function executed in case an error occurs
      */
-    public void getUsernamesAndThen(final @NotNull Consumer<List<String>> function) {
+    public void getUsernamesAndThen(
+            final @NotNull Consumer<List<String>> function,
+            final @NotNull Runnable orElse
+    ) {
         try {
             @NotNull List<String> usernames = client.getUsernames();
             function.accept(usernames);
         } catch (APIClientException e) {
             logger.warning(e.getMessage());
+            orElse.run();
         }
     }
 
