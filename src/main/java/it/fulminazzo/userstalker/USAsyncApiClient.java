@@ -1,18 +1,44 @@
 package it.fulminazzo.userstalker;
 
 import it.fulminazzo.userstalker.client.APIClientException;
+import it.fulminazzo.userstalker.client.USApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * A wrapper for {@link USApiClient} that executes queries
  * asynchronously using Bukkit scheduling system.
  */
 public final class USAsyncApiClient {
+    private final @NotNull JavaPlugin plugin;
+    private final @NotNull Logger logger;
+    private final @NotNull BukkitScheduler scheduler;
+
+    private final @NotNull USApiClient client;
+
+    /**
+     * Instantiates a new async api client.
+     *
+     * @param plugin the plugin
+     * @throws APIClientException the api client exception
+     */
+    public USAsyncApiClient(final @NotNull UserStalker plugin) throws APIClientException {
+        this.plugin = plugin;
+        this.logger = plugin.getLogger();
+        this.scheduler = plugin.getServer().getScheduler();
+
+        this.client = USApiClient.builder()
+                .logger(logger)
+                .configuration(plugin.getConfiguration())
+                .build();
+    }
 
     /**
      * Notifies the API of a new user login.
