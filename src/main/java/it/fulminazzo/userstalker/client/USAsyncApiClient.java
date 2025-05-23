@@ -105,17 +105,20 @@ public abstract class USAsyncApiClient {
      * Gets all the logins of a single user and executes the given function.
      *
      * @param username the name of the user
-     * @param function the function
+     * @param function the function to executed
+     * @param orElse   the function executed in case an error occurs
      */
     public void getUserLogins(
             final @NotNull String username,
-            final @NotNull Consumer<List<UserLogin>> function
+            final @NotNull Consumer<List<UserLogin>> function,
+            final @NotNull Runnable orElse
     ) {
         try {
             @NotNull List<UserLogin> userLogins = client.getUserLogins(username);
             function.accept(userLogins);
         } catch (APIClientException e) {
             logger.warning(e.getMessage());
+            orElse.run();
         }
     }
 
