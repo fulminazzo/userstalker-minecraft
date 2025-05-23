@@ -24,11 +24,11 @@ class USApiClientBuilderTest extends Specification {
         noExceptionThrown()
 
         where:
-        logger                              | settings
-        null                                | ['address': 'http://localhost']
-        null                                | ['address': 'http://localhost', 'port': 22525]
-        Logger.getLogger('UserStalkerTest') | ['address': 'http://localhost']
-        Logger.getLogger('UserStalkerTest') | ['address': 'http://localhost', 'port': 22525]
+        logger                                  | settings
+        null                                    | ['address': 'http://localhost']
+        null                                    | ['address': 'http://localhost', 'port': 22525]
+        Logger.getLogger(getClass().simpleName) | ['address': 'http://localhost']
+        Logger.getLogger(getClass().simpleName) | ['address': 'http://localhost', 'port': 22525]
     }
 
     def 'test that build without ip throws'() {

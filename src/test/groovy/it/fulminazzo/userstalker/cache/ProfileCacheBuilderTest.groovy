@@ -11,7 +11,7 @@ import java.util.logging.Logger
 class ProfileCacheBuilderTest extends Specification {
 
     private static final File PLUGIN_DIRECTORY = new File('build/resources/test/ProfileCacheBuilderTest')
-    private final Logger logger = Logger.getLogger('TestUserStalker')
+    private final Logger logger = Logger.getLogger(getClass().simpleName)
 
     void setup() {
         if (PLUGIN_DIRECTORY.exists()) FileUtils.deleteFolder(PLUGIN_DIRECTORY)
