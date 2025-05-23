@@ -18,3 +18,8 @@ skin-cache:
   database: "userstalker"
   username: "sa"
   password: ""
+
+# Settings for UserStalker REST API service.
+userstalker-http-server:
+  address: "http://localhost"
+  port: 8080
