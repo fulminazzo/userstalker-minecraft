@@ -179,7 +179,7 @@ public final class USApiClient {
      *
      * @return the api client builder
      */
-    static @NotNull USApiClientBuilder builder() {
+    public static @NotNull USApiClientBuilder builder() {
         return new USApiClientBuilder();
     }
 

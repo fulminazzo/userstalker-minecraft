@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * A helper class to create a {@link USApiClient} from
  * the given configuration.
  */
-final class USApiClientBuilder extends ConfiguredBuilder<USApiClient, USApiClientBuilder, APIClientException> {
+public final class USApiClientBuilder extends ConfiguredBuilder<USApiClient, USApiClientBuilder, APIClientException> {
 
     private static final int DEFAULT_PORT = 80;
 
