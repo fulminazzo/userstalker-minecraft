@@ -63,13 +63,22 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets the top user logins of the month.
+     * Gets the top user logins of the month and executes the given function.
      *
-     * @return the user logins count
-     * @throws APIClientException the exception thrown in case of any errors
+     * @param function the function to executed
+     * @param orElse   the function executed in case an error occurs
      */
-    public @NotNull List<UserLoginCount> getMonthlyUserLogins() throws APIClientException {
-        return null;
+    public void getMonthlyUserLoginsAndThen(
+            final @NotNull Consumer<List<UserLoginCount>> function,
+            final @NotNull Runnable orElse
+    ) {
+        try {
+            @NotNull List<UserLoginCount> userLoginsCount = client.getMonthlyUserLogins();
+            function.accept(userLoginsCount);
+        } catch (APIClientException e) {
+            logger.warning(e.getMessage());
+            orElse.run();
+        }
     }
 
     /**
