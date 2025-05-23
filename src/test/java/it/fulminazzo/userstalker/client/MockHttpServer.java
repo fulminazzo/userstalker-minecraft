@@ -41,7 +41,7 @@ public class MockHttpServer implements HttpHandler {
     private final HttpServer server;
 
     private List<?> usernames;
-    private boolean showUserLogins;
+    private boolean showUserLogins = true;
 
     public MockHttpServer(int port) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
