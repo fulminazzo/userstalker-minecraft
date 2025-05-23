@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 /**
@@ -82,13 +83,17 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets all the users names that entered the server.
+     * Gets all the users names that entered the server and executes the given function
      *
-     * @return the usernames
-     * @throws APIClientException the exception thrown in case of any errors
+     * @param function the function
      */
-    public @NotNull List<String> getUsernames() throws APIClientException {
-        return null;
+    public void getUsernamesAndThen(final @NotNull Consumer<List<String>> function) {
+        try {
+            @NotNull List<String> usernames = client.getUsernames();
+            function.accept(usernames);
+        } catch (APIClientException e) {
+            logger.warning(e.getMessage());
+        }
     }
 
     /**
