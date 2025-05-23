@@ -7,14 +7,19 @@
 # GUIs that contain players heads.
 skin-cache:
   # Defines how the users skins should be stored.
-  # Accepted values: YAML, JSON, TOML, XML or DATABASE
+  # Accepted values: YAML, JSON, TOML, XML or SQL
   type: JSON
   # The amount of seconds after which the cache should
   # be refreshed.
   expire-time: 86400
-  # Only valid if type = DATABASE
+  # Only valid if type = SQL
   address: "localhost"
   database-type: "mysql"
   database: "userstalker"
   username: "sa"
   password: ""
+
+# Settings for UserStalker REST API service.
+userstalker-http-server:
+  address: "http://localhost"
+  port: 8080

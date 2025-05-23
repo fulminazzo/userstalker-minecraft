@@ -31,7 +31,7 @@ dependencies {
 
     compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
 
-    implementation 'it.fulminazzo:FulmiCollection:1.7.2'
+    implementation 'it.fulminazzo:FulmiCollection:1.8'
     implementation 'it.fulminazzo:Configurations:1.6.3'
     implementation 'it.fulminazzo:yagl:4.3'
 
@@ -44,6 +44,8 @@ dependencies {
 
     testImplementation 'com.google.code.gson:gson:2.13.1'
     testImplementation 'com.h2database:h2:2.2.224'
+
+    testImplementation 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
 }
 
 test {

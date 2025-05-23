@@ -1,6 +1,6 @@
 package it.fulminazzo.userstalker.cache
 
-
+import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils
 import org.h2.tools.Server
@@ -11,16 +11,16 @@ import java.util.logging.Logger
 class ProfileCacheBuilderTest extends Specification {
 
     private static final File PLUGIN_DIRECTORY = new File('build/resources/test/ProfileCacheBuilderTest')
-    private final Logger logger = Logger.getLogger('TestUserStalker')
+    private final Logger logger = Logger.getLogger(getClass().simpleName)
 
     void setup() {
         if (PLUGIN_DIRECTORY.exists()) FileUtils.deleteFolder(PLUGIN_DIRECTORY)
         FileUtils.createFolder(PLUGIN_DIRECTORY)
     }
 
-    def 'test that build builds SQLProfileCache on DATABASE type'() {
+    def 'test that build builds SQLProfileCache on SQL type'() {
         given:
-        def file = mockConfiguration('database', 10, true)
+        def file = mockConfiguration('sql', 10, true)
 
         and:
         def server = Server.createTcpServer('-tcpAllowOthers', '-ifNotExists').start()
@@ -38,7 +38,7 @@ class ProfileCacheBuilderTest extends Specification {
 
     def 'test that connection to invalid database throws'() {
         given:
-        def file = mockConfiguration('database', 10,
+        def file = mockConfiguration('sql', 10,
                 'localhost:3306', 'unknown',
                 'userstalker', 'username', 'password',
                 true

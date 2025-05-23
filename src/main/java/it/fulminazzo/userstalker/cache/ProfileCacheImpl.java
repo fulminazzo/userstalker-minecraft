@@ -89,9 +89,10 @@ abstract class ProfileCacheImpl implements ProfileCache {
      */
     @NotNull Optional<JsonObject> getJsonFromURL(final @NotNull String url,
                                                  final @NotNull String action) throws ProfileCacheException {
+        HttpURLConnection connection = null;
         try {
             URL actualUrl = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) actualUrl.openConnection();
+            connection = (HttpURLConnection) actualUrl.openConnection();
             connection.setRequestMethod("GET");
 
             int responseCode = connection.getResponseCode();
@@ -107,6 +108,8 @@ abstract class ProfileCacheImpl implements ProfileCache {
             throw new ProfileCacheException("Invalid URL provided: " + url);
         } catch (IOException e) {
             throw new ProfileCacheException(action, e);
+        } finally {
+            if (connection != null) connection.disconnect();
         }
     }
 

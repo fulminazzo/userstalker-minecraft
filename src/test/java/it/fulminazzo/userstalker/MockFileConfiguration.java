@@ -1,4 +1,4 @@
-package it.fulminazzo.userstalker.cache;
+package it.fulminazzo.userstalker;
 
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.configuration.IConfiguration;
@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.util.Map;
 
-public class MockFileConfiguration extends FileConfiguration {
+class MockFileConfiguration extends FileConfiguration {
     private final @NotNull Map<?, ?> data;
 
     public MockFileConfiguration(final @NotNull Map<?, ?> data) {

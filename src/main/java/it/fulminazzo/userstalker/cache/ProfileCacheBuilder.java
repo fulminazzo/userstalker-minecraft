@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.cache;
 
+import it.fulminazzo.userstalker.builder.ConfiguredBuilder;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.AccessLevel;
@@ -13,7 +14,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -21,19 +21,13 @@ import java.util.logging.Logger;
  * the given configuration.
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public final class ProfileCacheBuilder {
+public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, ProfileCacheBuilder, ProfileCacheException> {
     private static final String FILE_NAME = "skin_cache";
-    private static final String PATH = "skin-cache";
 
     private static final CacheType DEFAULT_TYPE = CacheType.JSON;
     private static final long DEFAULT_TIMEOUT = 24 * 60 * 60;
 
-    private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
-    private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to %s";
-
-    private @Nullable Logger logger;
     private @Nullable File pluginDirectory;
-    private @Nullable FileConfiguration configuration;
 
     /**
      * Internal constructor, for testing purposes.
@@ -49,75 +43,12 @@ public final class ProfileCacheBuilder {
     }
 
     /**
-     * Gets the logger.
-     *
-     * @return an optional containing the logger (if not null)
-     */
-    @NotNull Optional<Logger> getLogger() {
-        return Optional.ofNullable(logger);
-    }
-
-    /**
-     * Sets the logger.
-     *
-     * @param logger the logger
-     * @return this profile cache builder
-     */
-    public @NotNull ProfileCacheBuilder logger(@Nullable Logger logger) {
-        this.logger = logger;
-        return this;
-    }
-
-    /**
-     * Gets plugin directory.
-     *
-     * @return the plugin directory
-     * @throws ProfileCacheException the profile cache exception
-     */
-    @NotNull File getPluginDirectory() throws ProfileCacheException {
-        if (pluginDirectory == null) throw new ProfileCacheException("No plugin directory specified");
-        return pluginDirectory;
-    }
-
-    /**
-     * Sets the plugin directory.
-     *
-     * @param pluginDirectory the plugin directory
-     * @return this profile cache builder
-     */
-    public @NotNull ProfileCacheBuilder pluginDirectory(@Nullable File pluginDirectory) {
-        this.pluginDirectory = pluginDirectory;
-        return this;
-    }
-
-    /**
-     * Gets configuration.
-     *
-     * @return the configuration
-     * @throws ProfileCacheException the profile cache exception
-     */
-    @NotNull FileConfiguration getConfiguration() throws ProfileCacheException {
-        if (configuration == null) throw new ProfileCacheException("No configuration specified");
-        return configuration;
-    }
-
-    /**
-     * Sets the configuration.
-     *
-     * @param configuration the configuration
-     * @return this profile cache builder
-     */
-    public @NotNull ProfileCacheBuilder configuration(@Nullable FileConfiguration configuration) {
-        this.configuration = configuration;
-        return this;
-    }
-
-    /**
      * Builds the {@link ProfileCache} from the configurations in the config file.
      *
      * @return the profile cache
      * @throws ProfileCacheException an exception thrown in case of errors
      */
+    @Override
     public @NotNull ProfileCache build() throws ProfileCacheException {
         CacheType cacheType = loadCacheType();
         File cacheFile = new File(getPluginDirectory(), FILE_NAME + "." + cacheType.name().toLowerCase());
@@ -152,6 +83,28 @@ public final class ProfileCacheBuilder {
     }
 
     /**
+     * Gets plugin directory.
+     *
+     * @return the plugin directory
+     * @throws ProfileCacheException an exception thrown in case the plugin directory has not been provided
+     */
+    @NotNull File getPluginDirectory() throws ProfileCacheException {
+        if (pluginDirectory == null) throw new ProfileCacheException("No plugin directory specified");
+        return pluginDirectory;
+    }
+
+    /**
+     * Sets the plugin directory.
+     *
+     * @param pluginDirectory the plugin directory
+     * @return this profile cache builder
+     */
+    public @NotNull ProfileCacheBuilder pluginDirectory(@Nullable File pluginDirectory) {
+        this.pluginDirectory = pluginDirectory;
+        return this;
+    }
+
+    /**
      * Loads the appropriate {@link CacheType} from the configuration file.
      * If no value is provided, it will fall back to {@link #DEFAULT_TYPE}.
      *
@@ -159,12 +112,7 @@ public final class ProfileCacheBuilder {
      * @throws ProfileCacheException thrown in case an invalid type is provided
      */
     @NotNull CacheType loadCacheType() throws ProfileCacheException {
-        String path = PATH + ".type";
-        String type = getConfiguration().getString(path);
-        if (type == null) {
-            getLogger().ifPresent(l -> l.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TYPE.name())));
-            return DEFAULT_TYPE;
-        }
+        String type = getConfigurationValue("type", String.class, DEFAULT_TYPE.name());
         return Arrays.stream(CacheType.values())
                 .filter(t -> t.name().equalsIgnoreCase(type))
                 .findFirst()
@@ -181,12 +129,7 @@ public final class ProfileCacheBuilder {
      * @throws ProfileCacheException an exception thrown in case {@link #getConfiguration()} fails
      */
     long getExpiryTimeout() throws ProfileCacheException {
-        String path = PATH + ".expire-time";
-        Long expireTimeout = getConfiguration().getLong(path);
-        if (expireTimeout == null) {
-            getLogger().ifPresent(l -> l.warning(String.format(MISSING_VALUE_DEFAULT, path, DEFAULT_TIMEOUT)));
-            return DEFAULT_TIMEOUT * 1000;
-        } else return expireTimeout * 1000;
+        return getConfigurationValue("expire-time", Long.class, DEFAULT_TIMEOUT) * 1000;
     }
 
     /**
@@ -197,11 +140,17 @@ public final class ProfileCacheBuilder {
      * @throws ProfileCacheException thrown in case no value is provided
      */
     @NotNull String getConfigurationString(final @NotNull String path) throws ProfileCacheException {
-        String actualPath = PATH + "." + path;
-        String value = getConfiguration().getString(actualPath);
-        if (value == null)
-            throw new ProfileCacheException(String.format(MISSING_VALUE, actualPath));
-        else return value;
+        return getConfigurationValue(path, String.class, null);
+    }
+
+    @Override
+    protected @NotNull String getMainPath() {
+        return "skin-cache";
+    }
+
+    @Override
+    protected @NotNull ProfileCacheException newException(@NotNull String message) {
+        return new ProfileCacheException(message);
     }
 
     /**
@@ -243,7 +192,7 @@ public final class ProfileCacheBuilder {
         /**
          * Database cache type.
          */
-        DATABASE
+        SQL
     }
 
 }
