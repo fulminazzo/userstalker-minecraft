@@ -83,7 +83,7 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets all the users names that entered the server and executes the given function
+     * Gets all the users names that entered the server and executes the given function.
      *
      * @param function the function
      */
@@ -97,14 +97,21 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets all the logins of a single user.
+     * Gets all the logins of a single user and executes the given function.
      *
      * @param username the name of the user
-     * @return the user logins
-     * @throws APIClientException the exception thrown in case of any errors
+     * @param function the function
      */
-    public @NotNull List<UserLogin> getUserLogins(final @NotNull String username) throws APIClientException {
-        return null;
+    public void getUserLogins(
+            final @NotNull String username,
+            final @NotNull Consumer<List<UserLogin>> function
+    ) {
+        try {
+            @NotNull List<UserLogin> userLogins = client.getUserLogins(username);
+            function.accept(userLogins);
+        } catch (APIClientException e) {
+            logger.warning(e.getMessage());
+        }
     }
 
     /**
