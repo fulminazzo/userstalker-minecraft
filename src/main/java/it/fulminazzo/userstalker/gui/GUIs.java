@@ -19,6 +19,14 @@ import java.util.function.Function;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GUIs {
 
+    public static final Function<Collection<UserLogin>, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = data ->
+            setCommonGUISettings(DataGUI.newGUI(27, u -> ItemGUIContent.newInstance(Material.BOOK.name())
+                            .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
+                            .setLore(String.format("&fIp: &c%s", u.getIp()),
+                                    String.format("&fLogin date: &a%s %s",
+                                            u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
+                    data));
+
     public static final Function<Collection<UserLogin>, DataGUI<UserLogin>> USER_LOGINS_GUI_PROVIDER = data ->
             setCommonGUISettings(DataGUI.newGUI(54, u -> ItemGUIContent.newInstance(Material.BOOK.name())
                             .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
