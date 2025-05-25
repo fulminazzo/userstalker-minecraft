@@ -3,17 +3,23 @@ package it.fulminazzo.userstalker.gui;
 import it.fulminazzo.fulmicollection.objects.Refl;
 import it.fulminazzo.fulmicollection.utils.StringUtils;
 import it.fulminazzo.userstalker.cache.ProfileCache;
+import it.fulminazzo.userstalker.cache.ProfileCacheException;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.userstalker.utils.ItemMetaUtils;
 import it.fulminazzo.yagl.Metadatable;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yagl.guis.PageableGUI;
+import it.fulminazzo.yagl.items.BukkitItem;
 import it.fulminazzo.yagl.items.Item;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -135,7 +141,22 @@ public final class GUIs {
      * @return the gui content
      */
     static @NotNull ItemGUIContent newConverterContent(final @NotNull String materialName, final @Nullable ProfileCache cache) {
-        return ItemGUIContent.newInstance(materialName);
+        BukkitItem item = BukkitItem.newItem(materialName);
+        ItemGUIContent content = ItemGUIContent.newInstance(item);
+        item.setMetadata(ItemMeta.class, itemMeta -> {
+            if (cache == null) return;
+            if (itemMeta instanceof SkullMeta) {
+                String username = content.getVariable("username");
+                if (username == null) return;
+                SkullMeta skullMeta = (SkullMeta) itemMeta;
+                try {
+                    cache.getUserSkin(username).ifPresent(skin -> ItemMetaUtils.setSkin(skullMeta, skin));
+                } catch (ProfileCacheException e) {
+                    JavaPlugin.getProvidingPlugin(GUIs.class).getLogger().warning(e.getMessage());
+                }
+            }
+        });
+        return content;
     }
 
     /**
