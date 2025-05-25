@@ -27,35 +27,42 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<String> findUserSkin(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<Skin> findUserSkin(@NotNull String username) throws ProfileCacheException {
         checkSkinTableExists();
         return Optional.ofNullable(executeStatement(
-                () -> connection.prepareStatement("SELECT skin FROM skin_cache " +
+                () -> connection.prepareStatement("SELECT uuid, username, skin, signature FROM skin_cache " +
                         "WHERE username = ? AND expiry > CURRENT_TIMESTAMP"),
                 s -> {
                     s.setString(1, username);
                     ResultSet result = s.executeQuery();
-                    if (result.next()) return result.getString("skin");
+                    if (result.next()) return Skin.builder()
+                            .uuid(UUID.fromString(result.getString("uuid")))
+                            .username(result.getString("username"))
+                            .skin(result.getString("skin"))
+                            .signature(result.getString("signature"))
+                            .build();
                     else return null;
                 }
         ));
     }
 
     @Override
-    public void storeUserSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException {
-        @NotNull Optional<String> storedSkin = findUserSkin(username);
+    public void storeUserSkin(@NotNull String username, @NotNull Skin skin) throws ProfileCacheException {
+        @NotNull Optional<Skin> storedSkin = findUserSkin(username);
         String query = storedSkin.isPresent() ?
-                "UPDATE skin_cache SET skin = ?, expiry = ? WHERE username = ?" :
-                "INSERT INTO skin_cache (skin, expiry, username) VALUES (?, ?, ?)"
-                ;
+                "UPDATE skin_cache SET uuid = ?, username = ?, skin = ?, signature = ?, expiry = ? WHERE username = ?" :
+                "INSERT INTO skin_cache (uuid, username, skin, signature, expiry, username) VALUES (?, ?, ?)";
 
         executeStatement(
                 () -> connection.prepareStatement(query),
                 s -> {
-                    s.setString(1, skin);
+                    s.setString(1, skin.getUuid().toString());
+                    s.setString(2, skin.getUsername());
+                    s.setString(3, skin.getSkin());
+                    s.setString(4, skin.getSignature());
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis() + skinExpireTimeout);
-                    s.setTimestamp(2, timestamp);
-                    s.setString(3, username);
+                    s.setTimestamp(5, timestamp);
+                    s.setString(6, username);
                     return s.executeUpdate();
                 }
         );
@@ -96,8 +103,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
         @NotNull Optional<UUID> storedUUID = findUserUUID(username);
         String query = storedUUID.isPresent() ?
                 "UPDATE uuid_cache SET uuid = ? WHERE username = ?" :
-                "INSERT INTO uuid_cache (uuid, username) VALUES (?, ?)"
-                ;
+                "INSERT INTO uuid_cache (uuid, username) VALUES (?, ?)";
 
         executeStatement(
                 () -> connection.prepareStatement(query),
