@@ -14,6 +14,8 @@ public final class Configurator {
 
     private @Nullable File pluginDirectory;
 
+    private @Nullable ConfigurationType type = ConfigurationType.YAML;
+
     /**
      * Gets plugin directory.
      *
