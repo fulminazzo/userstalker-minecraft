@@ -17,5 +17,13 @@ public class SMMockItemFactory extends MockItemFactory {
         if (material == Material.PLAYER_HEAD) return new ProfiledSkullMeta();
         return super.getItemMeta(material);
     }
-    
+
+    @Override
+    public boolean isApplicable(@Nullable ItemMeta itemMeta, @Nullable Material material) throws IllegalArgumentException {
+        if (itemMeta instanceof ProfiledSkullMeta)
+            if (material != null && material.equals(Material.PLAYER_HEAD))
+                return true;
+        return super.isApplicable(itemMeta, material);
+    }
+
 }
