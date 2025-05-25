@@ -76,6 +76,30 @@ class ProfileCacheImplTest extends Specification {
         !second.isPresent()
     }
 
+    def 'test that fetchUserSkin of not existing with found UUID is put in blacklist'() {
+        given:
+        def username = 'NotExistingAtAll'
+        def blacklist = false
+
+        and:
+        def cache = Spy(TestProfileCache)
+        cache.getUserUUID(_ as String) >> Optional.of(UUID.randomUUID())
+        cache.getJsonFromURL(_ as String, _ as String) >> Optional.empty()
+        cache.isInFetchBlacklist(_ as String) >> { args ->
+            return blacklist
+        }
+        cache.updateFetchBlacklist(_ as String) >> { args ->
+            blacklist = true
+        }
+
+        when:
+        cache.fetchUserSkin(username)
+        def second = cache.fetchUserSkin(username)
+
+        then:
+        !second.isPresent()
+    }
+
     def 'test that getUserUUID does not store skin if empty response after lookup'() {
         given:
         def skinCache = Spy(TestProfileCache)
