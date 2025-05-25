@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 abstract class ProfileCacheImpl implements ProfileCache {
     private static final String MOJANG_API_UUID = "https://api.mojang.com/users/profiles/minecraft/%s";
-    private static final String MOJANG_API_SKIN = "https://sessionserver.mojang.com/session/minecraft/profile/%s";
+    private static final String MOJANG_API_SKIN = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
 
     /**
      * The Skin expire timeout.
