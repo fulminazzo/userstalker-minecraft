@@ -53,9 +53,9 @@ public final class GUIs {
             final @NotNull String materialName,
             final @Nullable ProfileCache cache
     ) {
-        return u -> newConverterContent(materialName, cache)
+        return u -> setupVariables(newConverterContent(materialName, cache)
                 .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
-                .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount()));
+                .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount())), u);
     }
 
     /**
@@ -69,11 +69,11 @@ public final class GUIs {
             final @NotNull String materialName,
             final @Nullable ProfileCache cache
     ) {
-        return u -> newConverterContent(materialName, cache)
+        return u -> setupVariables(newConverterContent(materialName, cache)
                 .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                 .setLore(String.format("&fIp: &c%s", u.getIp()),
                         String.format("&fLogin date: &a%s %s",
-                                u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate()));
+                                u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())), u);
     }
 
     /**
@@ -85,10 +85,10 @@ public final class GUIs {
     public static @NotNull Function<UserLogin, GUIContent> userLoginConverter(
             final @NotNull String materialName
     ) {
-        return u -> ItemGUIContent.newInstance(materialName)
+        return u -> setupVariables(ItemGUIContent.newInstance(materialName)
                 .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
                 .setLore(String.format("&fLogin date: &a%s %s",
-                        u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate()));
+                        u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())), u);
     }
 
     /**
