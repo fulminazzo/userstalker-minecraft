@@ -84,7 +84,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         and:
         def statement = connection.prepareStatement('INSERT INTO uuid_cache VALUES (?, ?)')
         statement.setString(1, username)
-        statement.setString(2, ProfileCacheUtils.toString(uuid))
+        statement.setString(2, uuid.toString())
         statement.execute()
 
         when:
@@ -109,7 +109,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
         then:
         resultSet.next()
-        resultSet.getString(1) == ProfileCacheUtils.toString(uuid)
+        resultSet.getString(1) == uuid.toString()
 
         where:
         username << ['Notch', 'Steve']
