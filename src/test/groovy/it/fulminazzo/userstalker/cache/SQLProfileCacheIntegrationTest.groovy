@@ -54,20 +54,26 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
     def 'test that storeUserSkin of #username saves correct value'() {
         given:
-        def skin = 'mock-skin'
+        def skin = Skin.builder()
+                .uuid(UUID.randomUUID())
+                .username(username)
+                .skin('mock-skin')
+                .signature('signature')
+                .build()
 
         when:
         cache.storeUserSkin(username, skin)
 
         and:
         def resultSet = connection
-                .prepareStatement("SELECT skin, expiry FROM profile_cache WHERE username = '$username'")
+                .prepareStatement("SELECT skin, signature, expiry FROM profile_cache WHERE username = '$username'")
                 .executeQuery()
 
         then:
         resultSet.next()
-        resultSet.getString(1) == skin
-        resultSet.getTimestamp(2).after(new Timestamp(System.currentTimeMillis()))
+        resultSet.getString(1) == skin.skin
+        resultSet.getString(2) == skin.signature
+        resultSet.getTimestamp(3).after(new Timestamp(System.currentTimeMillis()))
 
         where:
         username << ['Notch', 'Steve']
