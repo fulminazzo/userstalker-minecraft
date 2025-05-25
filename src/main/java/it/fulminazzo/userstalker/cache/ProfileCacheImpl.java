@@ -28,8 +28,8 @@ abstract class ProfileCacheImpl implements ProfileCache {
     protected final long skinExpireTimeout;
 
     @Override
-    public @NotNull Optional<String> getUserSkin(@NotNull String username) throws ProfileCacheException {
-        @NotNull Optional<String> userSkin = findUserSkin(username);
+    public @NotNull Optional<Skin> getUserSkin(@NotNull String username) throws ProfileCacheException {
+        @NotNull Optional<Skin> userSkin = findUserSkin(username);
         if (userSkin.isPresent()) return userSkin;
         userSkin = lookupUserSkin(username);
         if (userSkin.isPresent()) storeUserSkin(username, userSkin.get());
@@ -37,7 +37,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
     }
 
     @Override
-    public @NotNull Optional<String> lookupUserSkin(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws ProfileCacheException {
         Optional<UUID> uuid = getUserUUID(username);
         if (!uuid.isPresent()) return Optional.empty();
 
@@ -49,8 +49,16 @@ abstract class ProfileCacheImpl implements ProfileCache {
                     for (int i = 0; i < a.getAsJsonArray().size(); i++) {
                         JsonObject skin = a.getAsJsonArray().get(i).getAsJsonObject();
                         JsonElement name = skin.get("name");
-                        if (name != null && name.getAsString().equals("textures"))
-                            return skin.get("value").getAsString();
+                        if (name != null && name.getAsString().equals("textures")) {
+                            String value = skin.get("value").getAsString();
+                            String signature = skin.get("signature").getAsString();
+                            return Skin.builder()
+                                    .uuid(uuid.get())
+                                    .username(username)
+                                    .skin(value)
+                                    .signature(signature)
+                                    .build();
+                        }
                     }
                     return null;
                 });
