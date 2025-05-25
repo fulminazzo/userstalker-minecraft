@@ -4,6 +4,10 @@ on:
   push:
     branches: [ "main", "master", "test" ]
 
+concurrency:
+  group: gradle-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   jacoco:
     runs-on: ubuntu-latest
