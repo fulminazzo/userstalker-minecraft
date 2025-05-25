@@ -46,6 +46,9 @@ dependencies {
     testImplementation 'com.h2database:h2:2.2.224'
 
     testImplementation 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
+
+    testImplementation 'it.fulminazzo.jbukkit:base:3.4'
+    testImplementation 'it.fulminazzo.jbukkit:13:3.4'
 }
 
 test {
