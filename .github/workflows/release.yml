@@ -23,7 +23,7 @@ jobs:
   release:
     name: Setup Environment, Build JAR and Release Project
     runs-on: ubuntu-latest
-    if: "startsWith(github.event.workflow_run.head_commit.message, '!release')"
+    if: startsWith(github.event.workflow_run.head_commit.message, '!release') && github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Automatic Release
         uses: Fulminazzo/java-automatic-release@v3
