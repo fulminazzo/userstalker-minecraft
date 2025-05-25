@@ -28,10 +28,10 @@ class SQLProfileCacheIntegrationTest extends Specification {
         def skin = 'mock-skin'
 
         and:
-        cache.checkSkinTableExists()
+        cache.checkProfileTableExists()
 
         and:
-        def statement = connection.prepareStatement('INSERT INTO skin_cache VALUES (?, ?, ?)')
+        def statement = connection.prepareStatement('INSERT INTO profile_cache VALUES (?, ?, ?)')
         statement.setString(1, username)
         statement.setString(2, skin)
         if (username == 'Notch')
@@ -61,7 +61,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
         and:
         def resultSet = connection
-                .prepareStatement("SELECT skin, expiry FROM skin_cache WHERE username = '$username'")
+                .prepareStatement("SELECT skin, expiry FROM profile_cache WHERE username = '$username'")
                 .executeQuery()
 
         then:
@@ -79,10 +79,10 @@ class SQLProfileCacheIntegrationTest extends Specification {
         def uuid = UUID.randomUUID()
 
         and:
-        cache.checkUUIDTableExists()
+        cache.checkProfileTableExists()
 
         and:
-        def statement = connection.prepareStatement('INSERT INTO uuid_cache VALUES (?, ?)')
+        def statement = connection.prepareStatement('INSERT INTO profile_cache VALUES (?, ?)')
         statement.setString(1, username)
         statement.setString(2, uuid.toString())
         statement.execute()
@@ -104,7 +104,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
         and:
         def resultSet = connection
-                .prepareStatement("SELECT uuid FROM uuid_cache WHERE username = '$username'")
+                .prepareStatement("SELECT uuid FROM profile_cache WHERE username = '$username'")
                 .executeQuery()
 
         then:
