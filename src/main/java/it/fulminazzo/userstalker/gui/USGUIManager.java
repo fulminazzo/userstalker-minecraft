@@ -50,22 +50,34 @@ public final class USGUIManager {
             FileConfiguration config = FileConfiguration.newConfiguration(file);
             // Store GUIs in file and load in memory
 
-            userLoginsGUI = GUIs.defaultUserLogins();
-            config.set("user-logins", userLoginsGUI);
+            userLoginsGUI = setAndGet(config, "user-logins", GUIs.defaultUserLogins());
 
             config.save();
         } else {
             FileConfiguration config = FileConfiguration.newConfiguration(file);
             // Load GUIs in memory, warn for errors
 
-            if (config.contains("user-logins"))
-                userLoginsGUI = config.get("user-logins", DataGUI.class);
-            else {
-                logger.warning("Could not find user-logins in guis.yml. Using default GUI");
-                userLoginsGUI = GUIs.defaultUserLogins();
-            }
+            userLoginsGUI = getGUI(config, "user-logins");
         }
         return true;
+    }
+
+    private <T> T setAndGet(final @NotNull FileConfiguration config,
+                            final @NotNull String path,
+                            final @NotNull T t) {
+        config.set(path, t);
+        return t;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
+                                  final @NotNull String path) {
+        if (config.contains(path))
+            return config.get(path, DataGUI.class);
+        else {
+            logger.warning(String.format("Could not find %s in guis.yml. Using default GUI", path));
+            return (DataGUI<T>) GUIs.defaultUserLogins();
+        }
     }
 
 }
