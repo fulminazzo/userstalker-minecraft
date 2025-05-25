@@ -130,7 +130,26 @@ abstract class ProfileCacheImpl implements ProfileCache {
         }
     }
 
-    private void updateFetchBlacklist(final @NotNull String username) {
+    /**
+     * Checks if the given username is in the {@link #fetchBlacklist}.
+     *
+     * @param username the username
+     * @return true if it is
+     */
+    boolean isInFetchBlacklist(final @NotNull String username) {
+        long time = fetchBlacklist.getOrDefault(username, 0L);
+        if (System.currentTimeMillis() - time > 0) {
+            fetchBlacklist.remove(username);
+            return false;
+        } else return true;
+    }
+
+    /**
+     * Updates the fetch blacklist with the given username.
+     *
+     * @param username the username
+     */
+    void updateFetchBlacklist(final @NotNull String username) {
         fetchBlacklist.put(username, System.currentTimeMillis() + fetchBlacklistTimeout);
     }
 
