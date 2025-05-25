@@ -143,10 +143,7 @@ class ProfileCacheImplTest extends Specification {
         def username = 'Fulminazzo'
 
         when:
-        if (time != null)
-            new Refl<>(cache)
-                    .getFieldRefl('fetchBlacklist')
-                    .invokeMethod('put', username, time)
+        if (time != null) fetchBlacklist().put(username, time)
 
         then:
         cache.isInFetchBlacklist(username) == expected
@@ -164,6 +161,10 @@ class ProfileCacheImplTest extends Specification {
 
         then:
         noExceptionThrown()
+    }
+
+    private Map<String, Long> fetchBlacklist() {
+        return new Refl<>(cache).getFieldObject('fetchBlacklist')
     }
 
     private static JsonObject createData(Object... data) {
