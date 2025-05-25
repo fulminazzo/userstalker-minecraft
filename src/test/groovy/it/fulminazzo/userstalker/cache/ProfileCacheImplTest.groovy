@@ -63,6 +63,19 @@ class ProfileCacheImplTest extends Specification {
         createData(new Object(), ['name': 'textures', 'value': 'skin'], new Object()) || true
     }
 
+    def 'test that fetchUserSkin of not existing is put in blacklist'() {
+        given:
+        def username = 'NotExistingAtAll'
+
+        when:
+        cache.fetchUserSkin(username)
+        def second = cache.fetchUserSkin(username)
+
+        then:
+        fetchBlacklist().containsKey(username)
+        !second.isPresent()
+    }
+
     def 'test that getUserUUID does not store skin if empty response after lookup'() {
         given:
         def skinCache = Spy(TestProfileCache)
