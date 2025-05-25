@@ -174,7 +174,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
         then:
         def e = thrown(ProfileCacheException)
-        e.message == 'SQLException when closing connection with database: '
+        e.message == 'SQLException when closing connection to database: '
     }
 
     def 'test context loads'() {

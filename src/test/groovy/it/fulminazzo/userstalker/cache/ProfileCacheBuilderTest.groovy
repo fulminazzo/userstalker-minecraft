@@ -52,8 +52,8 @@ class ProfileCacheBuilderTest extends Specification {
 
         then:
         def e = thrown(ProfileCacheException)
-        e.message == 'SQLException when connecting with database ' +
-                '(jdbc:unknown://localhost:3306/userstalker, username, password): ' +
+        e.message == 'SQLException when connecting to database ' +
+                '"jdbc:unknown://localhost:3306/userstalker" (username:password): ' +
                 'No suitable driver found for jdbc:unknown://localhost:3306/userstalker'
     }
 
