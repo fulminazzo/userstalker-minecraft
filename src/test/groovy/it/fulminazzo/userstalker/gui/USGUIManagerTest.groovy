@@ -62,4 +62,20 @@ class USGUIManagerTest extends Specification {
         manager.userLoginsGUI == dataGUI
     }
 
+    def 'test setup with file but GUI not available uses default User Logins GUI'() {
+        given:
+        def file = new File(pluginDirectory, 'guis.yml')
+        if (file.exists()) file.delete()
+        FileUtils.createNewFile(file)
+
+        and:
+        def dataGUI = GUIs.defaultUserLogins()
+
+        when:
+        manager.setup(pluginDirectory)
+
+        then:
+        manager.userLoginsGUI == dataGUI
+    }
+
 }
