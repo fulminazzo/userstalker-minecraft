@@ -25,7 +25,8 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
     private static final String FILE_NAME = "skin_cache";
 
     private static final CacheType DEFAULT_TYPE = CacheType.JSON;
-    private static final long DEFAULT_TIMEOUT = 24 * 60 * 60;
+    private static final long DEFAULT_EXPIRY_TIMEOUT = 24 * 60 * 60;
+    private static final long DEFAULT_BLACKLIST_TIMEOUT = 24 * 60 * 60;
 
     private @Nullable File pluginDirectory;
 
@@ -53,16 +54,13 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
         CacheType cacheType = loadCacheType();
         File cacheFile = new File(getPluginDirectory(), FILE_NAME + "." + cacheType.name().toLowerCase());
         switch (cacheType) {
+            case YAML:
+                if (!cacheFile.exists()) cacheFile = new File(getPluginDirectory(), FILE_NAME + ".yml");
             case JSON:
             case XML:
             case TOML: {
                 checkFileExists(cacheFile);
-                return new FileProfileCache(cacheFile, getExpiryTimeout());
-            }
-            case YAML: {
-                if (!cacheFile.exists()) cacheFile = new File(getPluginDirectory(), FILE_NAME + ".yml");
-                checkFileExists(cacheFile);
-                return new FileProfileCache(cacheFile, getExpiryTimeout());
+                return new FileProfileCache(cacheFile, getExpiryTimeout(), getBlacklistTimeout());
             }
             default: {
                 String address = getConfigurationString("address");
@@ -73,7 +71,7 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
                 String jdbcPath = String.format("jdbc:%s://%s/%s", databaseType, address, database);
                 try {
                     Connection connection = DriverManager.getConnection(jdbcPath, username, password);
-                    return new SQLProfileCache(connection, getExpiryTimeout());
+                    return new SQLProfileCache(connection, getExpiryTimeout(), getBlacklistTimeout());
                 } catch (SQLException e) {
                     throw new ProfileCacheException(String.format("connecting with database (%s, %s, %s)",
                             jdbcPath, username, password), e);
@@ -122,14 +120,25 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
     }
 
     /**
-     * Gets the expiry timeout from the configuration file.
-     * If no value is provided, it will fall back to {@link #DEFAULT_TIMEOUT}.
+     * Gets the expiry timeout in seconds from the configuration file.
+     * If no value is provided, it will fall back to {@link #DEFAULT_EXPIRY_TIMEOUT}.
      *
      * @return the expiry timeout
      * @throws ProfileCacheException an exception thrown in case {@link #getConfiguration()} fails
      */
     long getExpiryTimeout() throws ProfileCacheException {
-        return getConfigurationValue("expire-time", Long.class, DEFAULT_TIMEOUT) * 1000;
+        return getConfigurationValue("expire-time", Long.class, DEFAULT_EXPIRY_TIMEOUT) * 1000;
+    }
+
+    /**
+     * Gets the blacklist timeout in seconds from the configuration file.
+     * If no value is provided, it will fall back to {@link #DEFAULT_BLACKLIST_TIMEOUT}.
+     *
+     * @return the expiry timeout
+     * @throws ProfileCacheException an exception thrown in case {@link #getConfiguration()} fails
+     */
+    long getBlacklistTimeout() throws ProfileCacheException {
+        return getConfigurationValue("blacklist-time", Long.class, DEFAULT_BLACKLIST_TIMEOUT) * 1000;
     }
 
     /**

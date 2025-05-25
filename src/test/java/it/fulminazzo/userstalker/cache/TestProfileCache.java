@@ -14,7 +14,7 @@ public class TestProfileCache extends ProfileCacheImpl {
     private final Map<String, UUID> uuidCache;
 
     public TestProfileCache() {
-        super(1);
+        super(1, 15 * 1000);
         this.skinCache = new HashMap<>();
         this.uuidCache = new HashMap<>();
     }

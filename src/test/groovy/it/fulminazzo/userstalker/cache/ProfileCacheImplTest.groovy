@@ -2,6 +2,7 @@ package it.fulminazzo.userstalker.cache
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import it.fulminazzo.fulmicollection.objects.Refl
 import spock.lang.Specification
 
 class ProfileCacheImplTest extends Specification {
@@ -62,6 +63,43 @@ class ProfileCacheImplTest extends Specification {
         createData(new Object(), ['name': 'textures', 'value': 'skin'], new Object()) || true
     }
 
+    def 'test that fetchUserSkin of not existing is put in blacklist'() {
+        given:
+        def username = 'NotExistingAtAll'
+
+        when:
+        cache.fetchUserSkin(username)
+        def second = cache.fetchUserSkin(username)
+
+        then:
+        fetchBlacklist().containsKey(username)
+        !second.isPresent()
+    }
+
+    def 'test that fetchUserSkin of not existing with found UUID is put in blacklist'() {
+        given:
+        def username = 'NotExistingAtAll'
+        def blacklist = false
+
+        and:
+        def cache = Spy(TestProfileCache)
+        cache.getUserUUID(_ as String) >> Optional.of(UUID.randomUUID())
+        cache.getJsonFromURL(_ as String, _ as String) >> Optional.empty()
+        cache.isInFetchBlacklist(_ as String) >> { args ->
+            return blacklist
+        }
+        cache.updateFetchBlacklist(_ as String) >> { args ->
+            blacklist = true
+        }
+
+        when:
+        cache.fetchUserSkin(username)
+        def second = cache.fetchUserSkin(username)
+
+        then:
+        !second.isPresent()
+    }
+
     def 'test that getUserUUID does not store skin if empty response after lookup'() {
         given:
         def skinCache = Spy(TestProfileCache)
@@ -84,6 +122,19 @@ class ProfileCacheImplTest extends Specification {
         then:
         uuid.isPresent()
         uuid.get() == UUID.fromString('069a79f4-44e9-4726-a5be-fca90e38aaf5')
+    }
+
+    def 'test that fetchUserUUID of not existing is put in blacklist'() {
+        given:
+        def username = 'NotExistingAtAll'
+
+        when:
+        cache.fetchUserUUID(username)
+        def second = cache.fetchUserUUID(username)
+
+        then:
+        fetchBlacklist().containsKey(username)
+        !second.isPresent()
     }
 
     def 'test that getJsonFromURL returns valid Json'() {
@@ -137,23 +188,21 @@ class ProfileCacheImplTest extends Specification {
         e.message == "Invalid response code when $ACTION: 400"
     }
 
-    def 'test that fromString returns correct value'() {
+    def 'test that isInFetchBlacklist returns #expected for #time'() {
         given:
-        def raw = '069a79f444e94726a5befca90e38aaf5'
+        def username = 'Fulminazzo'
 
         when:
-        def uuid = ProfileCacheUtils.fromString(raw)
+        if (time != null) fetchBlacklist().put(username, time)
 
         then:
-        uuid == UUID.fromString('069a79f4-44e9-4726-a5be-fca90e38aaf5')
-    }
+        cache.isInFetchBlacklist(username) == expected
 
-    def 'test that fromString of invalid throws'() {
-        when:
-        ProfileCacheUtils.fromString('mock')
-
-        then:
-        thrown(IllegalArgumentException)
+        where:
+        time                               || expected
+        System.currentTimeMillis() - 20000 || false
+        null                               || false
+        System.currentTimeMillis() + 20000 || true
     }
 
     def 'test that close does nothing'() {
@@ -162,6 +211,18 @@ class ProfileCacheImplTest extends Specification {
 
         then:
         noExceptionThrown()
+    }
+
+    def 'test that builder method returns empty builder'() {
+        given:
+        def builder = ProfileCache.builder()
+
+        expect:
+        builder == new ProfileCacheBuilder()
+    }
+
+    private Map<String, Long> fetchBlacklist() {
+        return new Refl<>(cache).getFieldObject('fetchBlacklist')
     }
 
     private static JsonObject createData(Object... data) {

@@ -38,7 +38,7 @@ class ProfileCacheBuilderTest extends Specification {
 
     def 'test that connection to invalid database throws'() {
         given:
-        def file = mockConfiguration('sql', 10,
+        def file = mockConfiguration('sql', 10, 0,
                 'localhost:3306', 'unknown',
                 'userstalker', 'username', 'password',
                 true
@@ -59,7 +59,7 @@ class ProfileCacheBuilderTest extends Specification {
 
     def 'test that missing database configuration throws'() {
         given:
-        def file = mockConfiguration('database', 10,
+        def file = mockConfiguration('database', 10, 0,
                 dbAddress, dbType, dbName, dbUsername, dbPassword, true
         )
 
@@ -150,6 +150,25 @@ class ProfileCacheBuilderTest extends Specification {
 
         when:
         def actualTimeout = builder.getExpiryTimeout()
+
+        then:
+        actualTimeout == expected
+
+        where:
+        timeout || expected
+        10      || 10 * 1000
+        null    || 86400 * 1000
+    }
+
+    def 'test that getBlacklistTimeout of blacklist time #timeout returns #expected'() {
+        given:
+        def file = mockConfiguration(null, null, timeout, true)
+
+        and:
+        def builder = new ProfileCacheBuilder(logger, PLUGIN_DIRECTORY, file)
+
+        when:
+        def actualTimeout = builder.getBlacklistTimeout()
 
         then:
         actualTimeout == expected
@@ -267,29 +286,35 @@ class ProfileCacheBuilderTest extends Specification {
         return mockConfiguration(type, null, section)
     }
 
-    private static FileConfiguration mockConfiguration(String type, Long timeout, boolean section) {
+    private static FileConfiguration mockConfiguration(String type, Long expireTimeout, boolean section) {
+        return mockConfiguration(type, expireTimeout, 0, section)
+    }
+
+    private static FileConfiguration mockConfiguration(String type, Long expireTimeout,
+                                                       Long blacklistTimeout, boolean section) {
         return mockConfiguration(
-                type, timeout,
+                type, expireTimeout, blacklistTimeout,
                 "localhost/./$PLUGIN_DIRECTORY.path", 'h2:tcp', 'testdb',
                 'sa', '',
                 section)
     }
 
     private static FileConfiguration mockConfiguration(
-            String type, Long timeout,
+            String type, Long expireTimeout, Long blacklistTimeout,
             String dbAddress, String dbType, String dbName,
             String dbUsername, String dbPassword,
             boolean section
     ) {
         def map = [:]
         if (section) map['skin-cache'] = [
-                'type'         : type,
-                'expire-time'  : timeout,
-                'address'      : dbAddress,
-                'database-type': dbType,
-                'database'     : dbName,
-                'username'     : dbUsername,
-                'password'     : dbPassword
+                'type'          : type,
+                'expire-time'   : expireTimeout,
+                'blacklist-time': blacklistTimeout,
+                'address'       : dbAddress,
+                'database-type' : dbType,
+                'database'      : dbName,
+                'username'      : dbUsername,
+                'password'      : dbPassword
         ]
         return new MockFileConfiguration(map)
     }

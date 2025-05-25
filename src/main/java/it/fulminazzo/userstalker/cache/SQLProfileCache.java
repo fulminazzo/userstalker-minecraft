@@ -17,12 +17,15 @@ final class SQLProfileCache extends ProfileCacheImpl {
     /**
      * Instantiates a new Sql profile cache.
      *
-     * @param connection        the connection
-     * @param skinExpireTimeout the skin expire timeout
+     * @param connection            the connection
+     * @param skinExpireTimeout     the skin expire timeout in milliseconds
+     * @param fetchBlacklistTimeout the fetch blacklist timeout in milliseconds
      */
     public SQLProfileCache(final @NotNull Connection connection,
-                           final long skinExpireTimeout) {
-        super(skinExpireTimeout);
+                           final long skinExpireTimeout,
+                           final long fetchBlacklistTimeout
+    ) {
+        super(skinExpireTimeout, fetchBlacklistTimeout);
         this.connection = connection;
     }
 

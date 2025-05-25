@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +28,13 @@ abstract class ProfileCacheImpl implements ProfileCache {
      * The Skin expire timeout.
      */
     protected final long skinExpireTimeout;
+    /**
+     * After how many milliseconds the fetch methods of this object
+     * should retry to fetch data from the server.
+     */
+    protected final long fetchBlacklistTimeout;
+
+    private final Map<String, Long> fetchBlacklist = new HashMap<>();
 
     @Override
     public @NotNull Optional<Skin> getUserSkin(@NotNull String username) throws ProfileCacheException {
@@ -38,12 +47,16 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
     @Override
     public @NotNull Optional<Skin> fetchUserSkin(@NotNull String username) throws ProfileCacheException {
+        if (isInFetchBlacklist(username)) return Optional.empty();
+
         Optional<UUID> uuid = getUserUUID(username);
         if (!uuid.isPresent()) return Optional.empty();
 
         String rawUUID = ProfileCacheUtils.toString(uuid.get());
-        return getJsonFromURL(String.format(MOJANG_API_SKIN, rawUUID),
-                "querying Mojang API for player skin")
+        Optional<JsonObject> result = getJsonFromURL(String.format(MOJANG_API_SKIN, rawUUID),
+                "querying Mojang API for player skin");
+        if (!result.isPresent()) updateFetchBlacklist(username);
+        return result
                 .map(j -> j.getAsJsonArray("properties"))
                 .map(a -> {
                     for (int i = 0; i < a.getAsJsonArray().size(); i++) {
@@ -75,8 +88,11 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
     @Override
     public @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) throws ProfileCacheException {
-        return getJsonFromURL(String.format(MOJANG_API_UUID, username),
-                "querying Mojang API for player UUID")
+        if (isInFetchBlacklist(username)) return Optional.empty();
+        Optional<JsonObject> result = getJsonFromURL(String.format(MOJANG_API_UUID, username),
+                "querying Mojang API for player UUID");
+        if (!result.isPresent()) updateFetchBlacklist(username);
+        return result
                 .map(j -> j.get("id"))
                 .map(JsonElement::getAsString)
                 .map(ProfileCacheUtils::fromString);
@@ -119,6 +135,30 @@ abstract class ProfileCacheImpl implements ProfileCache {
         } finally {
             if (connection != null) connection.disconnect();
         }
+    }
+
+    /**
+     * Checks if the given username is in the {@link #fetchBlacklist}.
+     *
+     * @param username the username
+     * @return true if it is
+     */
+    boolean isInFetchBlacklist(final @NotNull String username) {
+        long now = System.currentTimeMillis();
+        long time = fetchBlacklist.getOrDefault(username, now);
+        if (now - time >= 0) {
+            fetchBlacklist.remove(username);
+            return false;
+        } else return true;
+    }
+
+    /**
+     * Updates the fetch blacklist with the given username.
+     *
+     * @param username the username
+     */
+    void updateFetchBlacklist(final @NotNull String username) {
+        fetchBlacklist.put(username, System.currentTimeMillis() + fetchBlacklistTimeout);
     }
 
 }
