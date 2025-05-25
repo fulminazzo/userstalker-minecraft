@@ -51,12 +51,12 @@ abstract class ProfileCacheImpl implements ProfileCache {
                         JsonElement name = skin.get("name");
                         if (name != null && name.getAsString().equals("textures")) {
                             String value = skin.get("value").getAsString();
-                            String signature = skin.get("signature").getAsString();
+                            JsonElement signature = skin.get("signature");
                             return Skin.builder()
                                     .uuid(uuid.get())
                                     .username(username)
                                     .skin(value)
-                                    .signature(signature)
+                                    .signature(signature == null ? "" : signature.getAsString())
                                     .build();
                         }
                     }
