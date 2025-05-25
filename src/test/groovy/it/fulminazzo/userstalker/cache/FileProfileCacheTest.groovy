@@ -62,7 +62,7 @@ class FileProfileCacheTest extends Specification {
         config.save()
 
         and:
-        cache = new FileProfileCache(cacheFile, 100 * 1000)
+        cache = new FileProfileCache(cacheFile, 100 * 1000, 0L)
 
         when:
         def actualSkin = cache.getUserSkin(username)
@@ -132,7 +132,7 @@ class FileProfileCacheTest extends Specification {
         config.save()
 
         and:
-        cache = new FileProfileCache(cacheFile, 100 * 1000)
+        cache = new FileProfileCache(cacheFile, 100 * 1000, 0L)
 
         when:
         def actualUUID = cache.getUserUUID(username)

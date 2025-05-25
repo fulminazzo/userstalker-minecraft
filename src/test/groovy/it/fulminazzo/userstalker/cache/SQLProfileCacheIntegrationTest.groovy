@@ -167,7 +167,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         }
 
         and:
-        def cache = new SQLProfileCache(connection, 10)
+        def cache = new SQLProfileCache(connection, 10, 0)
 
         when:
         cache.close()
