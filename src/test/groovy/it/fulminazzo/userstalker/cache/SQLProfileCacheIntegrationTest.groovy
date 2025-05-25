@@ -8,7 +8,7 @@ import java.sql.SQLException
 import java.sql.Timestamp
 
 class SQLProfileCacheIntegrationTest extends Specification {
-    private static final String DB_URL = 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1'
+    private static final String DB_URL = 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=0'
     private static final String DB_USER = 'sa'
     private static final String DB_PASSWORD = ''
 
@@ -21,6 +21,16 @@ class SQLProfileCacheIntegrationTest extends Specification {
         connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)
 
         cache = new SQLProfileCache(connection, 100 * 1000)
+        cache.checkProfileTableExists()
+
+        def statement = connection.prepareStatement('INSERT INTO profile_cache (username, uuid) VALUES (?, ?)')
+        statement.setString(1, 'Steve')
+        statement.setString(2, UUID.randomUUID().toString())
+        statement.execute()
+    }
+
+    void cleanup() {
+        connection.close()
     }
 
     def 'test that findUserSkin of #username returns correct value'() {
@@ -31,9 +41,6 @@ class SQLProfileCacheIntegrationTest extends Specification {
                 .skin('mock-skin')
                 .signature('signature')
                 .build()
-
-        and:
-        cache.checkProfileTableExists()
 
         and:
         def statement = connection.prepareStatement('INSERT INTO profile_cache VALUES (?, ?, ?, ?, ?)')
@@ -88,11 +95,8 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
     def 'test that findUserUUID returns correct value'() {
         given:
-        def username = 'Batman'
+        def username = 'Notch'
         def uuid = UUID.randomUUID()
-
-        and:
-        cache.checkProfileTableExists()
 
         and:
         def statement = connection.prepareStatement('INSERT INTO profile_cache (username, uuid) VALUES (?, ?)')
