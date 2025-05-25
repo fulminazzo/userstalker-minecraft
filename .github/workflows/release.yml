@@ -11,6 +11,10 @@ on:
       - "master"
       - "main"
 
+concurrency:
+  group: gradle-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
