@@ -11,6 +11,10 @@ on:
   push:
     branches: [ "master", "main", "dev" ]
 
+concurrency:
+  group: gradle-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
