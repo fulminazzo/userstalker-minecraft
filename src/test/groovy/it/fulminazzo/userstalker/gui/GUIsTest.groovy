@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker.gui
 import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.cache.ProfileCache
 import it.fulminazzo.userstalker.domain.UserLogin
+import it.fulminazzo.userstalker.domain.UserLoginCount
 import it.fulminazzo.userstalker.utils.TimeUtils
 import it.fulminazzo.yagl.contents.ItemGUIContent
 import it.fulminazzo.yagl.guis.DataGUI
@@ -21,6 +22,24 @@ class GUIsTest extends Specification {
 
     void setup() {
         BukkitUtils.setupServer()
+    }
+
+    def 'test that userLoginCountConverter correctly converts UserLogin'() {
+        given:
+        def userLoginCount = UserLoginCount.builder()
+                .username('Fulminazzo')
+                .loginCount(10L)
+                .build()
+
+        when:
+        def content = GUIs.userLoginCountConverter('stone', null).apply(userLoginCount) as ItemGUIContent
+
+        then:
+        content.material == 'stone'
+        content.displayName.contains(userLoginCount.username)
+        content.lore.find {it.contains(userLoginCount.loginCount.toString())} != null
+        content.getVariable('username') == userLoginCount.username
+        content.getVariable('login_count') == userLoginCount.loginCount.toString()
     }
 
     def 'test that namedUsersLoginConverter correctly converts UserLogin'() {
