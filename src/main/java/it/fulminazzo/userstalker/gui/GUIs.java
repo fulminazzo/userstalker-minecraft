@@ -85,6 +85,21 @@ public final class GUIs {
     }
 
     /**
+     * Provides a function to convert a {@link UserLogin} to a {@link GUIContent} without the username.
+     *
+     * @param materialName the material name
+     * @return the function
+     */
+    public static @NotNull Function<UserLogin, GUIContent> userLoginConverter(
+            final @NotNull String materialName
+    ) {
+        return u -> ItemGUIContent.newInstance(materialName)
+                .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
+                .setLore(String.format("&fLogin date: &a%s %s",
+                        u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate()));
+    }
+
+    /**
      * Returns the default top users logins gui.
      *
      * @return the gui
