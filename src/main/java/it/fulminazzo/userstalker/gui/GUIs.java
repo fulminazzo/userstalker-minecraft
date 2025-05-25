@@ -35,18 +35,21 @@ import java.util.function.Function;
 public final class GUIs {
 
     private static final Function<Integer, DataGUI<UserLoginCount>> NAMED_USER_LOGINS_COUNT_GUI_PROVIDER = size ->
-            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BARRIER.name())
-                            .setDisplayName("&4NOT IMPLEMENTED"),
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u ->
+                            ItemGUIContent.newInstance(Material.BARRIER.name().toLowerCase())
+                                    .setDisplayName("&4NOT IMPLEMENTED"),
                     new ArrayList<UserLoginCount>()));
 
     private static final Function<Integer, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = size ->
-            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BARRIER.name())
-                            .setDisplayName("&4NOT IMPLEMENTED"),
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u ->
+                            ItemGUIContent.newInstance(Material.BARRIER.name().toLowerCase())
+                                    .setDisplayName("&4NOT IMPLEMENTED"),
                     new ArrayList<UserLogin>()));
 
     private static final Function<Integer, DataGUI<UserLogin>> USER_LOGINS_GUI_PROVIDER = size ->
-            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BARRIER.name())
-                            .setDisplayName("&4NOT IMPLEMENTED"),
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u ->
+                            ItemGUIContent.newInstance(Material.BARRIER.name().toLowerCase())
+                                    .setDisplayName("&4NOT IMPLEMENTED"),
                     new ArrayList<UserLogin>()));
 
     /**
@@ -167,10 +170,10 @@ public final class GUIs {
      */
     @SuppressWarnings("unchecked")
     static <G extends PageableGUI> @NotNull G setupPagesItemsAndCorners(final @NotNull G gui) {
-        return (G) gui.setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name()).setDisplayName(" "))
-                .setPreviousPage(gui.size() - 7, Item.newItem(Material.PAPER.name()).setDisplayName("&ePrevious page"))
-                .setNextPage(gui.size() - 3, Item.newItem(Material.PAPER.name()).setDisplayName("&eNext page"))
-                .setContents(gui.size() - 5, Item.newItem(Material.OBSIDIAN.name())
+        return (G) gui.setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name().toLowerCase()).setDisplayName(" "))
+                .setPreviousPage(gui.size() - 7, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName("&ePrevious page"))
+                .setNextPage(gui.size() - 3, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName("&eNext page"))
+                .setContents(gui.size() - 5, Item.newItem(Material.OBSIDIAN.name().toLowerCase())
                         .setDisplayName("&fCurrent page: &e<page>&8/&a<pages>")
                 );
     }
