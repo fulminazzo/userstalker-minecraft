@@ -44,9 +44,9 @@ public final class GUIs {
     @SuppressWarnings("unchecked")
     static <G extends PageableGUI> @NotNull G setupPagesItemsAndCorners(final @NotNull G gui) {
         return (G) gui.setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name()).setDisplayName(" "))
-                .setPreviousPage(47, Item.newItem(Material.PAPER.name()).setDisplayName("&ePrevious page"))
-                .setNextPage(51, Item.newItem(Material.PAPER.name()).setDisplayName("&eNext page"))
-                .setContents(49, Item.newItem(Material.OBSIDIAN.name())
+                .setPreviousPage(gui.size() - 7, Item.newItem(Material.PAPER.name()).setDisplayName("&ePrevious page"))
+                .setNextPage(gui.size() - 3, Item.newItem(Material.PAPER.name()).setDisplayName("&eNext page"))
+                .setContents(gui.size() - 5, Item.newItem(Material.OBSIDIAN.name())
                         .setDisplayName("&fCurrent page: &e<page>&8/&a<pages>")
                 );
     }
