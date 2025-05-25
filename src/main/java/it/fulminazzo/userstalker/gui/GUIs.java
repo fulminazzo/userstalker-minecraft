@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.function.Function;
 
 /**
@@ -21,13 +20,13 @@ import java.util.function.Function;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GUIs {
 
-    public static final Function<Integer, DataGUI<UserLoginCount>> NAMED_USER_LOGINS_COUNT_GUI_PROVIDER = size ->
+    private static final Function<Integer, DataGUI<UserLoginCount>> NAMED_USER_LOGINS_COUNT_GUI_PROVIDER = size ->
             setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
                             .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                             .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount())),
                     new ArrayList<UserLoginCount>()));
 
-    public static final Function<Integer, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = size ->
+    private static final Function<Integer, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = size ->
             setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
                             .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                             .setLore(String.format("&fIp: &c%s", u.getIp()),
@@ -35,12 +34,48 @@ public final class GUIs {
                                             u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
                     new ArrayList<UserLogin>()));
 
-    public static final Function<Integer, DataGUI<UserLogin>> USER_LOGINS_GUI_PROVIDER = size ->
+    private static final Function<Integer, DataGUI<UserLogin>> USER_LOGINS_GUI_PROVIDER = size ->
             setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
                             .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
                             .setLore(String.format("&fLogin date: &a%s %s",
                                     u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
                     new ArrayList<UserLogin>()));
+
+    /**
+     * Returns the default top users logins gui.
+     *
+     * @return the gui
+     */
+    public static @NotNull DataGUI<UserLoginCount> defaultTopUsersLogins() {
+        return NAMED_USER_LOGINS_COUNT_GUI_PROVIDER.apply(45).setTitle("&6Top users logins");
+    }
+
+    /**
+     * Returns the default monthly users logins gui.
+     *
+     * @return the gui
+     */
+    public static @NotNull DataGUI<UserLoginCount> defaultMonthlyUsersLogins() {
+        return NAMED_USER_LOGINS_COUNT_GUI_PROVIDER.apply(27).setTitle("&6Monthly users logins");
+    }
+
+    /**
+     * Returns the default newest user logins gui.
+     *
+     * @return the gui
+     */
+    public static @NotNull DataGUI<UserLogin> defaultNewestUserLogins() {
+        return NAMED_USER_LOGINS_GUI_PROVIDER.apply(27).setTitle("&6Newest users logins");
+    }
+
+    /**
+     * Returns the default user logins gui.
+     *
+     * @return the gui
+     */
+    public static @NotNull DataGUI<UserLogin> defaultUserLogins() {
+        return USER_LOGINS_GUI_PROVIDER.apply(54).setTitle("&6<user>'s logins");
+    }
 
     /**
      * Sets the pages items and the corners on the given gui.
