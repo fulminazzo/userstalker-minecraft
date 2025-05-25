@@ -17,7 +17,7 @@ jobs:
   jacoco:
     runs-on: ubuntu-latest
     permissions: write-all
-    if: github.event.workflow_run.conclusion == 'success'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - uses: actions/checkout@v4
