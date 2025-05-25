@@ -88,7 +88,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
     def 'test that findUserUUID returns correct value'() {
         given:
-        def username = 'Notch'
+        def username = 'Batman'
         def uuid = UUID.randomUUID()
 
         and:
