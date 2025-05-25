@@ -19,7 +19,7 @@ public interface ProfileCache {
      * @return the user skin, if it was found
      * @throws ProfileCacheException an exception thrown in case retrieval is not possible
      */
-    @NotNull Optional<String> getUserSkin(@NotNull String username) throws ProfileCacheException;
+    @NotNull Optional<Skin> getUserSkin(@NotNull String username) throws ProfileCacheException;
 
     /**
      * Looks up for the skin value at the Mojang API endpoints.
@@ -28,7 +28,7 @@ public interface ProfileCache {
      * @return the user skin, if it was found
      * @throws ProfileCacheException an exception thrown in case retrieval is not possible
      */
-    @NotNull Optional<String> lookupUserSkin(@NotNull String username) throws ProfileCacheException;
+    @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws ProfileCacheException;
 
     /**
      * Searches the skin for the given username in the current cache.
@@ -37,7 +37,7 @@ public interface ProfileCache {
      * @return an optional that might contain the skin (if already stored and not expired)
      * @throws ProfileCacheException an exception thrown in case retrieval is not possible
      */
-    @NotNull Optional<String> findUserSkin(@NotNull String username) throws ProfileCacheException;
+    @NotNull Optional<Skin> findUserSkin(@NotNull String username) throws ProfileCacheException;
 
     /**
      * Stores the given skin value and username in the internal cache.
@@ -46,7 +46,7 @@ public interface ProfileCache {
      * @param skin     the skin
      * @throws ProfileCacheException an exception thrown in case of any errors
      */
-    void storeUserSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException;
+    void storeUserSkin(@NotNull String username, @NotNull Skin skin) throws ProfileCacheException;
 
     /**
      * Uses {@link #findUserUUID(String)} to search for the cached value of the uuid.
