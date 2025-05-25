@@ -27,6 +27,14 @@ class SQLProfileCacheIntegrationTest extends Specification {
         statement.setString(1, 'Steve')
         statement.setString(2, UUID.randomUUID().toString())
         statement.execute()
+
+        statement = connection.prepareStatement('INSERT INTO profile_cache (username, uuid, skin, signature, expiry) VALUES (?, ?, ?, ?, ?)')
+        statement.setString(1, 'Jeb')
+        statement.setString(2, UUID.randomUUID().toString())
+        statement.setString(3, 'skin')
+        statement.setString(4, 'signature')
+        statement.setTimestamp(5, new Timestamp(System.currentTimeMillis() + 1000000))
+        statement.execute()
     }
 
     void cleanup() {
@@ -55,10 +63,10 @@ class SQLProfileCacheIntegrationTest extends Specification {
         statement.execute()
 
         when:
-        def actualUUID = cache.findUserSkin(username)
+        def actualSkin = cache.findUserSkin(username)
 
         then:
-        actualUUID.isPresent() == expected
+        actualSkin.isPresent() == expected
 
         where:
         username || expected
@@ -90,7 +98,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         resultSet.getTimestamp(3).after(new Timestamp(System.currentTimeMillis()))
 
         where:
-        username << ['Notch', 'Steve']
+        username << ['Notch', 'Steve', 'Jeb']
     }
 
     def 'test that findUserUUID returns correct value'() {
