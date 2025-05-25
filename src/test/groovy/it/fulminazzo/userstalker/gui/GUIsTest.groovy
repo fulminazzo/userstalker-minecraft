@@ -23,6 +23,28 @@ class GUIsTest extends Specification {
         BukkitUtils.setupServer()
     }
 
+    def 'test that namedUsersLoginConverter correctly converts UserLogin'() {
+        given:
+        def userLogin = UserLogin.builder()
+                .username('Fulminazzo')
+                .ip('127.0.0.1')
+                .loginDate(LocalDateTime.now())
+                .build()
+        def loginDate = TimeUtils.toString(userLogin.loginDate)
+
+        when:
+        def content = GUIs.namedUsersLoginConverter('stone', null).apply(userLogin) as ItemGUIContent
+
+        then:
+        content.material == 'stone'
+        content.displayName.contains(userLogin.username)
+        content.lore.find {it.contains(userLogin.ip)} != null
+        content.lore.find {it.contains(loginDate)} != null
+        content.getVariable('username') == userLogin.username
+        content.getVariable('ip') == userLogin.ip
+        content.getVariable('login_date') == loginDate
+    }
+
     def 'test that userLoginConverter correctly converts UserLogin'() {
         given:
         def userLogin = UserLogin.builder()
