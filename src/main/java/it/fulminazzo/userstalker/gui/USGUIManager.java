@@ -83,7 +83,7 @@ public final class USGUIManager {
         if (config.contains(path))
             return config.get(path, DataGUI.class);
         else {
-            logger.warning(String.format("Could not find %s in guis.yml. Using default GUI", path));
+            logger.warning(String.format("Could not find gui \"%s\" in guis.yml. Using default GUI", path));
             return defaultGUI;
         }
     }
