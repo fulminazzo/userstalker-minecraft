@@ -5,6 +5,7 @@ import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.parsers.GUIYAGLParser
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
+import it.fulminazzo.yamlparser.utils.FileUtils
 import spock.lang.Specification
 
 import java.util.logging.Logger
@@ -38,6 +39,27 @@ class USGUIManagerTest extends Specification {
         manager.userLoginsGUI == defaultGUI
         def config = FileConfiguration.newConfiguration(file)
         config.get('user-logins', DataGUI) == defaultGUI
+    }
+
+    def 'test setup with file uses stored User Logins GUI'() {
+        given:
+        def file = new File(pluginDirectory, 'guis.yml')
+        if (file.exists()) file.delete()
+        FileUtils.createNewFile(file)
+
+        and:
+        def dataGUI = GUIs.defaultUserLogins().setTitle('Hello, world!')
+
+        and:
+        def config = FileConfiguration.newConfiguration(file)
+        config.set('user-logins', dataGUI)
+        config.save()
+
+        when:
+        manager.setup(pluginDirectory)
+
+        then:
+        manager.userLoginsGUI == dataGUI
     }
 
 }
