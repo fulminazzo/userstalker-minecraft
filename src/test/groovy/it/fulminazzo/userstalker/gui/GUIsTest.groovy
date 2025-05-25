@@ -1,10 +1,13 @@
 package it.fulminazzo.userstalker.gui
 
+import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.guis.PageableGUI
 import it.fulminazzo.yagl.items.Item
 import org.bukkit.Material
 import spock.lang.Specification
+
+import java.time.LocalDateTime
 
 class GUIsTest extends Specification {
 
@@ -99,6 +102,48 @@ class GUIsTest extends Specification {
         36   || 29       | 31      | 33
         45   || 38       | 40      | 42
         54   || 47       | 49      | 51
+    }
+
+    def 'test that setupVariables sets correct variables for object #object'() {
+        given:
+        def stringLoginDate = loginDate == null ? '' : loginDate.toString().replace('T', ' ')
+
+        and:
+        def metadatable = new MockMetadatable()
+
+        when:
+        GUIs.setupVariables(metadatable, object)
+
+        then:
+        metadatable.getVariable('username') == username
+        metadatable.getVariable('ip') == ip
+        metadatable.getVariable('login_date') == stringLoginDate
+
+        where:
+        username     | ip          | loginDate                             || object
+        ''           | '127.0.0.1' | LocalDateTime.of(2025, 5, 25, 16, 13) || UserLogin.builder()
+                .ip('127.0.0.1')
+                .loginDate(LocalDateTime.of(2025, 5, 25, 16, 13))
+                .build()
+        'Fulminazzo' | ''          | LocalDateTime.of(2025, 5, 25, 16, 13) || UserLogin.builder()
+                .username('Fulminazzo')
+                .loginDate(LocalDateTime.of(2025, 5, 25, 16, 13))
+                .build()
+        'Fulminazzo' | '127.0.0.1' | null                                  || UserLogin.builder()
+                .username('Fulminazzo')
+                .ip('127.0.0.1')
+                .build()
+        'Fulminazzo' | ''          | null                                  || UserLogin.builder()
+                .username('Fulminazzo').build()
+        ''           | '127.0.0.1' | null                                  || UserLogin.builder()
+                .ip('127.0.0.1').build()
+        ''           | ''          | LocalDateTime.of(2025, 5, 25, 16, 13) || UserLogin.builder()
+                .loginDate(LocalDateTime.of(2025, 5, 25, 16, 13))
+                .build()
+        'Fulminazzo' | '127.0.0.1' | LocalDateTime.of(2025, 5, 25, 16, 13) || UserLogin.builder()
+                .username('Fulminazzo').ip('127.0.0.1')
+                .loginDate(LocalDateTime.of(2025, 5, 25, 16, 13))
+                .build()
     }
 
 }
