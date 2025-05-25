@@ -130,4 +130,8 @@ abstract class ProfileCacheImpl implements ProfileCache {
         }
     }
 
+    private void updateFetchBlacklist(final @NotNull String username) {
+        fetchBlacklist.put(username, System.currentTimeMillis() + fetchBlacklistTimeout);
+    }
+
 }
