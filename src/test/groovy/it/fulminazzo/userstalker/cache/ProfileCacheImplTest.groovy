@@ -87,6 +87,19 @@ class ProfileCacheImplTest extends Specification {
         uuid.get() == UUID.fromString('069a79f4-44e9-4726-a5be-fca90e38aaf5')
     }
 
+    def 'test that fetchUserUUID of not existing is put in blacklist'() {
+        given:
+        def username = 'NotExistingAtAll'
+
+        when:
+        cache.fetchUserUUID(username)
+        def second = cache.fetchUserUUID(username)
+
+        then:
+        fetchBlacklist().containsKey(username)
+        !second.isPresent()
+    }
+
     def 'test that getJsonFromURL returns valid Json'() {
         given:
         def url = 'https://api.github.com/repos/fulminazzo/userstalker'
