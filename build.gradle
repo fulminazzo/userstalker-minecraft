@@ -55,6 +55,7 @@ dependencies {
 
     testImplementation 'it.fulminazzo.jbukkit:base:3.4'
     testImplementation 'it.fulminazzo.jbukkit:13:3.4'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
 }
 
 test {
