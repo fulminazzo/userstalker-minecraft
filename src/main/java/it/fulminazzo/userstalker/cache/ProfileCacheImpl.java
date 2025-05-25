@@ -1,8 +1,8 @@
 package it.fulminazzo.userstalker.cache;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.fulminazzo.userstalker.utils.GsonUtils;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -126,8 +126,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
                 throw new ProfileCacheException(String.format("Invalid response code when %s: %s", action, responseCode));
 
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-            Gson gson = new Gson();
-            return Optional.of(gson.fromJson(reader, JsonObject.class));
+            return Optional.of(GsonUtils.getGson().fromJson(reader, JsonObject.class));
         } catch (MalformedURLException e) {
             throw new ProfileCacheException("Invalid URL provided: " + url);
         } catch (IOException e) {

@@ -1,8 +1,8 @@
 package it.fulminazzo.userstalker.cache
 
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import it.fulminazzo.fulmicollection.objects.Refl
+import it.fulminazzo.userstalker.utils.GsonUtils
 import spock.lang.Specification
 
 class ProfileCacheImplTest extends Specification {
@@ -226,8 +226,8 @@ class ProfileCacheImplTest extends Specification {
     }
 
     private static JsonObject createData(Object... data) {
-        Gson gson = new Gson()
-        String raw = gson.toJson([
+        def gson = GsonUtils.gson
+        def raw = gson.toJson([
                 'id'        : UUID.randomUUID().toString().replace('-', ''),
                 'properties': data
         ])
