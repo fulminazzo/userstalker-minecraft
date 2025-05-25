@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker.meta;
 
 import it.fulminazzo.jbukkit.inventory.MockItemFactory;
+import it.fulminazzo.jbukkit.inventory.meta.MockItemMeta;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,7 @@ public class SMMockItemFactory extends MockItemFactory {
     @Override
     public @Nullable ItemMeta getItemMeta(@NotNull Material material) {
         if (material == Material.PLAYER_HEAD) return new ProfiledSkullMeta();
-        return super.getItemMeta(material);
+        return new MockItemMeta();
     }
 
     @Override
