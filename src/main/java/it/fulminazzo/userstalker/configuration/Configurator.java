@@ -38,4 +38,26 @@ public final class Configurator {
         return this;
     }
 
+    /**
+     * Gets configuration type.
+     *
+     * @return the configuration type
+     * @throws ConfigurationException if the configuration type has not been provided
+     */
+    @NotNull ConfigurationType getType() throws ConfigurationException {
+        if (type == null) throw new ConfigurationException("No configuration type specified");
+        return type;
+    }
+
+    /**
+     * Sets the configuration type.
+     *
+     * @param type the type
+     * @return this configurator
+     */
+    public @NotNull Configurator type(@Nullable ConfigurationType type) {
+        this.type = type;
+        return this;
+    }
+
 }
