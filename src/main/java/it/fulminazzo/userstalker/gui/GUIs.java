@@ -47,7 +47,7 @@ public final class GUIs {
      * @return the gui
      */
     public static @NotNull DataGUI<UserLoginCount> defaultTopUsersLogins() {
-        return NAMED_USER_LOGINS_COUNT_GUI_PROVIDER.apply(45).setTitle("&6Top users logins");
+        return NAMED_USER_LOGINS_COUNT_GUI_PROVIDER.apply(45).setTitle("&cTop users logins");
     }
 
     /**
@@ -56,7 +56,7 @@ public final class GUIs {
      * @return the gui
      */
     public static @NotNull DataGUI<UserLoginCount> defaultMonthlyUsersLogins() {
-        return NAMED_USER_LOGINS_COUNT_GUI_PROVIDER.apply(27).setTitle("&6Monthly users logins");
+        return NAMED_USER_LOGINS_COUNT_GUI_PROVIDER.apply(27).setTitle("&cMonthly users logins");
     }
 
     /**
@@ -65,7 +65,7 @@ public final class GUIs {
      * @return the gui
      */
     public static @NotNull DataGUI<UserLogin> defaultNewestUsersLogins() {
-        return NAMED_USER_LOGINS_GUI_PROVIDER.apply(27).setTitle("&6Newest users logins");
+        return NAMED_USER_LOGINS_GUI_PROVIDER.apply(27).setTitle("&cNewest users logins");
     }
 
     /**
@@ -74,7 +74,7 @@ public final class GUIs {
      * @return the gui
      */
     public static @NotNull DataGUI<UserLogin> defaultUserLogins() {
-        return USER_LOGINS_GUI_PROVIDER.apply(54).setTitle("&6<user>'s logins");
+        return USER_LOGINS_GUI_PROVIDER.apply(54).setTitle("&c<user>'s logins");
     }
 
     /**

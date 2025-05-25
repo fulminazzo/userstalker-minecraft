@@ -18,7 +18,7 @@ class GUIsTest extends Specification {
                 .setPreviousPage(38, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
                 .setNextPage(42, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
                 .setContents(40, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
-                .setTitle('&6Top users logins')
+                .setTitle('&cTop users logins')
 
         expect:
         defaultGUI == expected
@@ -34,7 +34,7 @@ class GUIsTest extends Specification {
                 .setPreviousPage(20, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
                 .setNextPage(24, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
                 .setContents(22, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
-                .setTitle('&6Monthly users logins')
+                .setTitle('&cMonthly users logins')
 
         expect:
         defaultGUI == expected
@@ -50,7 +50,7 @@ class GUIsTest extends Specification {
                 .setPreviousPage(20, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
                 .setNextPage(24, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
                 .setContents(22, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
-                .setTitle('&6Newest users logins')
+                .setTitle('&cNewest users logins')
 
         expect:
         defaultGUI == expected
@@ -66,7 +66,7 @@ class GUIsTest extends Specification {
                 .setPreviousPage(47, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
                 .setNextPage(51, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
                 .setContents(49, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
-                .setTitle('&6<user>\'s logins')
+                .setTitle('&c<user>\'s logins')
 
         expect:
         defaultGUI == expected
