@@ -1,7 +1,9 @@
 package it.fulminazzo.userstalker.gui;
 
+import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yagl.guis.PageableGUI;
@@ -10,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -40,6 +43,25 @@ public final class GUIs {
                             .setLore(String.format("&fLogin date: &a%s %s",
                                     u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
                     new ArrayList<UserLogin>()));
+
+    /**
+     * Provides a function to convert a {@link UserLoginCount} to a {@link GUIContent}.
+     *
+     * @param materialName the material name
+     * @param cache        the cache to use to lookup skin in case of {@link Material#PLAYER_HEAD} provided
+     * @return the function
+     */
+    public static @NotNull Function<UserLoginCount, GUIContent> userLoginCountConverter(
+            final @NotNull String materialName,
+            final @Nullable ProfileCache cache
+            ) {
+        return u -> {
+            //TODO: if player head, use cache when rendering
+            return ItemGUIContent.newInstance(materialName)
+                    .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
+                    .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount()));
+        };
+    }
 
     /**
      * Returns the default top users logins gui.
