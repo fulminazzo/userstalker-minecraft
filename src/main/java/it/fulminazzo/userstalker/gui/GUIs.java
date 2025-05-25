@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker.gui;
 
 import it.fulminazzo.userstalker.domain.UserLogin;
+import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yagl.guis.PageableGUI;
@@ -19,6 +20,12 @@ import java.util.function.Function;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GUIs {
+
+    public static final Function<Integer, DataGUI<UserLoginCount>> NAMED_USER_LOGINS_COUNT_GUI_PROVIDER = size ->
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
+                            .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
+                            .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount())),
+                    new ArrayList<UserLoginCount>()));
 
     public static final Function<Integer, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = size ->
             setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
