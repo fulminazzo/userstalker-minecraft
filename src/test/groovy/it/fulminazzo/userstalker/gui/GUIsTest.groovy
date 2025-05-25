@@ -3,6 +3,8 @@ package it.fulminazzo.userstalker.gui
 import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.cache.ProfileCache
 import it.fulminazzo.userstalker.domain.UserLogin
+import it.fulminazzo.userstalker.utils.TimeUtils
+import it.fulminazzo.yagl.contents.ItemGUIContent
 import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.guis.PageableGUI
 import it.fulminazzo.yagl.items.BukkitItem
@@ -19,6 +21,27 @@ class GUIsTest extends Specification {
 
     void setup() {
         BukkitUtils.setupServer()
+    }
+
+    def 'test that userLoginConverter correctly converts UserLogin'() {
+        given:
+        def userLogin = UserLogin.builder()
+                .username('Fulminazzo')
+                .ip('127.0.0.1')
+                .loginDate(LocalDateTime.now())
+                .build()
+        def loginDate = TimeUtils.toString(userLogin.loginDate)
+
+        when:
+        def content = GUIs.userLoginConverter('stone').apply(userLogin) as ItemGUIContent
+
+        then:
+        content.material == 'stone'
+        content.displayName.contains(userLogin.ip)
+        content.lore.find {it.contains(loginDate)} != null
+        content.getVariable('username') == userLogin.username
+        content.getVariable('ip') == userLogin.ip
+        content.getVariable('login_date') == loginDate
     }
 
     def 'test that newContentConverter works'() {
@@ -162,7 +185,7 @@ class GUIsTest extends Specification {
 
     def 'test that setupVariables sets correct variables for object #object'() {
         given:
-        def stringLoginDate = loginDate == null ? '' : loginDate.toString().replace('T', ' ')
+        def stringLoginDate = loginDate == null ? '' : TimeUtils.toString(loginDate)
 
         and:
         def metadatable = new MockMetadatable()
