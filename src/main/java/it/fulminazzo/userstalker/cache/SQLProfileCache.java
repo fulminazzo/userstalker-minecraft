@@ -50,7 +50,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
     public void storeUserSkin(@NotNull String username, @NotNull Skin skin) throws ProfileCacheException {
         @NotNull Optional<Skin> storedSkin = findUserSkin(username);
         String query = storedSkin.isPresent() ?
-                "UPDATE skin_cache SET uuid = ?, skin = ?, signature = ?, expiry = ? WHERE username = ?" :
+                "UPDATE profile_cache SET uuid = ?, skin = ?, signature = ?, expiry = ? WHERE username = ?" :
                 "INSERT INTO profile_cache (uuid, skin, signature, expiry, username) VALUES (?, ?, ?, ?, ?)";
 
         executeStatement(
