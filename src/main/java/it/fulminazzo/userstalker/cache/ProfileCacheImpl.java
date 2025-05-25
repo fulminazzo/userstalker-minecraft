@@ -31,13 +31,13 @@ abstract class ProfileCacheImpl implements ProfileCache {
     public @NotNull Optional<Skin> getUserSkin(@NotNull String username) throws ProfileCacheException {
         @NotNull Optional<Skin> userSkin = findUserSkin(username);
         if (userSkin.isPresent()) return userSkin;
-        userSkin = lookupUserSkin(username);
+        userSkin = fetchUserSkin(username);
         if (userSkin.isPresent()) storeUserSkin(userSkin.get());
         return userSkin;
     }
 
     @Override
-    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<Skin> fetchUserSkin(@NotNull String username) throws ProfileCacheException {
         Optional<UUID> uuid = getUserUUID(username);
         if (!uuid.isPresent()) return Optional.empty();
 
@@ -68,13 +68,13 @@ abstract class ProfileCacheImpl implements ProfileCache {
     public @NotNull Optional<UUID> getUserUUID(@NotNull String username) throws ProfileCacheException {
         @NotNull Optional<UUID> uuid = findUserUUID(username);
         if (uuid.isPresent()) return uuid;
-        uuid = lookupUserUUID(username);
+        uuid = fetchUserUUID(username);
         if (uuid.isPresent()) storeUserUUID(username, uuid.get());
         return uuid;
     }
 
     @Override
-    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) throws ProfileCacheException {
         return getJsonFromURL(String.format(MOJANG_API_UUID, username),
                 "querying Mojang API for player UUID")
                 .map(j -> j.get("id"))

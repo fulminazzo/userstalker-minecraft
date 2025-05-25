@@ -12,7 +12,7 @@ public interface ProfileCache {
 
     /**
      * Uses {@link #findUserSkin(String)} to search for the cached value of the skin.
-     * If it is not present or expired, uses {@link #lookupUserSkin(String)} to look up the new
+     * If it is not present or expired, uses {@link #fetchUserSkin(String)} to look up the new
      * skin value and stores it in the current cache.
      *
      * @param username the username
@@ -28,7 +28,7 @@ public interface ProfileCache {
      * @return the user skin, if it was found
      * @throws ProfileCacheException an exception thrown in case retrieval is not possible
      */
-    @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws ProfileCacheException;
+    @NotNull Optional<Skin> fetchUserSkin(@NotNull String username) throws ProfileCacheException;
 
     /**
      * Searches the skin for the given username in the current cache.
@@ -49,7 +49,7 @@ public interface ProfileCache {
 
     /**
      * Uses {@link #findUserUUID(String)} to search for the cached value of the uuid.
-     * If it is not present or expired, uses {@link #lookupUserUUID(String)} to look up the new
+     * If it is not present or expired, uses {@link #fetchUserUUID(String)} to look up the new
      * uuid value and stores it in the current cache.
      *
      * @param username the username
@@ -65,7 +65,7 @@ public interface ProfileCache {
      * @return the user uuid, if it was found
      * @throws ProfileCacheException an exception thrown in case retrieval is not possible
      */
-    @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException;
+    @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) throws ProfileCacheException;
 
     /**
      * Searches the uuid for the given username in the current cache.
