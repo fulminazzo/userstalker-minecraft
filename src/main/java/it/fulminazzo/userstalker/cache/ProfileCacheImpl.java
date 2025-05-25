@@ -84,8 +84,11 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
     @Override
     public @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) throws ProfileCacheException {
-        return getJsonFromURL(String.format(MOJANG_API_UUID, username),
-                "querying Mojang API for player UUID")
+        if (isInFetchBlacklist(username)) return Optional.empty();
+        Optional<JsonObject> result = getJsonFromURL(String.format(MOJANG_API_UUID, username),
+                "querying Mojang API for player UUID");
+        if (!result.isPresent()) updateFetchBlacklist(username);
+        return result
                 .map(j -> j.get("id"))
                 .map(JsonElement::getAsString)
                 .map(ProfileCacheUtils::fromString);
