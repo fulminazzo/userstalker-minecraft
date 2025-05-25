@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +28,13 @@ abstract class ProfileCacheImpl implements ProfileCache {
      * The Skin expire timeout.
      */
     protected final long skinExpireTimeout;
+    /**
+     * After how many milliseconds the fetch methods of this object
+     * should retry to fetch data from the server.
+     */
+    protected final long fetchBlacklistTimeout;
+
+    private final Map<String, Long> fetchBlacklist = new HashMap<>();
 
     @Override
     public @NotNull Optional<Skin> getUserSkin(@NotNull String username) throws ProfileCacheException {
