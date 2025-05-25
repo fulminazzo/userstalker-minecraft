@@ -13,6 +13,8 @@ import java.io.File;
 public final class Configurator {
 
     private @Nullable File pluginDirectory;
+    
+    private @Nullable String name;
 
     private @Nullable ConfigurationType type = ConfigurationType.YAML;
 
@@ -35,6 +37,28 @@ public final class Configurator {
      */
     public @NotNull Configurator pluginDirectory(@Nullable File pluginDirectory) {
         this.pluginDirectory = pluginDirectory;
+        return this;
+    }
+
+    /**
+     * Gets configuration name.
+     *
+     * @return the configuration name
+     * @throws ConfigurationException if the configuration name has not been provided
+     */
+    @NotNull String getName() throws ConfigurationException {
+        if (name == null) throw new ConfigurationException("No configuration name specified");
+        return name;
+    }
+
+    /**
+     * Sets the file name.
+     *
+     * @param name the name
+     * @return this configurator
+     */
+    public @NotNull Configurator name(@Nullable String name) {
+        this.name = name;
         return this;
     }
 
