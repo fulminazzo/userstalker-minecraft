@@ -97,7 +97,7 @@ class FileProfileCacheTest extends Specification {
                 .build()
 
         when:
-        cache.storeUserSkin('Alex', skin)
+        cache.storeUserSkin(skin)
         config = FileConfiguration.newConfiguration(cacheFile)
 
         then:

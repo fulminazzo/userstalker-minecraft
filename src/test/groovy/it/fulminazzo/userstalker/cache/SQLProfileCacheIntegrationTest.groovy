@@ -84,7 +84,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
                 .build()
 
         when:
-        cache.storeUserSkin(username, skin)
+        cache.storeUserSkin(skin)
 
         and:
         def resultSet = connection

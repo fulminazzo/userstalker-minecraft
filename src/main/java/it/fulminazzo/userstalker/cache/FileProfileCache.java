@@ -45,7 +45,8 @@ final class FileProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeUserSkin(@NotNull String username, @NotNull Skin skin) {
+    public void storeUserSkin(@NotNull Skin skin) {
+        String username = skin.getUsername();
         config.set(username, null);
         ConfigurationSection section = config.createSection(username);
         section.set("uuid", skin.getUuid());

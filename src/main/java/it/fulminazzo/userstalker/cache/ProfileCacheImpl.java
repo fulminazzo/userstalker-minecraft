@@ -32,7 +32,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
         @NotNull Optional<Skin> userSkin = findUserSkin(username);
         if (userSkin.isPresent()) return userSkin;
         userSkin = lookupUserSkin(username);
-        if (userSkin.isPresent()) storeUserSkin(username, userSkin.get());
+        if (userSkin.isPresent()) storeUserSkin(userSkin.get());
         return userSkin;
     }
 

@@ -25,8 +25,8 @@ public class TestProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeUserSkin(@NotNull String username, @NotNull Skin skin) {
-        skinCache.put(username, skin);
+    public void storeUserSkin(@NotNull Skin skin) {
+        skinCache.put(skin.getUsername(), skin);
     }
 
     @Override

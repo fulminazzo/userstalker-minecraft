@@ -42,11 +42,10 @@ public interface ProfileCache {
     /**
      * Stores the given skin value and username in the internal cache.
      *
-     * @param username the username
-     * @param skin     the skin
+     * @param skin the skin
      * @throws ProfileCacheException an exception thrown in case of any errors
      */
-    void storeUserSkin(@NotNull String username, @NotNull Skin skin) throws ProfileCacheException;
+    void storeUserSkin(@NotNull Skin skin) throws ProfileCacheException;
 
     /**
      * Uses {@link #findUserUUID(String)} to search for the cached value of the uuid.

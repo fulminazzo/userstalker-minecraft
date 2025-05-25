@@ -47,7 +47,8 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeUserSkin(@NotNull String username, @NotNull Skin skin) throws ProfileCacheException {
+    public void storeUserSkin(@NotNull Skin skin) throws ProfileCacheException {
+        String username = skin.getUsername();
         @NotNull Optional<?> storedData = findUserSkin(username);
         if (!storedData.isPresent()) storedData = findUserUUID(username);
         String query = storedData.isPresent() ?
