@@ -35,21 +35,14 @@ public final class USGUIManager {
      * Sets the current manager by loading the GUIs from the configuration file.
      *
      * @param pluginDirectory the plugin directory
-     * @return true if everything was successful
+     * @throws IOException if there was an error while creating the <b>guis.yml</b> file
      */
-    public boolean setup(final @NotNull File pluginDirectory) {
+    public void setup(final @NotNull File pluginDirectory) throws IOException {
         File file = new File(pluginDirectory, "guis.yml");
 
         if (!file.exists()) {
             logger.info("Creating configuration file: " + file.getPath());
-            try {
-                FileUtils.createNewFile(file);
-            } catch (IOException e) {
-                logger.severe(String.format("An error occurred when creating the configuration file %s: %s",
-                        file.getPath(),
-                        e.getMessage()));
-                return false;
-            }
+            FileUtils.createNewFile(file);
             FileConfiguration config = FileConfiguration.newConfiguration(file);
             // Store GUIs in file and load in memory
 
@@ -73,9 +66,7 @@ public final class USGUIManager {
             newestUsersLoginsGUI = getGUI(config, "newest-users-logins", GUIs.defaultNewestUsersLogins());
 
             userLoginsGUI = getGUI(config, "user-logins", GUIs.defaultUserLogins());
-
         }
-        return true;
     }
 
     private <T> T setAndGet(final @NotNull FileConfiguration config,
