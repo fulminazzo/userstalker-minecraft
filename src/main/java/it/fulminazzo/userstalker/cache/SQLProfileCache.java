@@ -50,19 +50,18 @@ final class SQLProfileCache extends ProfileCacheImpl {
     public void storeUserSkin(@NotNull String username, @NotNull Skin skin) throws ProfileCacheException {
         @NotNull Optional<Skin> storedSkin = findUserSkin(username);
         String query = storedSkin.isPresent() ?
-                "UPDATE skin_cache SET uuid = ?, username = ?, skin = ?, signature = ?, expiry = ? WHERE username = ?" :
-                "INSERT INTO profile_cache (uuid, username, skin, signature, expiry, username) VALUES (?, ?, ?)";
+                "UPDATE skin_cache SET uuid = ?, skin = ?, signature = ?, expiry = ? WHERE username = ?" :
+                "INSERT INTO profile_cache (uuid, skin, signature, expiry, username) VALUES (?, ?, ?, ?, ?)";
 
         executeStatement(
                 () -> connection.prepareStatement(query),
                 s -> {
                     s.setString(1, skin.getUuid().toString());
-                    s.setString(2, skin.getUsername());
-                    s.setString(3, skin.getSkin());
-                    s.setString(4, skin.getSignature());
+                    s.setString(2, skin.getSkin());
+                    s.setString(3, skin.getSignature());
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis() + skinExpireTimeout);
-                    s.setTimestamp(5, timestamp);
-                    s.setString(6, username);
+                    s.setTimestamp(4, timestamp);
+                    s.setString(5, username);
                     return s.executeUpdate();
                 }
         );
