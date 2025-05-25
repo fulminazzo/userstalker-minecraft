@@ -1,8 +1,13 @@
 name: Generate JaCoCo badge
 
 on:
-  push:
-    branches: [ "main", "master", "test" ]
+  workflow_run:
+    workflows: [ "Execute tests with Gradle" ]
+    types:
+      - completed
+    branches:
+      - "master"
+      - "main"
 
 concurrency:
   group: gradle-${{ github.ref }}
