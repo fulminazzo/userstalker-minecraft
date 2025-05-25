@@ -95,7 +95,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
                     if (result.next()) return result.getString("uuid");
                     else return null;
                 }
-        )).map(ProfileCacheUtils::fromString);
+        )).map(UUID::fromString);
     }
 
     @Override
@@ -108,7 +108,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
         executeStatement(
                 () -> connection.prepareStatement(query),
                 s -> {
-                    s.setString(1, ProfileCacheUtils.toString(uuid));
+                    s.setString(1, uuid.toString());
                     s.setString(2, username);
                     return s.executeUpdate();
                 }
