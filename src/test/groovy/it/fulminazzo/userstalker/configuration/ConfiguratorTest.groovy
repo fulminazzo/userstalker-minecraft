@@ -1,13 +1,54 @@
 package it.fulminazzo.userstalker.configuration
 
+import it.fulminazzo.yamlparser.utils.FileUtils
 import spock.lang.Specification
 
 class ConfiguratorTest extends Specification {
 
+    private static final File PLUGIN_DIRECTORY = new File('build/resources/test')
+
+    def 'test that configurator loads existing file'() {
+        given:
+        def configurator = new Configurator()
+                .pluginDirectory(PLUGIN_DIRECTORY)
+                .name('existing')
+                .type(ConfigurationType.TOML)
+
+        and:
+        def file = new File(PLUGIN_DIRECTORY, 'existing.toml')
+        FileUtils.createNewFile(file)
+        file.write('hello = "world"')
+
+        when:
+        def config = configurator.build()
+
+        then:
+        config.getString('hello') == 'world'
+    }
+
+    def 'test that configurator loads non_existing file'() {
+        given:
+        def configurator = new Configurator()
+                .pluginDirectory(PLUGIN_DIRECTORY)
+                .name('non_existing')
+                .type(ConfigurationType.TOML)
+
+        and:
+        def file = new File(PLUGIN_DIRECTORY, 'non_existing.toml')
+
+        when:
+        def config = configurator.build()
+        config.set('hello', 'world')
+        config.save()
+
+        then:
+        file.readLines() == ['hello = "world"']
+    }
+
     def 'test that configurator throws if missing field'() {
         when:
-        new Configurator().
-                pluginDirectory(pluginDirectory)
+        new Configurator()
+                .pluginDirectory(pluginDirectory)
                 .name(name)
                 .type(type)
                 .build()
