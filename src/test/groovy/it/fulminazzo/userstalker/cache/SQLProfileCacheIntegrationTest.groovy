@@ -8,7 +8,7 @@ import java.sql.SQLException
 import java.sql.Timestamp
 
 class SQLProfileCacheIntegrationTest extends Specification {
-    private static final String DB_URL = 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1'
+    private static final String DB_URL = 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=0'
     private static final String DB_USER = 'sa'
     private static final String DB_PASSWORD = ''
 
@@ -21,30 +21,52 @@ class SQLProfileCacheIntegrationTest extends Specification {
         connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)
 
         cache = new SQLProfileCache(connection, 100 * 1000)
+        cache.checkProfileTableExists()
+
+        def statement = connection.prepareStatement('INSERT INTO profile_cache (username, uuid) VALUES (?, ?)')
+        statement.setString(1, 'Steve')
+        statement.setString(2, UUID.randomUUID().toString())
+        statement.execute()
+
+        statement = connection.prepareStatement('INSERT INTO profile_cache (username, uuid, skin, signature, expiry) VALUES (?, ?, ?, ?, ?)')
+        statement.setString(1, 'Jeb')
+        statement.setString(2, UUID.randomUUID().toString())
+        statement.setString(3, 'skin')
+        statement.setString(4, 'signature')
+        statement.setTimestamp(5, new Timestamp(System.currentTimeMillis() + 1000000))
+        statement.execute()
     }
 
-    def 'test that findUserUUID of #username returns correct value'() {
+    void cleanup() {
+        connection.close()
+    }
+
+    def 'test that lookupUserSkin of #username returns correct value'() {
         given:
-        def skin = 'mock-skin'
+        def skin = Skin.builder()
+                .uuid(UUID.randomUUID())
+                .username(username)
+                .skin('mock-skin')
+                .signature('signature')
+                .build()
 
         and:
-        cache.checkSkinTableExists()
-
-        and:
-        def statement = connection.prepareStatement('INSERT INTO skin_cache VALUES (?, ?, ?)')
+        def statement = connection.prepareStatement('INSERT INTO profile_cache VALUES (?, ?, ?, ?, ?)')
         statement.setString(1, username)
-        statement.setString(2, skin)
+        statement.setString(2, skin.uuid.toString())
+        statement.setString(3, skin.skin)
+        statement.setString(4, skin.signature)
         if (username == 'Notch')
-            statement.setTimestamp(3, new Timestamp(System.currentTimeMillis() + 1000 * 100))
+            statement.setTimestamp(5, new Timestamp(System.currentTimeMillis() + 1000 * 100))
         else
-            statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()))
+            statement.setTimestamp(5, new Timestamp(System.currentTimeMillis()))
         statement.execute()
 
         when:
-        def actualUUID = cache.findUserSkin(username)
+        def actualSkin = cache.lookupUserSkin(username)
 
         then:
-        actualUUID.isPresent() == expected
+        actualSkin.isPresent() == expected
 
         where:
         username || expected
@@ -54,41 +76,44 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
     def 'test that storeUserSkin of #username saves correct value'() {
         given:
-        def skin = 'mock-skin'
+        def skin = Skin.builder()
+                .uuid(UUID.randomUUID())
+                .username(username)
+                .skin('mock-skin')
+                .signature('signature')
+                .build()
 
         when:
-        cache.storeUserSkin(username, skin)
+        cache.storeUserSkin(skin)
 
         and:
         def resultSet = connection
-                .prepareStatement("SELECT skin, expiry FROM skin_cache WHERE username = '$username'")
+                .prepareStatement("SELECT skin, signature, expiry FROM profile_cache WHERE username = '$username'")
                 .executeQuery()
 
         then:
         resultSet.next()
-        resultSet.getString(1) == skin
-        resultSet.getTimestamp(2).after(new Timestamp(System.currentTimeMillis()))
+        resultSet.getString(1) == skin.skin
+        resultSet.getString(2) == skin.signature
+        resultSet.getTimestamp(3).after(new Timestamp(System.currentTimeMillis()))
 
         where:
-        username << ['Notch', 'Steve']
+        username << ['Notch', 'Steve', 'Jeb']
     }
 
-    def 'test that findUserUUID returns correct value'() {
+    def 'test that lookupUserUUID returns correct value'() {
         given:
         def username = 'Notch'
         def uuid = UUID.randomUUID()
 
         and:
-        cache.checkUUIDTableExists()
-
-        and:
-        def statement = connection.prepareStatement('INSERT INTO uuid_cache VALUES (?, ?)')
+        def statement = connection.prepareStatement('INSERT INTO profile_cache (username, uuid) VALUES (?, ?)')
         statement.setString(1, username)
-        statement.setString(2, ProfileCacheUtils.toString(uuid))
+        statement.setString(2, uuid.toString())
         statement.execute()
 
         when:
-        def actualUUID = cache.findUserUUID(username)
+        def actualUUID = cache.lookupUserUUID(username)
 
         then:
         actualUUID.isPresent()
@@ -104,12 +129,12 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
         and:
         def resultSet = connection
-                .prepareStatement("SELECT uuid FROM uuid_cache WHERE username = '$username'")
+                .prepareStatement("SELECT uuid FROM profile_cache WHERE username = '$username'")
                 .executeQuery()
 
         then:
         resultSet.next()
-        resultSet.getString(1) == ProfileCacheUtils.toString(uuid)
+        resultSet.getString(1) == uuid.toString()
 
         where:
         username << ['Notch', 'Steve']

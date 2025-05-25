@@ -27,7 +27,7 @@ final class FileProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<String> findUserSkin(@NotNull String username) {
+    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) {
         ConfigurationSection section = config.getConfigurationSection(username);
         if (section == null) return Optional.empty();
         Long expiry = section.getLong("expiry");
@@ -35,24 +35,36 @@ final class FileProfileCache extends ProfileCacheImpl {
             config.set(username, null);
             config.save();
             return Optional.empty();
-        } else return Optional.ofNullable(section.getString("skin"));
+        } else return Optional.ofNullable(Skin.builder()
+                .uuid(section.getUUID("uuid"))
+                .username(section.getString("username"))
+                .skin(section.getString("skin"))
+                .signature(section.getString("signature"))
+                .build()
+        );
     }
 
     @Override
-    public void storeUserSkin(@NotNull String username, @NotNull String skin) {
-        config.set(username + ".skin", skin);
-        config.set(username + ".expiry", System.currentTimeMillis() + skinExpireTimeout);
+    public void storeUserSkin(@NotNull Skin skin) {
+        String username = skin.getUsername();
+        config.set(username, null);
+        ConfigurationSection section = config.createSection(username);
+        section.set("uuid", skin.getUuid());
+        section.set("username", skin.getUsername());
+        section.set("skin", skin.getSkin());
+        section.set("signature", skin.getSignature());
+        section.set("expiry", System.currentTimeMillis() + skinExpireTimeout);
         config.save();
     }
 
     @Override
-    public @NotNull Optional<UUID> findUserUUID(@NotNull String username) {
-        return Optional.ofNullable(config.getString(username + ".uuid")).map(ProfileCacheUtils::fromString);
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) {
+        return Optional.ofNullable(config.getString(username + ".uuid")).map(UUID::fromString);
     }
 
     @Override
     public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) {
-        config.set(username + ".uuid", ProfileCacheUtils.toString(uuid));
+        config.set(username + ".uuid", uuid);
         config.save();
     }
 

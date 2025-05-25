@@ -16,7 +16,7 @@ class ProfileCacheImplTest extends Specification {
     def 'test that getUserSkin does not store skin if empty response after lookup'() {
         given:
         def skinCache = Spy(TestProfileCache)
-        skinCache.lookupUserSkin(_ as String) >> Optional.empty()
+        skinCache.fetchUserSkin(_ as String) >> Optional.empty()
 
         when:
         skinCache.getUserSkin('user')
@@ -28,29 +28,29 @@ class ProfileCacheImplTest extends Specification {
         stored == null
     }
 
-    def 'test that lookupUserSkin of valid username returns expected value'() {
+    def 'test that fetchUserSkin of valid username returns expected value'() {
         when:
-        def skin = cache.lookupUserSkin('Notch')
+        def skin = cache.fetchUserSkin('Notch')
 
         then:
         skin.isPresent()
     }
 
-    def 'test that lookupUserSkin of not existing player returns empty'() {
+    def 'test that fetchUserSkin of not existing player returns empty'() {
         when:
-        def skin = cache.lookupUserSkin('NotExistingAtAll')
+        def skin = cache.fetchUserSkin('NotExistingAtAll')
 
         then:
         !skin.isPresent()
     }
 
-    def 'test that lookupUserSkin of #jsonObject is as expected'() {
+    def 'test that fetchUserSkin of #jsonObject is as expected'() {
         given:
         def skinCache = Spy(TestProfileCache)
         skinCache.getJsonFromURL(_ as String, _ as String) >> Optional.of(jsonObject)
 
         when:
-        def skin = skinCache.lookupUserSkin('Notch')
+        def skin = skinCache.fetchUserSkin('Notch')
 
         then:
         skin.isPresent() == expected
@@ -65,7 +65,7 @@ class ProfileCacheImplTest extends Specification {
     def 'test that getUserUUID does not store skin if empty response after lookup'() {
         given:
         def skinCache = Spy(TestProfileCache)
-        skinCache.lookupUserUUID(_ as String) >> Optional.empty()
+        skinCache.fetchUserUUID(_ as String) >> Optional.empty()
 
         when:
         skinCache.getUserUUID('user')
@@ -77,9 +77,9 @@ class ProfileCacheImplTest extends Specification {
         stored == null
     }
 
-    def 'test that lookupUserUUID of valid username returns expected value'() {
+    def 'test that fetchUserUUID of valid username returns expected value'() {
         when:
-        def uuid = cache.lookupUserUUID('Notch')
+        def uuid = cache.fetchUserUUID('Notch')
 
         then:
         uuid.isPresent()

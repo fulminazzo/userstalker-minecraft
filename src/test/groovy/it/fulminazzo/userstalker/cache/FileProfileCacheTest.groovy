@@ -18,14 +18,21 @@ class FileProfileCacheTest extends Specification {
         def now = System.currentTimeMillis()
 
         config = FileConfiguration.newConfiguration(cacheFile)
+        config.set('expired.uuid', UUID.randomUUID())
+        config.set('expired.username', 'Steve')
         config.set('expired.skin', 'skin')
+        config.set('expired.signature', 'signature')
         config.set('expired.expiry', now)
 
+        config.set('not-expired.uuid', UUID.randomUUID())
+        config.set('not-expired.username', 'Fulminazzo')
         config.set('not-expired.skin', 'skin')
-        config.set('not-expired.uuid', UUID.randomUUID().toString().replace('-', ''))
+        config.set('not-expired.signature', 'signature')
         config.set('not-expired.expiry', now + 100 * 1000)
 
+        config.set('not-specified.username', 'Joey')
         config.set('not-specified.skin', 'skin')
+        config.set('not-specified.signature', 'signature')
         config.save()
 
         cache = new FileProfileCache(cacheFile, 100 * 1000)
@@ -41,7 +48,7 @@ class FileProfileCacheTest extends Specification {
 
         then:
         actualSkin.isPresent()
-        actualSkin.get() != skin
+        actualSkin.get().skin != skin
     }
 
     def 'test that getUserSkin of cached does not query Mojang API'() {
@@ -62,12 +69,12 @@ class FileProfileCacheTest extends Specification {
 
         then:
         actualSkin.isPresent()
-        actualSkin.get() == skin
+        actualSkin.get().skin == skin
     }
 
-    def 'test that findUserSkin of #username is as expected'() {
+    def 'test that lookupUserSkin of #username is as expected'() {
         when:
-        def skin = cache.findUserSkin(username)
+        def skin = cache.lookupUserSkin(username)
 
         then:
         skin.isPresent() == expected
@@ -81,13 +88,23 @@ class FileProfileCacheTest extends Specification {
     }
 
     def 'test that storeUserSkin saves correct value'() {
+        given:
+        def skin = Skin.builder()
+                .uuid(UUID.randomUUID())
+                .username('Alex')
+                .skin('AnotherSkin')
+                .signature('')
+                .build()
+
         when:
-        cache.storeUserSkin('Alex', 'AnotherSkin')
+        cache.storeUserSkin(skin)
         config = FileConfiguration.newConfiguration(cacheFile)
 
         then:
-        config.getConfigurationSection('Alex') != null
-        config.getString('Alex.skin') == 'AnotherSkin'
+        config.getUUID('Alex.uuid') == skin.uuid
+        config.getString('Alex.username') == skin.username
+        config.getString('Alex.skin') == skin.skin
+        config.getString('Alex.signature') == skin.signature
         config.getLong('Alex.expiry') > System.currentTimeMillis()
     }
 
@@ -110,7 +127,7 @@ class FileProfileCacheTest extends Specification {
         def uuid = UUID.randomUUID()
 
         and:
-        config.set('Notch.uuid', uuid.toString().replace('-', ''))
+        config.set('Notch.uuid', uuid)
         config.set('Notch.expiry', System.currentTimeMillis() + 100 * 1000)
         config.save()
 
@@ -125,9 +142,9 @@ class FileProfileCacheTest extends Specification {
         actualUUID.get() == uuid
     }
 
-    def 'test that findUserUUID of username is as expected'() {
+    def 'test that lookupUserUUID of username is as expected'() {
         when:
-        def uuid = cache.findUserUUID('not-expired')
+        def uuid = cache.lookupUserUUID('not-expired')
 
         then:
         uuid.isPresent()
@@ -143,7 +160,7 @@ class FileProfileCacheTest extends Specification {
 
         then:
         config.getConfigurationSection('Alex') != null
-        config.getString('Alex.uuid') == uuid.toString().replace('-', '')
+        config.getUUID('Alex.uuid') == uuid
     }
 
 }

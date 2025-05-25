@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 abstract class ProfileCacheImpl implements ProfileCache {
     private static final String MOJANG_API_UUID = "https://api.mojang.com/users/profiles/minecraft/%s";
-    private static final String MOJANG_API_SKIN = "https://sessionserver.mojang.com/session/minecraft/profile/%s";
+    private static final String MOJANG_API_SKIN = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
 
     /**
      * The Skin expire timeout.
@@ -28,16 +28,16 @@ abstract class ProfileCacheImpl implements ProfileCache {
     protected final long skinExpireTimeout;
 
     @Override
-    public @NotNull Optional<String> getUserSkin(@NotNull String username) throws ProfileCacheException {
-        @NotNull Optional<String> userSkin = findUserSkin(username);
+    public @NotNull Optional<Skin> getUserSkin(@NotNull String username) throws ProfileCacheException {
+        @NotNull Optional<Skin> userSkin = lookupUserSkin(username);
         if (userSkin.isPresent()) return userSkin;
-        userSkin = lookupUserSkin(username);
-        if (userSkin.isPresent()) storeUserSkin(username, userSkin.get());
+        userSkin = fetchUserSkin(username);
+        if (userSkin.isPresent()) storeUserSkin(userSkin.get());
         return userSkin;
     }
 
     @Override
-    public @NotNull Optional<String> lookupUserSkin(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<Skin> fetchUserSkin(@NotNull String username) throws ProfileCacheException {
         Optional<UUID> uuid = getUserUUID(username);
         if (!uuid.isPresent()) return Optional.empty();
 
@@ -49,8 +49,16 @@ abstract class ProfileCacheImpl implements ProfileCache {
                     for (int i = 0; i < a.getAsJsonArray().size(); i++) {
                         JsonObject skin = a.getAsJsonArray().get(i).getAsJsonObject();
                         JsonElement name = skin.get("name");
-                        if (name != null && name.getAsString().equals("textures"))
-                            return skin.get("value").getAsString();
+                        if (name != null && name.getAsString().equals("textures")) {
+                            String value = skin.get("value").getAsString();
+                            JsonElement signature = skin.get("signature");
+                            return Skin.builder()
+                                    .uuid(uuid.get())
+                                    .username(username)
+                                    .skin(value)
+                                    .signature(signature == null ? "" : signature.getAsString())
+                                    .build();
+                        }
                     }
                     return null;
                 });
@@ -58,15 +66,15 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
     @Override
     public @NotNull Optional<UUID> getUserUUID(@NotNull String username) throws ProfileCacheException {
-        @NotNull Optional<UUID> uuid = findUserUUID(username);
+        @NotNull Optional<UUID> uuid = lookupUserUUID(username);
         if (uuid.isPresent()) return uuid;
-        uuid = lookupUserUUID(username);
+        uuid = fetchUserUUID(username);
         if (uuid.isPresent()) storeUserUUID(username, uuid.get());
         return uuid;
     }
 
     @Override
-    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) throws ProfileCacheException {
         return getJsonFromURL(String.format(MOJANG_API_UUID, username),
                 "querying Mojang API for player UUID")
                 .map(j -> j.get("id"))

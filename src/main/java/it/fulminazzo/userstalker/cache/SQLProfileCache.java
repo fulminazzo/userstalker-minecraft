@@ -27,82 +27,73 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<String> findUserSkin(@NotNull String username) throws ProfileCacheException {
-        checkSkinTableExists();
+    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws ProfileCacheException {
+        checkProfileTableExists();
         return Optional.ofNullable(executeStatement(
-                () -> connection.prepareStatement("SELECT skin FROM skin_cache " +
+                () -> connection.prepareStatement("SELECT uuid, username, skin, signature FROM profile_cache " +
                         "WHERE username = ? AND expiry > CURRENT_TIMESTAMP"),
                 s -> {
                     s.setString(1, username);
                     ResultSet result = s.executeQuery();
-                    if (result.next()) return result.getString("skin");
+                    if (result.next()) return Skin.builder()
+                            .uuid(UUID.fromString(result.getString("uuid")))
+                            .username(result.getString("username"))
+                            .skin(result.getString("skin"))
+                            .signature(result.getString("signature"))
+                            .build();
                     else return null;
                 }
         ));
     }
 
     @Override
-    public void storeUserSkin(@NotNull String username, @NotNull String skin) throws ProfileCacheException {
-        @NotNull Optional<String> storedSkin = findUserSkin(username);
-        String query = storedSkin.isPresent() ?
-                "UPDATE skin_cache SET skin = ?, expiry = ? WHERE username = ?" :
-                "INSERT INTO skin_cache (skin, expiry, username) VALUES (?, ?, ?)"
-                ;
+    public void storeUserSkin(@NotNull Skin skin) throws ProfileCacheException {
+        String username = skin.getUsername();
+        @NotNull Optional<?> storedData = lookupUserSkin(username);
+        if (!storedData.isPresent()) storedData = lookupUserUUID(username);
+        String query = storedData.isPresent() ?
+                "UPDATE profile_cache SET uuid = ?, skin = ?, signature = ?, expiry = ? WHERE username = ?" :
+                "INSERT INTO profile_cache (uuid, skin, signature, expiry, username) VALUES (?, ?, ?, ?, ?)";
 
         executeStatement(
                 () -> connection.prepareStatement(query),
                 s -> {
-                    s.setString(1, skin);
+                    s.setString(1, skin.getUuid().toString());
+                    s.setString(2, skin.getSkin());
+                    s.setString(3, skin.getSignature());
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis() + skinExpireTimeout);
-                    s.setTimestamp(2, timestamp);
-                    s.setString(3, username);
+                    s.setTimestamp(4, timestamp);
+                    s.setString(5, username);
                     return s.executeUpdate();
                 }
         );
     }
 
-    /**
-     * Checks if the skin_cache table exists, if not it creates it.
-     *
-     * @throws ProfileCacheException an exception thrown in case an error occurs
-     */
-    void checkSkinTableExists() throws ProfileCacheException {
-        executeStatement(
-                () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS skin_cache (" +
-                        "username VARCHAR(32) PRIMARY KEY," +
-                        "skin TEXT NOT NULL," +
-                        "expiry TIMESTAMP" +
-                        ")"),
-                PreparedStatement::executeUpdate
-        );
-    }
-
     @Override
-    public @NotNull Optional<UUID> findUserUUID(@NotNull String username) throws ProfileCacheException {
-        checkUUIDTableExists();
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException {
+        checkProfileTableExists();
         return Optional.ofNullable(executeStatement(
-                () -> connection.prepareStatement("SELECT uuid FROM uuid_cache WHERE username = ?"),
+                () -> connection.prepareStatement("SELECT uuid FROM profile_cache WHERE username = ?"),
                 s -> {
                     s.setString(1, username);
                     ResultSet result = s.executeQuery();
                     if (result.next()) return result.getString("uuid");
                     else return null;
                 }
-        )).map(ProfileCacheUtils::fromString);
+        )).map(UUID::fromString);
     }
 
     @Override
     public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
-        @NotNull Optional<UUID> storedUUID = findUserUUID(username);
+        @NotNull Optional<UUID> storedUUID = lookupUserUUID(username);
         String query = storedUUID.isPresent() ?
-                "UPDATE uuid_cache SET uuid = ? WHERE username = ?" :
-                "INSERT INTO uuid_cache (uuid, username) VALUES (?, ?)"
-                ;
+                "UPDATE profile_cache SET uuid = ? WHERE username = ?" :
+                "INSERT INTO profile_cache (uuid, username) VALUES (?, ?)";
 
         executeStatement(
                 () -> connection.prepareStatement(query),
                 s -> {
-                    s.setString(1, ProfileCacheUtils.toString(uuid));
+                    s.setString(1, uuid.toString());
                     s.setString(2, username);
                     return s.executeUpdate();
                 }
@@ -110,15 +101,18 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     /**
-     * Checks if the uuid_cache table exists, if not it creates it.
+     * Checks if the profile_cache table exists, if not it creates it.
      *
      * @throws ProfileCacheException an exception thrown in case an error occurs
      */
-    void checkUUIDTableExists() throws ProfileCacheException {
+    void checkProfileTableExists() throws ProfileCacheException {
         executeStatement(
-                () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS uuid_cache (" +
-                        "username VARCHAR(32) PRIMARY KEY," +
-                        "uuid VARCHAR(32) NOT NULL" +
+                () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS profile_cache (" +
+                        "username VARCHAR(16) PRIMARY KEY," +
+                        "uuid VARCHAR(36) NOT NULL," +
+                        "skin TEXT NULL," +
+                        "signature TEXT NULL," +
+                        "expiry TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                         ")"),
                 PreparedStatement::executeUpdate
         );
