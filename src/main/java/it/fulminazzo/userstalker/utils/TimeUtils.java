@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 
 /**
  * A collection of utilities to work with {@link LocalDateTime}
@@ -19,12 +22,12 @@ public final class TimeUtils {
      * @return the printed time
      */
     public static @NotNull String toString(final @NotNull LocalDateTime dateTime) {
-        return String.format("%s:%s:%s %s-%s-%s",
+        return String.format("%02d:%02d:%02d %02d/%02d/%d",
                 dateTime.getHour(),
                 dateTime.getMinute(),
                 dateTime.getSecond(),
-                dateTime.getMonthValue(),
                 dateTime.getDayOfMonth(),
+                dateTime.getMonthValue(),
                 dateTime.getYear()
         );
     }
