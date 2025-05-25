@@ -20,7 +20,7 @@ import java.util.function.Function;
 public final class GUIs {
 
     public static final Function<Collection<UserLogin>, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = data ->
-            setCommonGUISettings(DataGUI.newGUI(27, u -> ItemGUIContent.newInstance(Material.BOOK.name())
+            setupPagesItemsAndCorners(DataGUI.newGUI(27, u -> ItemGUIContent.newInstance(Material.BOOK.name())
                             .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                             .setLore(String.format("&fIp: &c%s", u.getIp()),
                                     String.format("&fLogin date: &a%s %s",
@@ -28,14 +28,21 @@ public final class GUIs {
                     data));
 
     public static final Function<Collection<UserLogin>, DataGUI<UserLogin>> USER_LOGINS_GUI_PROVIDER = data ->
-            setCommonGUISettings(DataGUI.newGUI(54, u -> ItemGUIContent.newInstance(Material.BOOK.name())
+            setupPagesItemsAndCorners(DataGUI.newGUI(54, u -> ItemGUIContent.newInstance(Material.BOOK.name())
                             .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
                             .setLore(String.format("&fLogin date: &a%s %s",
                                     u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
                     data));
 
+    /**
+     * Sets the pages items and the corners on the given gui.
+     *
+     * @param <G> the type of the gui
+     * @param gui the gui
+     * @return the updated gui
+     */
     @SuppressWarnings("unchecked")
-    private static <G extends PageableGUI> @NotNull G setCommonGUISettings(final @NotNull G gui) {
+    static <G extends PageableGUI> @NotNull G setupPagesItemsAndCorners(final @NotNull G gui) {
         return (G) gui.setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name()).setDisplayName(" "))
                 .setPreviousPage(47, Item.newItem(Material.PAPER.name()).setDisplayName("&ePrevious page"))
                 .setNextPage(51, Item.newItem(Material.PAPER.name()).setDisplayName("&eNext page"))
