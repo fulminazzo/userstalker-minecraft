@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.Optional;
 
 /**
  * A builder for {@link FileConfiguration}.
@@ -31,6 +33,17 @@ public final class Configurator {
         ConfigurationType type = getType();
 
         return null;
+    }
+
+    /**
+     * Checks the current JAR from the file fullname.
+     *
+     * @return an optional that might contain
+     * @throws ConfigurationException if any error occurs
+     */
+    @NotNull Optional<InputStream> getJarResource() throws ConfigurationException {
+        String fullName = getType().getCompleteFileName(getName());
+        return Optional.ofNullable(Configurator.class.getResourceAsStream("/" + fullName));
     }
 
     /**
