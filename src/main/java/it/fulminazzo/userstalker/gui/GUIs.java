@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.function.Function;
 
@@ -169,6 +170,7 @@ public final class GUIs {
             Object objectField = refl.getFieldObject(field);
             String name = StringUtils.decapitalize(field.getName()).toLowerCase();
             String value = objectField == null ? "" : objectField.toString();
+            if (objectField instanceof LocalDateTime) value = value.replace("T", " ");
             metadatable.setVariable(name, value);
         });
         return metadatable;
