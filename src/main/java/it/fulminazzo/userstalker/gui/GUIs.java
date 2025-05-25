@@ -24,24 +24,18 @@ import java.util.function.Function;
 public final class GUIs {
 
     private static final Function<Integer, DataGUI<UserLoginCount>> NAMED_USER_LOGINS_COUNT_GUI_PROVIDER = size ->
-            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
-                            .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
-                            .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount())),
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BARRIER.name())
+                            .setDisplayName("&4NOT IMPLEMENTED"),
                     new ArrayList<UserLoginCount>()));
 
     private static final Function<Integer, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = size ->
-            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
-                            .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
-                            .setLore(String.format("&fIp: &c%s", u.getIp()),
-                                    String.format("&fLogin date: &a%s %s",
-                                            u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BARRIER.name())
+                            .setDisplayName("&4NOT IMPLEMENTED"),
                     new ArrayList<UserLogin>()));
 
     private static final Function<Integer, DataGUI<UserLogin>> USER_LOGINS_GUI_PROVIDER = size ->
-            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
-                            .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
-                            .setLore(String.format("&fLogin date: &a%s %s",
-                                    u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BARRIER.name())
+                            .setDisplayName("&4NOT IMPLEMENTED"),
                     new ArrayList<UserLogin>()));
 
     /**
