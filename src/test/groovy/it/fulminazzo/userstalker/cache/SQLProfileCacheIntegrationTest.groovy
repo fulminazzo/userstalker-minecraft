@@ -82,7 +82,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         cache.checkProfileTableExists()
 
         and:
-        def statement = connection.prepareStatement('INSERT INTO profile_cache VALUES (?, ?)')
+        def statement = connection.prepareStatement('INSERT INTO profile_cache (username, uuid) VALUES (?, ?)')
         statement.setString(1, username)
         statement.setString(2, uuid.toString())
         statement.execute()
