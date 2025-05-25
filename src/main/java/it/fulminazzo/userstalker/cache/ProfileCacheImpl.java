@@ -146,7 +146,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
     boolean isInFetchBlacklist(final @NotNull String username) {
         long now = System.currentTimeMillis();
         long time = fetchBlacklist.getOrDefault(username, now);
-        if (now - time <= 0) {
+        if (now - time >= 0) {
             fetchBlacklist.remove(username);
             return false;
         } else return true;
