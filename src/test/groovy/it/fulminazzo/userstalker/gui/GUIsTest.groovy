@@ -2,7 +2,6 @@ package it.fulminazzo.userstalker.gui
 
 import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.cache.ProfileCache
-import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.guis.PageableGUI
@@ -20,6 +19,20 @@ class GUIsTest extends Specification {
 
     void setup() {
         BukkitUtils.setupServer()
+    }
+
+    def 'test that newContentConverter works'() {
+        given:
+        def content = GUIs.newContentConverter('PLAYER_HEAD', cache)
+                .setVariable('username', 'valid')
+
+        when:
+        content.render().copy(BukkitItem).create()
+
+        then:
+        def e = thrown(IllegalArgumentException)
+        // No CraftMetaSkull class is available
+        e.message == 'Could not find method ? setProfile(com.mojang.authlib.GameProfile)'
     }
 
     def 'test that newContentConverter does not throw'() {
