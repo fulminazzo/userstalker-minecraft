@@ -20,7 +20,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         Class.forName('org.h2.Driver')
         connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)
 
-        cache = new SQLProfileCache(connection, 100 * 1000)
+        cache = new SQLProfileCache(connection, 100 * 1000, 0)
         cache.checkProfileTableExists()
 
         def statement = connection.prepareStatement('INSERT INTO profile_cache (username, uuid) VALUES (?, ?)')

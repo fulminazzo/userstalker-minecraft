@@ -35,7 +35,7 @@ class FileProfileCacheTest extends Specification {
         config.set('not-specified.signature', 'signature')
         config.save()
 
-        cache = new FileProfileCache(cacheFile, 100 * 1000)
+        cache = new FileProfileCache(cacheFile, 100 * 1000, 0)
     }
 
     def 'test that getUserSkin of non cached queries Mojang API'() {

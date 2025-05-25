@@ -17,12 +17,15 @@ final class FileProfileCache extends ProfileCacheImpl {
     /**
      * Instantiates a new File skin cache.
      *
-     * @param cacheFile         the cache file
-     * @param skinExpireTimeout the skin expire timeout
+     * @param cacheFile             the cache file
+     * @param skinExpireTimeout     the skin expire timeout in milliseconds
+     * @param fetchBlacklistTimeout the fetch blacklist timeout in milliseconds
      */
     public FileProfileCache(final @NotNull File cacheFile,
-                            final long skinExpireTimeout) {
-        super(skinExpireTimeout);
+                            final long skinExpireTimeout,
+                            final long fetchBlacklistTimeout
+    ) {
+        super(skinExpireTimeout, fetchBlacklistTimeout);
         this.config = FileConfiguration.newConfiguration(cacheFile);
     }
 
