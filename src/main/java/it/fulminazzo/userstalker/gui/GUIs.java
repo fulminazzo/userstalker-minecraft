@@ -54,12 +54,33 @@ public final class GUIs {
     public static @NotNull Function<UserLoginCount, GUIContent> userLoginCountConverter(
             final @NotNull String materialName,
             final @Nullable ProfileCache cache
-            ) {
+    ) {
         return u -> {
             //TODO: if player head, use cache when rendering
             return ItemGUIContent.newInstance(materialName)
                     .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                     .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount()));
+        };
+    }
+
+    /**
+     * Provides a function to convert a {@link UserLogin} to a {@link GUIContent} with the username included.
+     *
+     * @param materialName the material name
+     * @param cache        the cache to use to lookup skin in case of {@link Material#PLAYER_HEAD} provided
+     * @return the function
+     */
+    public static @NotNull Function<UserLogin, GUIContent> namedUsersLoginConverter(
+            final @NotNull String materialName,
+            final @Nullable ProfileCache cache
+    ) {
+        return u -> {
+            //TODO: if player head, use cache when rendering
+            return ItemGUIContent.newInstance(materialName)
+                    .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
+                    .setLore(String.format("&fIp: &c%s", u.getIp()),
+                            String.format("&fLogin date: &a%s %s",
+                                    u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate()));
         };
     }
 
