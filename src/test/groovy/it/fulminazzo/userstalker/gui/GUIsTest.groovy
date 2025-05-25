@@ -10,6 +10,7 @@ import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.guis.PageableGUI
 import it.fulminazzo.yagl.items.BukkitItem
 import it.fulminazzo.yagl.items.Item
+import it.fulminazzo.yagl.utils.MessageUtils
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import spock.lang.Specification
@@ -22,6 +23,27 @@ class GUIsTest extends Specification {
 
     void setup() {
         BukkitUtils.setupServer()
+    }
+
+    def 'test that provider #provider has default dataConverter with warning message'() {
+        given:
+        def gui = provider.apply(9)
+
+        and:
+        def dataConverter = gui.dataConverter
+
+        when:
+        def result = dataConverter.apply(data) as ItemGUIContent
+
+        then:
+        result.material == 'BARRIER'
+        result.displayName == MessageUtils.color('&4NOT IMPLEMENTED')
+
+        where:
+        provider                                  | data
+        GUIs.NAMED_USER_LOGINS_COUNT_GUI_PROVIDER | UserLoginCount.builder().build()
+        GUIs.NAMED_USER_LOGINS_GUI_PROVIDER       | UserLogin.builder().build()
+        GUIs.USER_LOGINS_GUI_PROVIDER             | UserLogin.builder().build()
     }
 
     def 'test that userLoginCountConverter correctly converts UserLogin'() {
@@ -37,7 +59,7 @@ class GUIsTest extends Specification {
         then:
         content.material == 'stone'
         content.displayName.contains(userLoginCount.username)
-        content.lore.find {it.contains(userLoginCount.loginCount.toString())} != null
+        content.lore.find { it.contains(userLoginCount.loginCount.toString()) } != null
         content.getVariable('username') == userLoginCount.username
         content.getVariable('login_count') == userLoginCount.loginCount.toString()
     }
@@ -57,8 +79,8 @@ class GUIsTest extends Specification {
         then:
         content.material == 'stone'
         content.displayName.contains(userLogin.username)
-        content.lore.find {it.contains(userLogin.ip)} != null
-        content.lore.find {it.contains(loginDate)} != null
+        content.lore.find { it.contains(userLogin.ip) } != null
+        content.lore.find { it.contains(loginDate) } != null
         content.getVariable('username') == userLogin.username
         content.getVariable('ip') == userLogin.ip
         content.getVariable('login_date') == loginDate
@@ -79,7 +101,7 @@ class GUIsTest extends Specification {
         then:
         content.material == 'stone'
         content.displayName.contains(userLogin.ip)
-        content.lore.find {it.contains(loginDate)} != null
+        content.lore.find { it.contains(loginDate) } != null
         content.getVariable('username') == userLogin.username
         content.getVariable('ip') == userLogin.ip
         content.getVariable('login_date') == loginDate
