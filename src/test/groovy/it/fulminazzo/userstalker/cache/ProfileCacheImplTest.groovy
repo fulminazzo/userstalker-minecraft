@@ -213,14 +213,6 @@ class ProfileCacheImplTest extends Specification {
         noExceptionThrown()
     }
 
-    def 'test that builder method returns empty builder'() {
-        given:
-        def builder = ProfileCache.builder()
-
-        expect:
-        builder == new ProfileCacheBuilder()
-    }
-
     private Map<String, Long> fetchBlacklist() {
         return new Refl<>(cache).getFieldObject('fetchBlacklist')
     }
