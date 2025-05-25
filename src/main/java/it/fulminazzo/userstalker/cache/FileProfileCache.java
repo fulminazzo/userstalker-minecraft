@@ -28,12 +28,20 @@ final class FileProfileCache extends ProfileCacheImpl {
 
     @Override
     public @NotNull Optional<Skin> findUserSkin(@NotNull String username) {
-        Long expiry = config.getLong(username + ".expiry");
+        ConfigurationSection section = config.getConfigurationSection(username);
+        if (section == null) return Optional.empty();
+        Long expiry = section.getLong("expiry");
         if (expiry == null || expiry <= System.currentTimeMillis()) {
             config.set(username, null);
             config.save();
             return Optional.empty();
-        } else return Optional.ofNullable(config.get(username, Skin.class));
+        } else return Optional.ofNullable(Skin.builder()
+                .uuid(section.getUUID("uuid"))
+                .username(section.getString("username"))
+                .skin(section.getString("skin"))
+                .signature(section.getString("signature"))
+                .build()
+        );
     }
 
     @Override
