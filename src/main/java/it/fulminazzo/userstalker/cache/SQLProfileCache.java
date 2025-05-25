@@ -76,7 +76,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
     void checkSkinTableExists() throws ProfileCacheException {
         executeStatement(
                 () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS skin_cache (" +
-                        "username VARCHAR(32) PRIMARY KEY," +
+                        "username VARCHAR(16) PRIMARY KEY," +
                         "skin TEXT NOT NULL," +
                         "expiry TIMESTAMP" +
                         ")"),
@@ -123,8 +123,8 @@ final class SQLProfileCache extends ProfileCacheImpl {
     void checkUUIDTableExists() throws ProfileCacheException {
         executeStatement(
                 () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS uuid_cache (" +
-                        "username VARCHAR(32) PRIMARY KEY," +
-                        "uuid VARCHAR(32) NOT NULL" +
+                        "username VARCHAR(16) PRIMARY KEY," +
+                        "uuid VARCHAR(36) NOT NULL" +
                         ")"),
                 PreparedStatement::executeUpdate
         );
