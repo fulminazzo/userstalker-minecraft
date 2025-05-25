@@ -1,11 +1,13 @@
 package it.fulminazzo.userstalker.configuration;
 
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
+import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
@@ -32,7 +34,21 @@ public final class Configurator {
         String name = getName();
         ConfigurationType type = getType();
 
-        return null;
+        String fullName = type.getCompleteFileName(name);
+
+        File configFile = new File(pluginDirectory, fullName);
+
+        if (!configFile.exists())
+            try {
+                FileUtils.createNewFile(configFile);
+                @NotNull Optional<InputStream> jarResource = getJarResource();
+                if (jarResource.isPresent())
+                    FileUtils.writeToFile(configFile, jarResource.get());
+            } catch (IOException e) {
+                throw new ConfigurationException(e.getMessage());
+            }
+
+        return FileConfiguration.newConfiguration(configFile);
     }
 
     /**
