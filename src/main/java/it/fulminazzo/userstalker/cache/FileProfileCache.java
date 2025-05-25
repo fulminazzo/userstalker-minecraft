@@ -1,6 +1,5 @@
 package it.fulminazzo.userstalker.cache;
 
-import it.fulminazzo.yamlparser.configuration.ConfigurationSection;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,9 +27,7 @@ final class FileProfileCache extends ProfileCacheImpl {
 
     @Override
     public @NotNull Optional<Skin> findUserSkin(@NotNull String username) {
-        ConfigurationSection section = config.getConfigurationSection(username);
-        if (section == null) return Optional.empty();
-        Long expiry = section.getLong("expiry");
+        Long expiry = config.getLong(username + ".expiry");
         if (expiry == null || expiry <= System.currentTimeMillis()) {
             config.set(username, null);
             config.save();
