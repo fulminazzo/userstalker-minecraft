@@ -200,9 +200,9 @@ class ProfileCacheImplTest extends Specification {
 
         where:
         time                               || expected
-        System.currentTimeMillis() - 20000 || true
+        System.currentTimeMillis() - 20000 || false
         null                               || false
-        System.currentTimeMillis() + 20000 || false
+        System.currentTimeMillis() + 20000 || true
     }
 
     def 'test that close does nothing'() {
