@@ -54,14 +54,11 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
         CacheType cacheType = loadCacheType();
         File cacheFile = new File(getPluginDirectory(), FILE_NAME + "." + cacheType.name().toLowerCase());
         switch (cacheType) {
+            case YAML:
+                if (!cacheFile.exists()) cacheFile = new File(getPluginDirectory(), FILE_NAME + ".yml");
             case JSON:
             case XML:
             case TOML: {
-                checkFileExists(cacheFile);
-                return new FileProfileCache(cacheFile, getExpiryTimeout(), getBlacklistTimeout());
-            }
-            case YAML: {
-                if (!cacheFile.exists()) cacheFile = new File(getPluginDirectory(), FILE_NAME + ".yml");
                 checkFileExists(cacheFile);
                 return new FileProfileCache(cacheFile, getExpiryTimeout(), getBlacklistTimeout());
             }
