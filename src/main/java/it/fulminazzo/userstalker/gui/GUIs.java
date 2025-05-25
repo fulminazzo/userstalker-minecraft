@@ -7,6 +7,7 @@ import it.fulminazzo.userstalker.cache.ProfileCacheException;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.userstalker.utils.ItemMetaUtils;
+import it.fulminazzo.userstalker.utils.TimeUtils;
 import it.fulminazzo.yagl.Metadatable;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
@@ -78,8 +79,7 @@ public final class GUIs {
         return u -> setupVariables(newContentConverter(materialName, cache)
                 .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                 .setLore(String.format("&fIp: &c%s", u.getIp()),
-                        String.format("&fLogin date: &a%s %s",
-                                u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())), u);
+                        String.format("&fLogin date: &a%s", TimeUtils.toString(u.getLoginDate()))), u);
     }
 
     /**
@@ -93,8 +93,7 @@ public final class GUIs {
     ) {
         return u -> setupVariables(ItemGUIContent.newInstance(materialName)
                 .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
-                .setLore(String.format("&fLogin date: &a%s %s",
-                        u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())), u);
+                .setLore(String.format("&fLogin date: &a%s", TimeUtils.toString(u.getLoginDate()))), u);
     }
 
     /**
@@ -191,7 +190,7 @@ public final class GUIs {
             Object objectField = refl.getFieldObject(field);
             String name = StringUtils.decapitalize(field.getName()).toLowerCase();
             String value = objectField == null ? "" : objectField.toString();
-            if (objectField instanceof LocalDateTime) value = value.replace("T", " ");
+            if (objectField instanceof LocalDateTime) value = TimeUtils.toString((LocalDateTime) objectField);
             metadatable.setVariable(name, value);
         });
         return metadatable;
