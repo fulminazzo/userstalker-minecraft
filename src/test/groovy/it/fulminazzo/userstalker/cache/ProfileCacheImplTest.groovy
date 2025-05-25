@@ -2,6 +2,7 @@ package it.fulminazzo.userstalker.cache
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import it.fulminazzo.fulmicollection.objects.Refl
 import spock.lang.Specification
 
 class ProfileCacheImplTest extends Specification {
@@ -135,6 +136,26 @@ class ProfileCacheImplTest extends Specification {
         then:
         def e = thrown(ProfileCacheException)
         e.message == "Invalid response code when $ACTION: 400"
+    }
+
+    def 'test that isInFetchBlacklist returns #expected for #time'() {
+        given:
+        def username = 'Fulminazzo'
+
+        when:
+        if (time != null)
+            new Refl<>(cache)
+                    .getFieldRefl('fetchBlacklist')
+                    .invokeMethod('put', username, time)
+
+        then:
+        cache.isInFetchBlacklist(username) == expected
+
+        where:
+        time                               || expected
+        System.currentTimeMillis() - 20000 || true
+        null                               || false
+        System.currentTimeMillis() + 20000 || false
     }
 
     def 'test that close does nothing'() {
