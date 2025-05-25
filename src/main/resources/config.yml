@@ -12,6 +12,11 @@ skin-cache:
   # The amount of seconds after which the cache should
   # be refreshed.
   expire-time: 86400
+  # When querying the Mojang API, if the user is not found,
+  # it is put in a blacklist to ensure no useless repetition is made.
+  # This value specifies the amount of seconds after which
+  # the cache should try to query the API again.
+  blacklist-time: 86400
   # Only valid if type = SQL
   address: "localhost"
   database-type: "mysql"
