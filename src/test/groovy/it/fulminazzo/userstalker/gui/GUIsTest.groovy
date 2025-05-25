@@ -4,6 +4,7 @@ import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.cache.ProfileCache
 import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.userstalker.domain.UserLoginCount
+import it.fulminazzo.userstalker.meta.ProfiledSkullMeta
 import it.fulminazzo.userstalker.meta.SMMockItemFactory
 import it.fulminazzo.userstalker.utils.TimeUtils
 import it.fulminazzo.yagl.contents.ItemGUIContent
@@ -15,10 +16,14 @@ import it.fulminazzo.yagl.utils.MessageUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import org.bukkit.plugin.java.JavaPlugin
+import org.mockito.MockedStatic
 import org.mockito.Mockito
+import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.LocalDateTime
+import java.util.logging.Logger
 
 class GUIsTest extends Specification {
 
@@ -117,12 +122,13 @@ class GUIsTest extends Specification {
                 .setVariable('username', 'valid')
 
         when:
-        content.render().copy(BukkitItem).create()
+        def itemStack = content.render().copy(BukkitItem).create()
+        def itemMeta = itemStack.getItemMeta()
 
         then:
-        def e = thrown(IllegalArgumentException)
-        // No CraftMetaSkull class is available
-        e.message == 'Could not find method ? setProfile(com.mojang.authlib.GameProfile)'
+        itemMeta instanceof ProfiledSkullMeta
+        def skullMeta = itemMeta as ProfiledSkullMeta
+        skullMeta.profile.name == 'valid'
     }
 
     def 'test that newContentConverter does not throw'() {
@@ -130,13 +136,19 @@ class GUIsTest extends Specification {
         def content = GUIs.newContentConverter('PLAYER_HEAD', cache)
                 .setVariable('username', 'error')
 
+        and:
+        def plugin = Mock(JavaPlugin)
+        def logger = Logger.getLogger(getClass().simpleName)
+        plugin.logger >> logger
+
         when:
-        content.render().copy(BukkitItem).create()
+        try (def javaPlugin = Mockito.mockStatic(JavaPlugin)) {
+            javaPlugin.when(JavaPlugin.getProvidingPlugin(GUIs)).thenReturn(plugin)
+            content.render().copy(BukkitItem).create()
+        }
 
         then:
-        def e = thrown(IllegalArgumentException)
-        // Plugin not available so check that the error is missing plugin
-        e.message.contains('is not provided by class')
+        noExceptionThrown()
     }
 
     def 'test that newContentConverter returns expected content'() {
