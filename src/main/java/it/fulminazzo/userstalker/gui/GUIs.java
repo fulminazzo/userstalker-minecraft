@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -19,20 +20,20 @@ import java.util.function.Function;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GUIs {
 
-    public static final Function<Collection<UserLogin>, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = data ->
-            setupPagesItemsAndCorners(DataGUI.newGUI(27, u -> ItemGUIContent.newInstance(Material.BOOK.name())
+    public static final Function<Integer, DataGUI<UserLogin>> NAMED_USER_LOGINS_GUI_PROVIDER = size ->
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
                             .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                             .setLore(String.format("&fIp: &c%s", u.getIp()),
                                     String.format("&fLogin date: &a%s %s",
                                             u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
-                    data));
+                    new ArrayList<UserLogin>()));
 
-    public static final Function<Collection<UserLogin>, DataGUI<UserLogin>> USER_LOGINS_GUI_PROVIDER = data ->
-            setupPagesItemsAndCorners(DataGUI.newGUI(54, u -> ItemGUIContent.newInstance(Material.BOOK.name())
+    public static final Function<Integer, DataGUI<UserLogin>> USER_LOGINS_GUI_PROVIDER = size ->
+            setupPagesItemsAndCorners(DataGUI.newGUI(size, u -> ItemGUIContent.newInstance(Material.BOOK.name())
                             .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
                             .setLore(String.format("&fLogin date: &a%s %s",
                                     u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate())),
-                    data));
+                    new ArrayList<UserLogin>()));
 
     /**
      * Sets the pages items and the corners on the given gui.
