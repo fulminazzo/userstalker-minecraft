@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 public class TestProfileCache extends ProfileCacheImpl {
-    private final Map<String, String> skinCache;
+    private final Map<String, Skin> skinCache;
     private final Map<String, UUID> uuidCache;
 
     public TestProfileCache() {
@@ -20,12 +20,12 @@ public class TestProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<String> findUserSkin(@NotNull String username) {
+    public @NotNull Optional<Skin> findUserSkin(@NotNull String username) {
         return Optional.ofNullable(skinCache.get(username));
     }
 
     @Override
-    public void storeUserSkin(@NotNull String username, @NotNull String skin) {
+    public void storeUserSkin(@NotNull String username, @NotNull Skin skin) {
         skinCache.put(username, skin);
     }
 
