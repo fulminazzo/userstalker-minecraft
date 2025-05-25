@@ -20,7 +20,7 @@ public class TestProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<Skin> findUserSkin(@NotNull String username) {
+    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) {
         return Optional.ofNullable(skinCache.get(username));
     }
 
@@ -30,7 +30,7 @@ public class TestProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<UUID> findUserUUID(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException {
         return Optional.ofNullable(uuidCache.get(username));
     }
 

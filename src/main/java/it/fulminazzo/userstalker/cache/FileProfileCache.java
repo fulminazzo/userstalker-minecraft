@@ -27,7 +27,7 @@ final class FileProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<Skin> findUserSkin(@NotNull String username) {
+    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) {
         ConfigurationSection section = config.getConfigurationSection(username);
         if (section == null) return Optional.empty();
         Long expiry = section.getLong("expiry");
@@ -58,7 +58,7 @@ final class FileProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<UUID> findUserUUID(@NotNull String username) {
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) {
         return Optional.ofNullable(config.getString(username + ".uuid")).map(UUID::fromString);
     }
 

@@ -72,9 +72,9 @@ class FileProfileCacheTest extends Specification {
         actualSkin.get().skin == skin
     }
 
-    def 'test that findUserSkin of #username is as expected'() {
+    def 'test that lookupUserSkin of #username is as expected'() {
         when:
-        def skin = cache.findUserSkin(username)
+        def skin = cache.lookupUserSkin(username)
 
         then:
         skin.isPresent() == expected
@@ -142,9 +142,9 @@ class FileProfileCacheTest extends Specification {
         actualUUID.get() == uuid
     }
 
-    def 'test that findUserUUID of username is as expected'() {
+    def 'test that lookupUserUUID of username is as expected'() {
         when:
-        def uuid = cache.findUserUUID('not-expired')
+        def uuid = cache.lookupUserUUID('not-expired')
 
         then:
         uuid.isPresent()

@@ -41,7 +41,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         connection.close()
     }
 
-    def 'test that findUserSkin of #username returns correct value'() {
+    def 'test that lookupUserSkin of #username returns correct value'() {
         given:
         def skin = Skin.builder()
                 .uuid(UUID.randomUUID())
@@ -63,7 +63,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         statement.execute()
 
         when:
-        def actualSkin = cache.findUserSkin(username)
+        def actualSkin = cache.lookupUserSkin(username)
 
         then:
         actualSkin.isPresent() == expected
@@ -101,7 +101,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         username << ['Notch', 'Steve', 'Jeb']
     }
 
-    def 'test that findUserUUID returns correct value'() {
+    def 'test that lookupUserUUID returns correct value'() {
         given:
         def username = 'Notch'
         def uuid = UUID.randomUUID()
@@ -113,7 +113,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         statement.execute()
 
         when:
-        def actualUUID = cache.findUserUUID(username)
+        def actualUUID = cache.lookupUserUUID(username)
 
         then:
         actualUUID.isPresent()

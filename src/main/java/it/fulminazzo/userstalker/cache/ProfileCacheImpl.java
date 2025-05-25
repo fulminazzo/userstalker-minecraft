@@ -29,7 +29,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
     @Override
     public @NotNull Optional<Skin> getUserSkin(@NotNull String username) throws ProfileCacheException {
-        @NotNull Optional<Skin> userSkin = findUserSkin(username);
+        @NotNull Optional<Skin> userSkin = lookupUserSkin(username);
         if (userSkin.isPresent()) return userSkin;
         userSkin = fetchUserSkin(username);
         if (userSkin.isPresent()) storeUserSkin(userSkin.get());
@@ -66,7 +66,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
     @Override
     public @NotNull Optional<UUID> getUserUUID(@NotNull String username) throws ProfileCacheException {
-        @NotNull Optional<UUID> uuid = findUserUUID(username);
+        @NotNull Optional<UUID> uuid = lookupUserUUID(username);
         if (uuid.isPresent()) return uuid;
         uuid = fetchUserUUID(username);
         if (uuid.isPresent()) storeUserUUID(username, uuid.get());

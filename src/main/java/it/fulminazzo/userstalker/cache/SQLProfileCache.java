@@ -27,7 +27,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<Skin> findUserSkin(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws ProfileCacheException {
         checkProfileTableExists();
         return Optional.ofNullable(executeStatement(
                 () -> connection.prepareStatement("SELECT uuid, username, skin, signature FROM profile_cache " +
@@ -49,8 +49,8 @@ final class SQLProfileCache extends ProfileCacheImpl {
     @Override
     public void storeUserSkin(@NotNull Skin skin) throws ProfileCacheException {
         String username = skin.getUsername();
-        @NotNull Optional<?> storedData = findUserSkin(username);
-        if (!storedData.isPresent()) storedData = findUserUUID(username);
+        @NotNull Optional<?> storedData = lookupUserSkin(username);
+        if (!storedData.isPresent()) storedData = lookupUserUUID(username);
         String query = storedData.isPresent() ?
                 "UPDATE profile_cache SET uuid = ?, skin = ?, signature = ?, expiry = ? WHERE username = ?" :
                 "INSERT INTO profile_cache (uuid, skin, signature, expiry, username) VALUES (?, ?, ?, ?, ?)";
@@ -70,7 +70,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<UUID> findUserUUID(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException {
         checkProfileTableExists();
         return Optional.ofNullable(executeStatement(
                 () -> connection.prepareStatement("SELECT uuid FROM profile_cache WHERE username = ?"),
@@ -85,7 +85,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
-        @NotNull Optional<UUID> storedUUID = findUserUUID(username);
+        @NotNull Optional<UUID> storedUUID = lookupUserUUID(username);
         String query = storedUUID.isPresent() ?
                 "UPDATE profile_cache SET uuid = ? WHERE username = ?" :
                 "INSERT INTO profile_cache (uuid, username) VALUES (?, ?)";
