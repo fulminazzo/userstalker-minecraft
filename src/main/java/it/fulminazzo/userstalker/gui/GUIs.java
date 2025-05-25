@@ -1,8 +1,11 @@
 package it.fulminazzo.userstalker.gui;
 
+import it.fulminazzo.fulmicollection.objects.Refl;
+import it.fulminazzo.fulmicollection.utils.StringUtils;
 import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.yagl.Metadatable;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
@@ -149,6 +152,26 @@ public final class GUIs {
                 .setContents(gui.size() - 5, Item.newItem(Material.OBSIDIAN.name())
                         .setDisplayName("&fCurrent page: &e<page>&8/&a<pages>")
                 );
+    }
+
+    /**
+     * Gets all the fields of the given object and sets them as variables of
+     * the metadatable with their name in snake_case.
+     *
+     * @param <M>         the type of the metadatable
+     * @param metadatable the metadatable
+     * @param object      the object
+     * @return the updated metadatable
+     */
+    static <M extends Metadatable> @NotNull M setupVariables(final @NotNull M metadatable, final @NotNull Object object) {
+        Refl<?> refl = new Refl<>(object);
+        refl.getNonStaticFields().forEach(field -> {
+            Object objectField = refl.getFieldObject(field);
+            String name = StringUtils.decapitalize(field.getName()).toLowerCase();
+            String value = objectField == null ? "" : objectField.toString();
+            metadatable.setVariable(name, value);
+        });
+        return metadatable;
     }
 
 }
