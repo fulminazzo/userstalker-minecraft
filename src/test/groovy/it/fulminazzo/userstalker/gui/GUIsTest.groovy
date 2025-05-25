@@ -13,11 +13,11 @@ class GUIsTest extends Specification {
         def defaultGUI = GUIs.defaultTopUsersLogins()
 
         and:
-        def expected = DataGUI.newGUI(45, defaultGUI.dataConverter)
+        def expected = DataGUI.newGUI(54, defaultGUI.dataConverter)
                 .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name()).setDisplayName(' '))
-                .setPreviousPage(38, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
-                .setNextPage(42, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
-                .setContents(40, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
+                .setPreviousPage(47, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
+                .setNextPage(51, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
+                .setContents(49, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
                 .setTitle('&cTop users logins')
 
         expect:
@@ -29,11 +29,11 @@ class GUIsTest extends Specification {
         def defaultGUI = GUIs.defaultMonthlyUsersLogins()
 
         and:
-        def expected = DataGUI.newGUI(27, defaultGUI.dataConverter)
+        def expected = DataGUI.newGUI(45, defaultGUI.dataConverter)
                 .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name()).setDisplayName(' '))
-                .setPreviousPage(20, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
-                .setNextPage(24, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
-                .setContents(22, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
+                .setPreviousPage(38, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
+                .setNextPage(42, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
+                .setContents(40, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
                 .setTitle('&cMonthly users logins')
 
         expect:
@@ -45,11 +45,11 @@ class GUIsTest extends Specification {
         def defaultGUI = GUIs.defaultNewestUsersLogins()
 
         and:
-        def expected = DataGUI.newGUI(27, defaultGUI.dataConverter)
+        def expected = DataGUI.newGUI(45, defaultGUI.dataConverter)
                 .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name()).setDisplayName(' '))
-                .setPreviousPage(20, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
-                .setNextPage(24, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
-                .setContents(22, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
+                .setPreviousPage(38, Item.newItem(Material.PAPER.name()).setDisplayName('&ePrevious page'))
+                .setNextPage(42, Item.newItem(Material.PAPER.name()).setDisplayName('&eNext page'))
+                .setContents(40, Item.newItem(Material.OBSIDIAN.name()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
                 .setTitle('&cNewest users logins')
 
         expect:
