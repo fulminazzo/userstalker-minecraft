@@ -27,4 +27,15 @@ public final class Configurator {
         return pluginDirectory;
     }
 
+    /**
+     * Sets the plugin directory.
+     *
+     * @param pluginDirectory the plugin directory
+     * @return this configurator
+     */
+    public @NotNull Configurator pluginDirectory(@Nullable File pluginDirectory) {
+        this.pluginDirectory = pluginDirectory;
+        return this;
+    }
+
 }
