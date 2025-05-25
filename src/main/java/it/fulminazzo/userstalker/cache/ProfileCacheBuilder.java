@@ -73,7 +73,7 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
                     Connection connection = DriverManager.getConnection(jdbcPath, username, password);
                     return new SQLProfileCache(connection, getExpiryTimeout(), getBlacklistTimeout());
                 } catch (SQLException e) {
-                    throw new ProfileCacheException(String.format("connecting with database (%s, %s, %s)",
+                    throw new ProfileCacheException(String.format("connecting to database \"%s\" (%s:%s)",
                             jdbcPath, username, password), e);
                 }
             }
@@ -115,7 +115,7 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
                 .filter(t -> t.name().equalsIgnoreCase(type))
                 .findFirst()
                 .orElseThrow(() -> new ProfileCacheException(
-                        "Invalid configuration detected, unknown cache type: " + type
+                        String.format("Invalid configuration detected: unknown cache type \"%s\"", type)
                 ));
     }
 
@@ -199,7 +199,7 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
          */
         XML,
         /**
-         * Database cache type.
+         * SQL cache type.
          */
         SQL
     }

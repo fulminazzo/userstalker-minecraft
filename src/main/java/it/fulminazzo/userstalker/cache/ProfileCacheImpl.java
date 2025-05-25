@@ -54,7 +54,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
         String rawUUID = ProfileCacheUtils.toString(uuid.get());
         Optional<JsonObject> result = getJsonFromURL(String.format(MOJANG_API_SKIN, rawUUID),
-                "querying Mojang API for player skin");
+                String.format("querying Mojang API for user \"%s\"'s skin", username));
         if (!result.isPresent()) updateFetchBlacklist(username);
         return result
                 .map(j -> j.getAsJsonArray("properties"))
@@ -90,7 +90,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
     public @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) throws ProfileCacheException {
         if (isInFetchBlacklist(username)) return Optional.empty();
         Optional<JsonObject> result = getJsonFromURL(String.format(MOJANG_API_UUID, username),
-                "querying Mojang API for player UUID");
+                String.format("querying Mojang API for user \"%s\"'s UUID", username));
         if (!result.isPresent()) updateFetchBlacklist(username);
         return result
                 .map(j -> j.get("id"))

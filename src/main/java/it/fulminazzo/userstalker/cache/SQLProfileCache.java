@@ -126,7 +126,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
         try {
             connection.close();
         } catch (SQLException e) {
-            throw new ProfileCacheException("closing connection with database", e);
+            throw new ProfileCacheException("closing connection to database", e);
         }
     }
 

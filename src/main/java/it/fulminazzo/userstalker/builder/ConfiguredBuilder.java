@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public abstract class ConfiguredBuilder<O, B extends ConfiguredBuilder<O, B, X>, X extends Throwable> extends LoggedBuilder<O, B, X> {
 
     private static final String MISSING_VALUE = "Invalid configuration detected: missing %s value.";
-    private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to %s";
+    private static final String MISSING_VALUE_DEFAULT = MISSING_VALUE + " Defaulting to \"%s\"";
 
     private @Nullable FileConfiguration configuration;
 
