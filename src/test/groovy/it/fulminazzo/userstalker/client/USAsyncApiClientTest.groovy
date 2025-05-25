@@ -226,7 +226,7 @@ class USAsyncApiClientTest extends Specification {
 
     private static Object queryServer(String path, String method, Object input) {
         def gson = GsonUtils.gson
-        def url = new URL("http://localhost:$PORT/api/v1/userlogins/$path");
+        def url = new URL("http://localhost:$PORT/api/v1/userlogins/$path")
         HttpURLConnection connection = (HttpURLConnection) url.openConnection()
         connection.setRequestMethod(method)
         connection.setDoOutput(true)
