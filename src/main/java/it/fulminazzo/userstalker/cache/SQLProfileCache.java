@@ -28,9 +28,9 @@ final class SQLProfileCache extends ProfileCacheImpl {
 
     @Override
     public @NotNull Optional<Skin> findUserSkin(@NotNull String username) throws ProfileCacheException {
-        checkSkinTableExists();
+        checkProfileTableExists();
         return Optional.ofNullable(executeStatement(
-                () -> connection.prepareStatement("SELECT uuid, username, skin, signature FROM skin_cache " +
+                () -> connection.prepareStatement("SELECT uuid, username, skin, signature FROM profile_cache " +
                         "WHERE username = ? AND expiry > CURRENT_TIMESTAMP"),
                 s -> {
                     s.setString(1, username);
@@ -51,7 +51,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
         @NotNull Optional<Skin> storedSkin = findUserSkin(username);
         String query = storedSkin.isPresent() ?
                 "UPDATE skin_cache SET uuid = ?, username = ?, skin = ?, signature = ?, expiry = ? WHERE username = ?" :
-                "INSERT INTO skin_cache (uuid, username, skin, signature, expiry, username) VALUES (?, ?, ?)";
+                "INSERT INTO profile_cache (uuid, username, skin, signature, expiry, username) VALUES (?, ?, ?)";
 
         executeStatement(
                 () -> connection.prepareStatement(query),
@@ -68,27 +68,11 @@ final class SQLProfileCache extends ProfileCacheImpl {
         );
     }
 
-    /**
-     * Checks if the skin_cache table exists, if not it creates it.
-     *
-     * @throws ProfileCacheException an exception thrown in case an error occurs
-     */
-    void checkSkinTableExists() throws ProfileCacheException {
-        executeStatement(
-                () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS skin_cache (" +
-                        "username VARCHAR(16) PRIMARY KEY," +
-                        "skin TEXT NOT NULL," +
-                        "expiry TIMESTAMP" +
-                        ")"),
-                PreparedStatement::executeUpdate
-        );
-    }
-
     @Override
     public @NotNull Optional<UUID> findUserUUID(@NotNull String username) throws ProfileCacheException {
-        checkUUIDTableExists();
+        checkProfileTableExists();
         return Optional.ofNullable(executeStatement(
-                () -> connection.prepareStatement("SELECT uuid FROM uuid_cache WHERE username = ?"),
+                () -> connection.prepareStatement("SELECT uuid FROM profile_cache WHERE username = ?"),
                 s -> {
                     s.setString(1, username);
                     ResultSet result = s.executeQuery();
@@ -102,8 +86,8 @@ final class SQLProfileCache extends ProfileCacheImpl {
     public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
         @NotNull Optional<UUID> storedUUID = findUserUUID(username);
         String query = storedUUID.isPresent() ?
-                "UPDATE uuid_cache SET uuid = ? WHERE username = ?" :
-                "INSERT INTO uuid_cache (uuid, username) VALUES (?, ?)";
+                "UPDATE profile_cache SET uuid = ? WHERE username = ?" :
+                "INSERT INTO profile_cache (uuid, username) VALUES (?, ?)";
 
         executeStatement(
                 () -> connection.prepareStatement(query),
@@ -116,15 +100,18 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     /**
-     * Checks if the uuid_cache table exists, if not it creates it.
+     * Checks if the profile_cache table exists, if not it creates it.
      *
      * @throws ProfileCacheException an exception thrown in case an error occurs
      */
-    void checkUUIDTableExists() throws ProfileCacheException {
+    void checkProfileTableExists() throws ProfileCacheException {
         executeStatement(
-                () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS uuid_cache (" +
+                () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS profile_cache (" +
                         "username VARCHAR(16) PRIMARY KEY," +
                         "uuid VARCHAR(36) NOT NULL" +
+                        "skin TEXT NULL," +
+                        "signature TEXT NULL," +
+                        "expiry TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                         ")"),
                 PreparedStatement::executeUpdate
         );
