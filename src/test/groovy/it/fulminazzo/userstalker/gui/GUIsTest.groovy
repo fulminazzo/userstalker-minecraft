@@ -8,6 +8,22 @@ import spock.lang.Specification
 
 class GUIsTest extends Specification {
 
+    def 'test that default newest users logins GUI matches with expected gui'() {
+        given:
+        def defaultGUI = GUIs.defaultNewestUsersLogins()
+
+        and:
+        def expected = DataGUI.newGUI(27, defaultGUI.dataConverter)
+                .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name()).setDisplayName(" "))
+                .setPreviousPage(20, Item.newItem(Material.PAPER.name()).setDisplayName("&ePrevious page"))
+                .setNextPage(24, Item.newItem(Material.PAPER.name()).setDisplayName("&eNext page"))
+                .setContents(22, Item.newItem(Material.OBSIDIAN.name()).setDisplayName("&fCurrent page: &e<page>&8/&a<pages>"))
+                .setTitle("&6Newest users logins")
+
+        expect:
+        defaultGUI == expected
+    }
+
     def 'test that default user logins GUI matches with expected gui'() {
         given:
         def defaultGUI = GUIs.defaultUserLogins()
@@ -17,9 +33,7 @@ class GUIsTest extends Specification {
                 .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name()).setDisplayName(" "))
                 .setPreviousPage(47, Item.newItem(Material.PAPER.name()).setDisplayName("&ePrevious page"))
                 .setNextPage(51, Item.newItem(Material.PAPER.name()).setDisplayName("&eNext page"))
-                .setContents(49, Item.newItem(Material.OBSIDIAN.name())
-                        .setDisplayName("&fCurrent page: &e<page>&8/&a<pages>")
-                )
+                .setContents(49, Item.newItem(Material.OBSIDIAN.name()).setDisplayName("&fCurrent page: &e<page>&8/&a<pages>"))
                 .setTitle("&6<user>'s logins")
 
         expect:

@@ -64,7 +64,7 @@ public final class GUIs {
      *
      * @return the gui
      */
-    public static @NotNull DataGUI<UserLogin> defaultNewestUserLogins() {
+    public static @NotNull DataGUI<UserLogin> defaultNewestUsersLogins() {
         return NAMED_USER_LOGINS_GUI_PROVIDER.apply(27).setTitle("&6Newest users logins");
     }
 
