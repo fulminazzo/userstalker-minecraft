@@ -12,7 +12,12 @@ public class MockProfileCache implements ProfileCache {
 
     @Override
     public @NotNull Optional<Skin> getUserSkin(@NotNull String username) throws ProfileCacheException {
-        if (username.equals("valid")) return Optional.of(Skin.builder().skin("valid").build());
+        if (username.equals("valid")) return Optional.of(Skin.builder()
+                .uuid(UUID.randomUUID())
+                .username("valid")
+                .skin("skin")
+                .signature("signature")
+                .build());
         else if (username.equals("error")) throw new ProfileCacheException("error");
         else return Optional.empty();
     }
