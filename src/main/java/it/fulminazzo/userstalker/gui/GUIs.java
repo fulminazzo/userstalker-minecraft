@@ -49,12 +49,9 @@ public final class GUIs {
             final @NotNull String materialName,
             final @Nullable ProfileCache cache
     ) {
-        return u -> {
-            //TODO: if player head, use cache when rendering
-            return ItemGUIContent.newInstance(materialName)
-                    .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
-                    .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount()));
-        };
+        return u -> newConverterContent(materialName, cache)
+                .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
+                .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount()));
     }
 
     /**
@@ -68,14 +65,11 @@ public final class GUIs {
             final @NotNull String materialName,
             final @Nullable ProfileCache cache
     ) {
-        return u -> {
-            //TODO: if player head, use cache when rendering
-            return ItemGUIContent.newInstance(materialName)
-                    .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
-                    .setLore(String.format("&fIp: &c%s", u.getIp()),
-                            String.format("&fLogin date: &a%s %s",
-                                    u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate()));
-        };
+        return u -> newConverterContent(materialName, cache)
+                .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
+                .setLore(String.format("&fIp: &c%s", u.getIp()),
+                        String.format("&fLogin date: &a%s %s",
+                                u.getLoginDate().toLocalTime(), u.getLoginDate().toLocalDate()));
     }
 
     /**
@@ -127,6 +121,17 @@ public final class GUIs {
      */
     public static @NotNull DataGUI<UserLogin> defaultUserLogins() {
         return USER_LOGINS_GUI_PROVIDER.apply(54).setTitle("&c<user>'s logins");
+    }
+
+    /**
+     * Creates a new basic {@link GUIContent} converter.
+     *
+     * @param materialName the material name
+     * @param cache        the cache to use to lookup skin in case of {@link Material#PLAYER_HEAD} provided
+     * @return the gui content
+     */
+    static @NotNull ItemGUIContent newConverterContent(final @NotNull String materialName, final @Nullable ProfileCache cache) {
+        return ItemGUIContent.newInstance(materialName);
     }
 
     /**
