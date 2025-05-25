@@ -24,58 +24,73 @@ class USGUIManagerTest extends Specification {
         GUIYAGLParser.addAllParsers()
     }
 
-    def 'test setup with no file uses and saves default User Logins GUI'() {
+    def 'test setup with no file uses and saves default #guiName'() {
         given:
         def file = new File(pluginDirectory, 'guis.yml')
         if (file.exists()) file.delete()
-
-        and:
-        def defaultGUI = GUIs.defaultUserLogins()
 
         when:
         manager.setup(pluginDirectory)
 
         then:
-        manager.userLoginsGUI == defaultGUI
+        manager."$guiName" == defaultGUI
         def config = FileConfiguration.newConfiguration(file)
-        config.get('user-logins', DataGUI) == defaultGUI
+        config.get(path, DataGUI) == defaultGUI
+
+        where:
+        defaultGUI                       | path                   || guiName
+        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
     }
 
-    def 'test setup with file uses stored User Logins GUI'() {
+    def 'test setup with file uses stored #guiName GUI'() {
         given:
         def file = new File(pluginDirectory, 'guis.yml')
         if (file.exists()) file.delete()
         FileUtils.createNewFile(file)
 
         and:
-        def dataGUI = GUIs.defaultUserLogins().setTitle('Hello, world!')
+        def dataGUI = defaultGUI.setTitle('Hello, world!')
 
         and:
         def config = FileConfiguration.newConfiguration(file)
-        config.set('user-logins', dataGUI)
+        config.set(path, dataGUI)
         config.save()
 
         when:
         manager.setup(pluginDirectory)
 
         then:
-        manager.userLoginsGUI == dataGUI
+        manager."$guiName" == dataGUI
+
+        where:
+        defaultGUI                       | path                   || guiName
+        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
     }
 
-    def 'test setup with file but GUI not available uses default User Logins GUI'() {
+    def 'test setup with file but GUI not available uses default #guiName GUI'() {
         given:
         def file = new File(pluginDirectory, 'guis.yml')
         if (file.exists()) file.delete()
         FileUtils.createNewFile(file)
 
-        and:
-        def dataGUI = GUIs.defaultUserLogins()
-
         when:
         manager.setup(pluginDirectory)
 
         then:
-        manager.userLoginsGUI == dataGUI
+        manager."$guiName" == defaultGUI
+
+        where:
+        defaultGUI                       | path                   || guiName
+        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
     }
 
 }
