@@ -27,7 +27,7 @@ final class FileProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<String> findUserSkin(@NotNull String username) {
+    public @NotNull Optional<Skin> findUserSkin(@NotNull String username) {
         ConfigurationSection section = config.getConfigurationSection(username);
         if (section == null) return Optional.empty();
         Long expiry = section.getLong("expiry");
@@ -35,12 +35,12 @@ final class FileProfileCache extends ProfileCacheImpl {
             config.set(username, null);
             config.save();
             return Optional.empty();
-        } else return Optional.ofNullable(section.getString("skin"));
+        } else return Optional.ofNullable(config.get(username, Skin.class));
     }
 
     @Override
-    public void storeUserSkin(@NotNull String username, @NotNull String skin) {
-        config.set(username + ".skin", skin);
+    public void storeUserSkin(@NotNull String username, @NotNull Skin skin) {
+        config.set(username, skin);
         config.set(username + ".expiry", System.currentTimeMillis() + skinExpireTimeout);
         config.save();
     }
