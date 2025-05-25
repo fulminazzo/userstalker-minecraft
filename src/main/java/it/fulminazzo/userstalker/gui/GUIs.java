@@ -59,7 +59,7 @@ public final class GUIs {
             final @NotNull String materialName,
             final @Nullable ProfileCache cache
     ) {
-        return u -> setupVariables(newConverterContent(materialName, cache)
+        return u -> setupVariables(newContentConverter(materialName, cache)
                 .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                 .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount())), u);
     }
@@ -75,7 +75,7 @@ public final class GUIs {
             final @NotNull String materialName,
             final @Nullable ProfileCache cache
     ) {
-        return u -> setupVariables(newConverterContent(materialName, cache)
+        return u -> setupVariables(newContentConverter(materialName, cache)
                 .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
                 .setLore(String.format("&fIp: &c%s", u.getIp()),
                         String.format("&fLogin date: &a%s %s",
@@ -140,7 +140,7 @@ public final class GUIs {
      * @param cache        the cache to use to lookup skin in case of {@link Material#PLAYER_HEAD} provided
      * @return the gui content
      */
-    static @NotNull ItemGUIContent newConverterContent(final @NotNull String materialName, final @Nullable ProfileCache cache) {
+    static @NotNull ItemGUIContent newContentConverter(final @NotNull String materialName, final @Nullable ProfileCache cache) {
         BukkitItem item = BukkitItem.newItem(materialName);
         ItemGUIContent content = ItemGUIContent.newInstance(item);
         item.setMetadata(ItemMeta.class, itemMeta -> {

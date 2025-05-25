@@ -1,15 +1,58 @@
 package it.fulminazzo.userstalker.gui
 
+import it.fulminazzo.jbukkit.BukkitUtils
+import it.fulminazzo.userstalker.cache.ProfileCache
+import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.guis.PageableGUI
+import it.fulminazzo.yagl.items.BukkitItem
 import it.fulminazzo.yagl.items.Item
 import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 import spock.lang.Specification
 
 import java.time.LocalDateTime
 
 class GUIsTest extends Specification {
+
+    private static final ProfileCache cache = new MockProfileCache()
+
+    void setup() {
+        BukkitUtils.setupServer()
+    }
+
+    def 'test that newContentConverter does not throw'() {
+        given:
+        def content = GUIs.newContentConverter('PLAYER_HEAD', cache)
+                .setVariable('username', 'error')
+
+        when:
+        content.render().copy(BukkitItem).create()
+
+        then:
+        def e = thrown(IllegalArgumentException)
+        // Plugin not available so check that the error is missing plugin
+        e.message.contains('is not provided by class')
+    }
+
+    def 'test that newContentConverter returns expected content'() {
+        when:
+        def content = GUIs.newContentConverter(material, profileCache)
+        content.setVariable('username', username)
+
+        def render = content.render().copy(BukkitItem).create()
+
+        then:
+        render == expected
+
+        where:
+        material      | profileCache | username  || expected
+        'STONE'       | null         | null      || new ItemStack(Material.STONE)
+        'STONE'       | cache        | null      || new ItemStack(Material.STONE)
+        'PLAYER_HEAD' | cache        | null      || new ItemStack(Material.PLAYER_HEAD)
+        'PLAYER_HEAD' | cache        | 'invalid' || new ItemStack(Material.PLAYER_HEAD)
+    }
 
     def 'test that default top users logins GUI matches with expected gui'() {
         given:
