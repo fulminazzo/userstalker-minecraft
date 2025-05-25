@@ -108,7 +108,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
         executeStatement(
                 () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS profile_cache (" +
                         "username VARCHAR(16) PRIMARY KEY," +
-                        "uuid VARCHAR(36) NOT NULL" +
+                        "uuid VARCHAR(36) NOT NULL," +
                         "skin TEXT NULL," +
                         "signature TEXT NULL," +
                         "expiry TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
