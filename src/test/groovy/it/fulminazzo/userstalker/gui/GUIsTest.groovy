@@ -4,6 +4,7 @@ import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.cache.ProfileCache
 import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.userstalker.domain.UserLoginCount
+import it.fulminazzo.userstalker.meta.SMMockItemFactory
 import it.fulminazzo.userstalker.utils.TimeUtils
 import it.fulminazzo.yagl.contents.ItemGUIContent
 import it.fulminazzo.yagl.guis.DataGUI
@@ -11,8 +12,10 @@ import it.fulminazzo.yagl.guis.PageableGUI
 import it.fulminazzo.yagl.items.BukkitItem
 import it.fulminazzo.yagl.items.Item
 import it.fulminazzo.yagl.utils.MessageUtils
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import org.mockito.Mockito
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -23,6 +26,7 @@ class GUIsTest extends Specification {
 
     void setup() {
         BukkitUtils.setupServer()
+        Mockito.when(Bukkit.getServer().getItemFactory()).thenReturn(new SMMockItemFactory())
     }
 
     def 'test that provider #provider has default dataConverter with warning message'() {
