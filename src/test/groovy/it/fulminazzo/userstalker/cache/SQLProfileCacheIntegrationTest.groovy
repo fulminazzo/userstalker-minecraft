@@ -23,21 +23,28 @@ class SQLProfileCacheIntegrationTest extends Specification {
         cache = new SQLProfileCache(connection, 100 * 1000)
     }
 
-    def 'test that findUserUUID of #username returns correct value'() {
+    def 'test that findUserSkin of #username returns correct value'() {
         given:
-        def skin = 'mock-skin'
+        def skin = Skin.builder()
+                .uuid(UUID.randomUUID())
+                .username(username)
+                .skin('mock-skin')
+                .signature('signature')
+                .build()
 
         and:
         cache.checkProfileTableExists()
 
         and:
-        def statement = connection.prepareStatement('INSERT INTO profile_cache VALUES (?, ?, ?)')
+        def statement = connection.prepareStatement('INSERT INTO profile_cache VALUES (?, ?, ?, ?, ?)')
         statement.setString(1, username)
-        statement.setString(2, skin)
+        statement.setString(2, skin.uuid.toString())
+        statement.setString(3, skin.skin)
+        statement.setString(4, skin.signature)
         if (username == 'Notch')
-            statement.setTimestamp(3, new Timestamp(System.currentTimeMillis() + 1000 * 100))
+            statement.setTimestamp(5, new Timestamp(System.currentTimeMillis() + 1000 * 100))
         else
-            statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()))
+            statement.setTimestamp(5, new Timestamp(System.currentTimeMillis()))
         statement.execute()
 
         when:
