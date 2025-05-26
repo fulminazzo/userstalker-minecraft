@@ -84,6 +84,14 @@ class UserStalkerTest extends Specification {
         thrown(FulmiException)
     }
 
+    def 'test that getInstance throws if not initialized'() {
+        when:
+        UserStalker.instance
+
+        then:
+        thrown(IllegalStateException)
+    }
+
     def 'test spock tests work'() {
         expect:
         true
