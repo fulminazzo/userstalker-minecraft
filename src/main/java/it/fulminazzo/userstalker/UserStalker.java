@@ -68,7 +68,6 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         } catch (ConfigurationException | APIClientException e) {
             getLogger().severe(e.getMessage());
             disable();
-            return;
         }
     }
 
