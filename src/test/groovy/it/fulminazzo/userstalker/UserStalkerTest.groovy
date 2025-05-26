@@ -19,8 +19,9 @@ class UserStalkerTest extends Specification {
         plugin = Mock(UserStalker)
 
         plugin.logger >> Logger.getLogger(getClass().simpleName)
-        plugin.pluginDirectory >> PLUGIN_DIRECTORY
+        plugin.dataFolder >> PLUGIN_DIRECTORY
 
+        plugin.pluginDirectory >> { callRealMethod() }
         plugin.configuration >> { callRealMethod() }
         plugin.configurationType >> ConfigurationType.YAML
 
