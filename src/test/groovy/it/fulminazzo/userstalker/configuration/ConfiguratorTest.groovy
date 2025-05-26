@@ -41,6 +41,24 @@ class ConfiguratorTest extends Specification {
         config.getString('hello') == 'world'
     }
 
+    def 'test that configurator loads non_existing_function file and runs setup function'() {
+        given:
+        def configurator = new Configurator()
+                .pluginDirectory(PLUGIN_DIRECTORY)
+                .name('non_existing_function')
+                .type(ConfigurationType.TOML)
+                .onCreated {
+                    it.set('hello', 'world')
+                    it.save()
+                }
+
+        when:
+        def config = configurator.build()
+
+        then:
+        config.getString('hello') == 'world'
+    }
+
     def 'test that configurator loads non_existing file'() {
         given:
         def configurator = new Configurator()
