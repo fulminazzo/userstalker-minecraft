@@ -53,6 +53,17 @@ class UserStalkerTest extends Specification {
         'setupApiClient'     | []                  || new APIClientException('API client')
     }
 
+    def 'test that setupGUIManager throws if apiClient is null'() {
+        given:
+        plugin.setupGUIManager() >> { callRealMethod() }
+
+        when:
+        plugin.setupGUIManager()
+
+        then:
+        thrown(IllegalStateException)
+    }
+
     def 'test that disable disables the plugin'() {
         given:
         def manager = Mock(PluginManager)
