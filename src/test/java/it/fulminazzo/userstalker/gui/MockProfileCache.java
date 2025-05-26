@@ -59,7 +59,7 @@ public class MockProfileCache implements ProfileCache {
 
     @Override
     public void close() throws ProfileCacheException {
-
+        throw new ProfileCacheException("Not implemented yet");
     }
 
 }
