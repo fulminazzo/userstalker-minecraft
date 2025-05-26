@@ -2,7 +2,7 @@ name: Generate JaCoCo badge
 
 on:
   workflow_run:
-    workflows: [ "Execute tests with Gradle" ]
+    workflows: [ "Automatic Release" ]
     types:
       - completed
     branches:
