@@ -19,7 +19,7 @@ class USGUIManagerTest extends Specification {
     void setupSpec() {
         def logger = Logger.getLogger(getClass().simpleName)
 
-        manager = new USGUIManager(logger, Mock(USAsyncApiClient))
+        manager = new USGUIManager(logger, Mock(USAsyncApiClient), null)
 
         GUIYAGLParser.addAllParsers()
     }
