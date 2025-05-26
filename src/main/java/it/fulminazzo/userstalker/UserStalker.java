@@ -103,7 +103,10 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     @NotNull USGUIManager setupGUIManager() {
         if (apiClient == null)
             throw new IllegalStateException("API client not yet initialized");
-        return new USGUIManager(getLogger(), apiClient);
+        return USGUIManager.builder()
+                .logger(getLogger())
+                .client(apiClient)
+                .build();
     }
 
     /**
