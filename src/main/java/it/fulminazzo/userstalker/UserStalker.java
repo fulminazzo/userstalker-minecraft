@@ -3,6 +3,8 @@ package it.fulminazzo.userstalker;
 import it.fulminazzo.fulmicommands.FulmiException;
 import it.fulminazzo.fulmicommands.FulmiMessagesPlugin;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
+import it.fulminazzo.userstalker.cache.ProfileCache;
+import it.fulminazzo.userstalker.cache.ProfileCacheException;
 import it.fulminazzo.userstalker.client.APIClientException;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.gui.USGUIManager;
@@ -24,6 +26,7 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     private @Nullable FileConfiguration messages;
 
     private @Nullable USAsyncApiClient apiClient;
+    private @Nullable ProfileCache profileCache;
 
     private @Nullable USGUIManager guiManager;
 
@@ -42,9 +45,10 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
             messages = setupMessages(Messages.values());
 
             apiClient = setupApiClient();
+            profileCache = setupProfileCache();
 
             guiManager = setupGUIManager();
-        } catch (ConfigurationException | APIClientException e) {
+        } catch (ConfigurationException | APIClientException | ProfileCacheException e) {
             getLogger().severe(e.getMessage());
             disable();
             return;
@@ -75,10 +79,24 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     }
 
     /**
+     * Sets up a new Profile cache.
+     *
+     * @return profile cache
+     * @throws ProfileCacheException in case any errors occur
+     */
+    @NotNull ProfileCache setupProfileCache() throws ProfileCacheException {
+        return ProfileCache.builder()
+                .logger(getLogger())
+                .pluginDirectory(getPluginDirectory())
+                .configuration(getConfiguration())
+                .build();
+    }
+
+    /**
      * Sets up a new api client.
      *
      * @return the api client
-     * @throws APIClientException in case any error occurs
+     * @throws APIClientException in case any errors occur
      */
     @NotNull USAsyncApiClient setupApiClient() throws APIClientException {
         return new BukkitUSAsyncApiClient(this);
