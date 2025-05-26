@@ -98,15 +98,18 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
      * Sets up a new GUI manager.
      *
      * @return the gui manager
+     * @throws ConfigurationException in case an error in the configuration occurs
      */
-    @NotNull USGUIManager setupGUIManager() {
+    @NotNull USGUIManager setupGUIManager() throws ConfigurationException {
         if (apiClient == null)
             throw new IllegalStateException("API client not yet initialized");
-        return USGUIManager.builder()
+        USGUIManager manager = USGUIManager.builder()
                 .logger(getLogger())
                 .client(apiClient)
                 .cache(profileCache)
                 .build();
+        manager.setup(getPluginDirectory());
+        return manager;
     }
 
     /**
