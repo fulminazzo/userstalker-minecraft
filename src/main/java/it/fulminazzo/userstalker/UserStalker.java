@@ -4,7 +4,6 @@ import it.fulminazzo.fulmicommands.FulmiException;
 import it.fulminazzo.fulmicommands.FulmiMessagesPlugin;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,8 +44,11 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         // Plugin shutdown logic
     }
 
-    private void disable() {
-        Bukkit.getPluginManager().disablePlugin(this);
+    /**
+     * Disables the plugin.
+     */
+    void disable() {
+        getServer().getPluginManager().disablePlugin(this);
     }
 
     @Override
