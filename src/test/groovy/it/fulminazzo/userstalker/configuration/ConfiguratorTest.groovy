@@ -45,6 +45,25 @@ class ConfiguratorTest extends Specification {
         file.readLines() == ['hello = "world"']
     }
 
+    def 'test that configurator throws on error file'() {
+        given:
+        SpyStatic(FileUtils)
+        FileUtils.createNewFile(_ as File) >> {
+            throw new IOException('Caught exception')
+        }
+
+        and:
+        def configurator = new Configurator()
+                .pluginDirectory(PLUGIN_DIRECTORY)
+                .name('throw')
+
+        when:
+        configurator.build()
+
+        then:
+        thrown(ConfigurationException)
+    }
+
     def 'test that configurator throws if missing field'() {
         when:
         new Configurator()
