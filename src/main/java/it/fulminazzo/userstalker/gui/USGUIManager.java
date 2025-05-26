@@ -9,7 +9,6 @@ import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -33,6 +32,7 @@ public final class USGUIManager {
      * @param logger the logger
      * @param client the api client
      */
+    @Builder
     USGUIManager(final @NotNull Logger logger,
                  final @NotNull USAsyncApiClient client) {
         this.logger = logger;
