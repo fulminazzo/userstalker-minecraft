@@ -55,6 +55,7 @@ class UserStalkerTest extends Specification {
         'setupConfiguration' | []                  || new ConfigurationException('config.yml')
         'setupMessages'      | [Messages.values()] || new ConfigurationException('messages.yml')
         'setupApiClient'     | []                  || new APIClientException('API client')
+        'setupGUIManager'    | [] || new ConfigurationException('guis.yml')
     }
 
     def 'test that onEnable does not throw if an error happens during setupProfileCache'() {
