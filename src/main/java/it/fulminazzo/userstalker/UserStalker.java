@@ -3,6 +3,8 @@ package it.fulminazzo.userstalker;
 import it.fulminazzo.fulmicommands.FulmiException;
 import it.fulminazzo.fulmicommands.FulmiMessagesPlugin;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
+import it.fulminazzo.userstalker.client.APIClientException;
+import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +21,8 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     private @Nullable FileConfiguration configuration;
     private @Nullable FileConfiguration messages;
 
+    private @Nullable USAsyncApiClient apiClient;
+
     /**
      * Instantiates a new User stalker.
      */
@@ -31,12 +35,13 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         try {
             configuration = setupConfiguration();
             messages = setupMessages(Messages.values());
-        } catch (ConfigurationException e) {
+
+            apiClient = setupApiClient();
+        } catch (ConfigurationException | APIClientException e) {
             getLogger().severe(e.getMessage());
             disable();
             return;
         }
-
     }
 
     @Override
@@ -49,6 +54,16 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
      */
     void disable() {
         getServer().getPluginManager().disablePlugin(this);
+    }
+
+    /**
+     * Sets up a new api client.
+     *
+     * @return the api client
+     * @throws APIClientException in case any error occurs
+     */
+    @NotNull USAsyncApiClient setupApiClient() throws APIClientException {
+        return new BukkitUSAsyncApiClient(this);
     }
 
     @Override
