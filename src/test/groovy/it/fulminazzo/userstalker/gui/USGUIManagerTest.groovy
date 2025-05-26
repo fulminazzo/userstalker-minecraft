@@ -1,0 +1,96 @@
+package it.fulminazzo.userstalker.gui
+
+
+import it.fulminazzo.userstalker.client.USAsyncApiClient
+import it.fulminazzo.yagl.guis.DataGUI
+import it.fulminazzo.yagl.parsers.GUIYAGLParser
+import it.fulminazzo.yamlparser.configuration.FileConfiguration
+import it.fulminazzo.yamlparser.utils.FileUtils
+import spock.lang.Specification
+
+import java.util.logging.Logger
+
+class USGUIManagerTest extends Specification {
+
+    private final File pluginDirectory = new File('build/resources/test')
+
+    private USGUIManager manager
+
+    void setup() {
+        def logger = Logger.getLogger(getClass().simpleName)
+
+        manager = new USGUIManager(logger, Mock(USAsyncApiClient))
+
+        GUIYAGLParser.addAllParsers()
+    }
+
+    def 'test setup with no file uses and saves default #guiName'() {
+        given:
+        def file = new File(pluginDirectory, 'guis.yml')
+        if (file.exists()) file.delete()
+
+        when:
+        manager.setup(pluginDirectory)
+
+        then:
+        manager."$guiName" == defaultGUI
+        def config = FileConfiguration.newConfiguration(file)
+        config.get(path, DataGUI) == defaultGUI
+
+        where:
+        defaultGUI                       | path                   || guiName
+        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
+    }
+
+    def 'test setup with file uses stored #guiName GUI'() {
+        given:
+        def file = new File(pluginDirectory, 'guis.yml')
+        if (file.exists()) file.delete()
+        FileUtils.createNewFile(file)
+
+        and:
+        def dataGUI = defaultGUI.setTitle('Hello, world!')
+
+        and:
+        def config = FileConfiguration.newConfiguration(file)
+        config.set(path, dataGUI)
+        config.save()
+
+        when:
+        manager.setup(pluginDirectory)
+
+        then:
+        manager."$guiName" == dataGUI
+
+        where:
+        defaultGUI                       | path                   || guiName
+        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
+    }
+
+    def 'test setup with file but GUI not available uses default #guiName GUI'() {
+        given:
+        def file = new File(pluginDirectory, 'guis.yml')
+        if (file.exists()) file.delete()
+        FileUtils.createNewFile(file)
+
+        when:
+        manager.setup(pluginDirectory)
+
+        then:
+        manager."$guiName" == defaultGUI
+
+        where:
+        defaultGUI                       | path                   || guiName
+        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
+    }
+
+}

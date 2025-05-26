@@ -22,6 +22,10 @@ repositories {
         name = 'fulminazzo'
         url = 'https://repo.fulminazzo.it/releases'
     }
+    maven {
+        name = 'minecraft-repo'
+        url = 'https://libraries.minecraft.net/'
+    }
 }
 
 dependencies {
@@ -30,9 +34,11 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:26.0.2'
 
     compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
+    compileOnly 'com.mojang:authlib:1.5.21'
 
     implementation 'it.fulminazzo:FulmiCollection:1.8'
     implementation 'it.fulminazzo:Configurations:1.6.3'
+    implementation 'it.fulminazzo:yagl:4.3'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
@@ -40,13 +46,16 @@ dependencies {
 
     testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
     testRuntimeOnly 'net.bytebuddy:byte-buddy:1.17.5'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
 
     testImplementation 'com.google.code.gson:gson:2.13.1'
     testImplementation 'com.h2database:h2:2.2.224'
 
     testImplementation 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
+    testImplementation 'com.mojang:authlib:1.5.21'
 
-    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testImplementation 'it.fulminazzo.jbukkit:base:3.4'
+    testImplementation 'it.fulminazzo.jbukkit:13:3.4'
 }
 
 test {
@@ -64,6 +73,7 @@ shadowJar {
     relocate('it.fulminazzo.yamlparser', "it.fulminazzo.${project.name}.yamlparser")
     relocate('it.fulminazzo.tagparser', "it.fulminazzo.${project.name}.tagparser")
     relocate('it.fulminazzo.fulmicollection', "it.fulminazzo.${project.name}.fulmicollection")
+    relocate('it.fulminazzo.yagl', "it.fulminazzo.${project.name}.yagl")
     relocate('com.google.gson', "it.fulminazzo.${project.name}.gson")
     relocate('com.moandjiezana.toml', "it.fulminazzo.${project.name}.toml")
     archiveFileName = "$project.name-${project.version}.jar"

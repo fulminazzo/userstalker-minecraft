@@ -1,7 +1,7 @@
 package it.fulminazzo.userstalker.client
 
-import com.google.gson.Gson
 import it.fulminazzo.userstalker.MockFileConfiguration
+import it.fulminazzo.userstalker.utils.GsonUtils
 import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
 
@@ -225,8 +225,8 @@ class USAsyncApiClientTest extends Specification {
     }
 
     private static Object queryServer(String path, String method, Object input) {
-        def gson = new Gson()
-        def url = new URL("http://localhost:$PORT/api/v1/userlogins/$path");
+        def gson = GsonUtils.gson
+        def url = new URL("http://localhost:$PORT/api/v1/userlogins/$path")
         HttpURLConnection connection = (HttpURLConnection) url.openConnection()
         connection.setRequestMethod(method)
         connection.setDoOutput(true)

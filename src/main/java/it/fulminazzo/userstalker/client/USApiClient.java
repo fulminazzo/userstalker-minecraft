@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker.client;
 import com.google.gson.Gson;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.userstalker.utils.GsonUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -132,7 +133,7 @@ public final class USApiClient {
                           final int expectedResponse,
                           final @Nullable Class<T> convertClass,
                           final @Nullable Object input) throws APIClientException {
-        final Gson gson = new Gson();
+        final Gson gson = GsonUtils.getGson();
         final String link = String.format("%s:%s%s%s", address, port, API_PATH, path);
         HttpURLConnection connection = null;
         try {
@@ -167,7 +168,7 @@ public final class USApiClient {
 
     private static @NotNull <T> List<T> convertGeneralListToListOf(final @NotNull List<?> list,
                                                                    final @NotNull Class<T> clazz) {
-        Gson gson = new Gson();
+        Gson gson = GsonUtils.getGson();
         return list.stream()
                 .filter(Objects::nonNull)
                 .map(gson::toJson)

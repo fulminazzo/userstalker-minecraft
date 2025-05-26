@@ -1,11 +1,11 @@
 package it.fulminazzo.userstalker.client;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.userstalker.utils.GsonUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -103,8 +103,7 @@ public class MockHttpServer implements HttpHandler {
 
     private <T> T readInputBody(HttpExchange httpExchange, Class<T> clazz) throws IOException {
         try (InputStreamReader reader = new InputStreamReader(httpExchange.getRequestBody())) {
-            Gson gson = new Gson();
-            return gson.fromJson(reader, clazz);
+            return GsonUtils.getGson().fromJson(reader, clazz);
         }
     }
 
@@ -113,7 +112,7 @@ public class MockHttpServer implements HttpHandler {
     }
 
     private void sendResponse(HttpExchange httpExchange, int status, Object response) throws IOException {
-        String rawResponse = new Gson().toJson(response);
+        String rawResponse = GsonUtils.getGson().toJson(response);
         httpExchange.getResponseHeaders().set("Content-Type", "application/json");
         httpExchange.sendResponseHeaders(status, rawResponse.length());
 
