@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * A builder for {@link FileConfiguration}.
@@ -22,6 +23,8 @@ public final class Configurator {
     private @Nullable String name;
 
     private @Nullable ConfigurationType type = ConfigurationType.YAML;
+
+    private @Nullable Consumer<FileConfiguration> onCreated;
 
     /**
      * Builds a new file configuration from the set parameters.
@@ -60,6 +63,17 @@ public final class Configurator {
     @NotNull Optional<InputStream> getJarResource() throws ConfigurationException {
         String fullName = getType().getCompleteFileName(getName());
         return Optional.ofNullable(Configurator.class.getResourceAsStream("/" + fullName));
+    }
+
+    /**
+     * Specifies a function to execute when creating the configuration file for the first time.
+     *
+     * @param function the function
+     * @return this configurator
+     */
+    public @NotNull Configurator onCreated(final @Nullable Consumer<FileConfiguration> function) {
+        this.onCreated = function;
+        return this;
     }
 
     /**
