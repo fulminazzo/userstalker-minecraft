@@ -26,6 +26,21 @@ class ConfiguratorTest extends Specification {
         config.getString('hello') == 'world'
     }
 
+    def 'test that configurator loads non_existing file from jar'() {
+        given:
+        def configurator = Spy(Configurator)
+                .pluginDirectory(PLUGIN_DIRECTORY)
+                .name('non_existing_jar')
+                .type(ConfigurationType.TOML)
+        configurator.getJarResource() >> Optional.of(new ByteArrayInputStream('hello = "world"'.bytes))
+
+        when:
+        def config = configurator.build()
+
+        then:
+        config.getString('hello') == 'world'
+    }
+
     def 'test that configurator loads non_existing file'() {
         given:
         def configurator = new Configurator()
