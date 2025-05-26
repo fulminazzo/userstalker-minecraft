@@ -8,6 +8,7 @@ import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,6 @@ import java.util.logging.Logger;
 /**
  * A class responsible for creating and displaying all the plugin GUIs.
  */
-@RequiredArgsConstructor
 public final class USGUIManager {
     private final @NotNull Logger logger;
     private final @NotNull USAsyncApiClient client;
@@ -26,6 +26,18 @@ public final class USGUIManager {
     private DataGUI<UserLoginCount> monthlyUsersLoginsGUI;
     private DataGUI<UserLogin> newestUsersLoginsGUI;
     private DataGUI<UserLogin> userLoginsGUI;
+
+    /**
+     * Instantiates a new GUI manager.
+     *
+     * @param logger the logger
+     * @param client the api client
+     */
+    USGUIManager(final @NotNull Logger logger,
+                 final @NotNull USAsyncApiClient client) {
+        this.logger = logger;
+        this.client = client;
+    }
 
     // getTopUserLoginsAndThen
     // getMonthlyUserLoginsAndThen
