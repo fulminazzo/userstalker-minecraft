@@ -41,13 +41,24 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     @Override
     public void onEnable() {
         try {
+            getLogger().info("Starting setup process");
+
+            getLogger().info("Loading config.yml file");
             configuration = setupConfiguration();
+
+            getLogger().info("Loading messages.yml file");
             messages = setupMessages(Messages.values());
 
-            apiClient = setupApiClient();
+            getLogger().info("Setting up skin cache");
             profileCache = setupProfileCache();
 
+            getLogger().info("Setting up internal API client");
+            apiClient = setupApiClient();
+
+            getLogger().info("Setting up GUI manager");
             guiManager = setupGUIManager();
+
+            getLogger().info("UserStalker setup complete");
         } catch (ConfigurationException | APIClientException | ProfileCacheException e) {
             getLogger().severe(e.getMessage());
             disable();
@@ -57,12 +68,18 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
 
     @Override
     public void onDisable() {
-        if (profileCache != null)
-            try {
+        try {
+            getLogger().info("Starting shutdown process");
+
+            if (profileCache != null) {
+                getLogger().info("Shutting down skin cache");
                 profileCache.close();
-            } catch (ProfileCacheException e) {
-                getLogger().severe(e.getMessage());
             }
+
+            getLogger().info("Shutdown complete. Goodbye");
+        } catch (ProfileCacheException e) {
+            getLogger().severe(e.getMessage());
+        }
     }
 
     /**
