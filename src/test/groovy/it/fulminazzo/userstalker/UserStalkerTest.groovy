@@ -3,6 +3,8 @@ package it.fulminazzo.userstalker
 import it.fulminazzo.fulmicommands.FulmiException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationType
+import org.bukkit.Server
+import org.bukkit.plugin.PluginManager
 import spock.lang.Specification
 
 import java.util.logging.Logger
@@ -46,6 +48,23 @@ class UserStalkerTest extends Specification {
         method               | arguments           || exception
         'setupConfiguration' | []                  || new ConfigurationException('config.yml')
         'setupMessages'      | [Messages.values()] || new ConfigurationException('messages.yml')
+    }
+
+    def 'test that disable disables the plugin'() {
+        given:
+        def manager = Mock(PluginManager)
+        def server = Mock(Server)
+        server.pluginManager >> manager
+
+        and:
+        plugin.server >> server
+        plugin.disable() >> { callRealMethod() }
+
+        when:
+        plugin.disable()
+
+        then:
+        1 * manager.disablePlugin(plugin)
     }
 
     def 'test that getConfiguration throws if not initialized'() {
