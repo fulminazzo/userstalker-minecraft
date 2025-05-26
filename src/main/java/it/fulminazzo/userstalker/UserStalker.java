@@ -106,6 +106,7 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         return USGUIManager.builder()
                 .logger(getLogger())
                 .client(apiClient)
+                .cache(profileCache)
                 .build();
     }
 
