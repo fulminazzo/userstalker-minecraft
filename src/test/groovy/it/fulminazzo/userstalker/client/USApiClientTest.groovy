@@ -9,17 +9,17 @@ import java.time.Month
 class USApiClientTest extends Specification {
     private static final int PORT = 22525
 
-    private final MockHttpServer server = new MockHttpServer(PORT)
+    private static MockHttpServer server
+    private static USApiClient client
 
-    private USApiClient client
-
-    void setup() {
+    void setupSpec() {
+        server = new MockHttpServer(PORT)
         server.start()
 
         client = new USApiClient('http://localhost', PORT)
     }
 
-    void cleanup() {
+    void cleanupSpec() {
         server.stop()
     }
 

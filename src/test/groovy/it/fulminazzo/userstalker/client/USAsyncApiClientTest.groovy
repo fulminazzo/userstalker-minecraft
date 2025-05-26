@@ -10,17 +10,17 @@ import java.util.logging.Logger
 class USAsyncApiClientTest extends Specification {
     private static final int PORT = 23525
 
-    private final MockHttpServer server = new MockHttpServer(PORT)
+    private static MockHttpServer server
+    private static USAsyncApiClient client
 
-    private USAsyncApiClient client
-
-    void setup() {
-        client = newClient('http://localhost')
-
+    void setupSpec() {
+        server = new MockHttpServer(PORT)
         server.start()
+
+        client = newClient('http://localhost')
     }
 
-    void cleanup() {
+    void cleanupSpec() {
         server.stop()
     }
 
@@ -206,7 +206,7 @@ class USAsyncApiClientTest extends Specification {
         test
     }
 
-    private USAsyncApiClient newClient(String host) {
+    private static USAsyncApiClient newClient(String host) {
         def logger = Logger.getLogger(getClass().simpleName)
 
         def configuration = new MockFileConfiguration([

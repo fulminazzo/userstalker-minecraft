@@ -14,9 +14,9 @@ class USGUIManagerTest extends Specification {
 
     private final File pluginDirectory = new File('build/resources/test')
 
-    private USGUIManager manager
+    private static USGUIManager manager
 
-    void setup() {
+    void setupSpec() {
         def logger = Logger.getLogger(getClass().simpleName)
 
         manager = new USGUIManager(logger, Mock(USAsyncApiClient))

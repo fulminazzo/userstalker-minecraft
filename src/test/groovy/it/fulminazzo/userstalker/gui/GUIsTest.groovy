@@ -27,7 +27,7 @@ class GUIsTest extends Specification {
 
     private static final ProfileCache cache = new MockProfileCache()
 
-    void setup() {
+    void setupSpec() {
         BukkitUtils.setupServer()
         Mockito.when(Bukkit.getServer().getItemFactory()).thenReturn(new SMMockItemFactory())
     }
