@@ -61,13 +61,6 @@ public final class USGUIManager {
         userLoginsGUI = getGUI(config, "user-logins", GUIs.defaultUserLogins());
     }
 
-    private <T> T setAndGet(final @NotNull FileConfiguration config,
-                            final @NotNull String path,
-                            final @NotNull T t) {
-        config.set(path, t);
-        return t;
-    }
-
     @SuppressWarnings("unchecked")
     private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
                                   final @NotNull String path,
