@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker
 import it.fulminazzo.fulmicommands.FulmiException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationType
+import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.client.APIClientException
 import org.bukkit.Server
 import org.bukkit.plugin.PluginManager
@@ -51,6 +52,7 @@ class UserStalkerTest extends Specification {
         'setupConfiguration' | []                  || new ConfigurationException('config.yml')
         'setupMessages'      | [Messages.values()] || new ConfigurationException('messages.yml')
         'setupApiClient'     | []                  || new APIClientException('API client')
+        'setupProfileCache'  | []                  || new ProfileCacheException('Profile cache')
     }
 
     def 'test that setupGUIManager throws if apiClient is null'() {
