@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker.gui;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationType;
 import it.fulminazzo.fulmicommands.configuration.Configurator;
+import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
@@ -10,6 +11,7 @@ import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -21,6 +23,8 @@ public final class USGUIManager {
     private final @NotNull Logger logger;
     private final @NotNull USAsyncApiClient client;
 
+    private @Nullable ProfileCache cache;
+
     private DataGUI<UserLoginCount> topUsersLoginsGUI;
     private DataGUI<UserLoginCount> monthlyUsersLoginsGUI;
     private DataGUI<UserLogin> newestUsersLoginsGUI;
@@ -31,12 +35,15 @@ public final class USGUIManager {
      *
      * @param logger the logger
      * @param client the api client
+     * @param cache  the cache
      */
     @Builder
     USGUIManager(final @NotNull Logger logger,
-                 final @NotNull USAsyncApiClient client) {
+                 final @NotNull USAsyncApiClient client,
+                 final @Nullable ProfileCache cache) {
         this.logger = logger;
         this.client = client;
+        this.cache = cache;
     }
 
     // getTopUserLoginsAndThen
