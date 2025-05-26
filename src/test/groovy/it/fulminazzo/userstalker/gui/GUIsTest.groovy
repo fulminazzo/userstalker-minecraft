@@ -17,9 +17,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
-import org.mockito.MockedStatic
 import org.mockito.Mockito
-import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -141,11 +139,12 @@ class GUIsTest extends Specification {
         def logger = Logger.getLogger(getClass().simpleName)
         plugin.logger >> logger
 
+        and:
+        SpyStatic(JavaPlugin)
+        JavaPlugin.getProvidingPlugin(GUIs) >> plugin
+
         when:
-        try (def javaPlugin = Mockito.mockStatic(JavaPlugin)) {
-            javaPlugin.when(JavaPlugin.getProvidingPlugin(GUIs)).thenReturn(plugin)
-            content.render().copy(BukkitItem).create()
-        }
+        content.render().copy(BukkitItem).create()
 
         then:
         noExceptionThrown()
