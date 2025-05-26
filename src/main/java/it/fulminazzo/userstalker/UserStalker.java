@@ -9,12 +9,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
+/**
+ * The main class of the plugin.
+ */
 public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin {
     private static @Nullable UserStalker instance;
 
     private @Nullable FileConfiguration configuration;
     private @Nullable FileConfiguration messages;
 
+    /**
+     * Instantiates a new User stalker.
+     */
     public UserStalker() {
         instance = this;
     }
@@ -46,6 +52,12 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         return getDataFolder();
     }
 
+    /**
+     * Gets an instance of the current plugin.
+     * Throws if the plugin has not been initialized yet.
+     *
+     * @return the instance
+     */
     public static @NotNull UserStalker getInstance() {
         if (instance == null) throw new IllegalStateException("Plugin not yet initialized");
         return instance;
