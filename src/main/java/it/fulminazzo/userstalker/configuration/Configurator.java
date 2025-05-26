@@ -47,6 +47,7 @@ public final class Configurator {
                 @NotNull Optional<InputStream> jarResource = getJarResource();
                 if (jarResource.isPresent())
                     FileUtils.writeToFile(configFile, jarResource.get());
+                if (onCreated != null) onCreated.accept(FileConfiguration.newConfiguration(configFile));
             } catch (IOException e) {
                 throw new ConfigurationException(e.getMessage());
             }
