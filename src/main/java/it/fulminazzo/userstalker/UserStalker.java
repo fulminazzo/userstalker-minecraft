@@ -57,7 +57,12 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        if (profileCache != null)
+            try {
+                profileCache.close();
+            } catch (ProfileCacheException e) {
+                getLogger().severe(e.getMessage());
+            }
     }
 
     /**
