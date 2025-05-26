@@ -84,12 +84,12 @@ public final class USGUIManager {
     private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
                                   final @NotNull String path,
                                   final @NotNull DataGUI<T> defaultGUI) {
-        if (config.contains(path))
-            return config.get(path, DataGUI.class);
-        else {
-            logger.warning(String.format("Could not find gui \"%s\" in guis.yml. Using default GUI", path));
-            return defaultGUI;
+        if (config.contains(path)) {
+            DataGUI<T> gui = config.get(path, DataGUI.class);
+            if (gui != null) return gui;
         }
+        logger.warning(String.format("Could not find gui \"%s\" in guis.yml. Using default GUI", path));
+        return defaultGUI;
     }
 
 }

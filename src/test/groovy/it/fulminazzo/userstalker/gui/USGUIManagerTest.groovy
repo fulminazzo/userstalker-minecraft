@@ -73,6 +73,31 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
     }
 
+    def 'test setup with file but GUI null uses default #guiName GUI'() {
+        given:
+        def file = new File(pluginDirectory, 'guis.yml')
+        if (file.exists()) file.delete()
+        FileUtils.createNewFile(file)
+
+        and:
+        def config = FileConfiguration.newConfiguration(file)
+        config.set(path, null)
+        config.save()
+
+        when:
+        manager.setup(pluginDirectory)
+
+        then:
+        manager."$guiName" == defaultGUI
+
+        where:
+        defaultGUI                       | path                   || guiName
+        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
+    }
+
     def 'test setup with file but GUI not available uses default #guiName GUI'() {
         given:
         def file = new File(pluginDirectory, 'guis.yml')
