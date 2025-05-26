@@ -1,16 +1,17 @@
 package it.fulminazzo.userstalker.gui;
 
+import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
+import it.fulminazzo.fulmicommands.configuration.ConfigurationType;
+import it.fulminazzo.fulmicommands.configuration.Configurator;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
-import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -35,38 +36,29 @@ public final class USGUIManager {
      * Sets the current manager by loading the GUIs from the configuration file.
      *
      * @param pluginDirectory the plugin directory
-     * @throws IOException if there was an error while creating the <b>guis.yml</b> file
+     * @throws ConfigurationException if there was any error while creating the <b>guis.yml</b> file
      */
-    public void setup(final @NotNull File pluginDirectory) throws IOException {
-        File file = new File(pluginDirectory, "guis.yml");
+    public void setup(final @NotNull File pluginDirectory) throws ConfigurationException {
+        FileConfiguration config = Configurator.newBuilder()
+                .pluginDirectory(pluginDirectory)
+                .name("guis")
+                .type(ConfigurationType.YAML)
+                .onCreated(c -> {
+                    logger.info(String.format("Created new configuration file: %s/guis.yml", pluginDirectory.getPath()));
 
-        if (!file.exists()) {
-            logger.info("Creating configuration file: " + file.getPath());
-            FileUtils.createNewFile(file);
-            FileConfiguration config = FileConfiguration.newConfiguration(file);
-            // Store GUIs in file and load in memory
+                    c.set("top-users-logins", GUIs.defaultTopUsersLogins());
+                    c.set("monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
+                    c.set("newest-users-logins", GUIs.defaultNewestUsersLogins());
+                    c.set("user-logins", GUIs.defaultUserLogins());
 
-            topUsersLoginsGUI = setAndGet(config, "top-users-logins", GUIs.defaultTopUsersLogins());
+                    c.save();
+                })
+                .build();
 
-            monthlyUsersLoginsGUI = setAndGet(config, "monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
-
-            newestUsersLoginsGUI = setAndGet(config, "newest-users-logins", GUIs.defaultNewestUsersLogins());
-
-            userLoginsGUI = setAndGet(config, "user-logins", GUIs.defaultUserLogins());
-
-            config.save();
-        } else {
-            FileConfiguration config = FileConfiguration.newConfiguration(file);
-            // Load GUIs in memory, warn for errors
-
-            topUsersLoginsGUI = getGUI(config, "top-users-logins", GUIs.defaultTopUsersLogins());
-
-            monthlyUsersLoginsGUI = getGUI(config, "monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
-
-            newestUsersLoginsGUI = getGUI(config, "newest-users-logins", GUIs.defaultNewestUsersLogins());
-
-            userLoginsGUI = getGUI(config, "user-logins", GUIs.defaultUserLogins());
-        }
+        topUsersLoginsGUI = getGUI(config, "top-users-logins", GUIs.defaultTopUsersLogins());
+        monthlyUsersLoginsGUI = getGUI(config, "monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
+        newestUsersLoginsGUI = getGUI(config, "newest-users-logins", GUIs.defaultNewestUsersLogins());
+        userLoginsGUI = getGUI(config, "user-logins", GUIs.defaultUserLogins());
     }
 
     private <T> T setAndGet(final @NotNull FileConfiguration config,
