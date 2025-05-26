@@ -5,6 +5,8 @@ import it.fulminazzo.fulmicommands.FulmiMessagesPlugin;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
 import it.fulminazzo.userstalker.client.APIClientException;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
+import it.fulminazzo.userstalker.gui.USGUIManager;
+import it.fulminazzo.yagl.parsers.GUIYAGLParser;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -23,11 +25,14 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
 
     private @Nullable USAsyncApiClient apiClient;
 
+    private @Nullable USGUIManager guiManager;
+
     /**
      * Instantiates a new User stalker.
      */
     public UserStalker() {
         instance = this;
+        GUIYAGLParser.addAllParsers();
     }
 
     @Override
@@ -37,6 +42,8 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
             messages = setupMessages(Messages.values());
 
             apiClient = setupApiClient();
+
+            guiManager = setupGUIManager();
         } catch (ConfigurationException | APIClientException e) {
             getLogger().severe(e.getMessage());
             disable();
@@ -54,6 +61,17 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
      */
     void disable() {
         getServer().getPluginManager().disablePlugin(this);
+    }
+
+    /**
+     * Sets up a new GUI manager.
+     *
+     * @return the gui manager
+     */
+    @NotNull USGUIManager setupGUIManager() {
+        if (apiClient == null)
+            throw new IllegalStateException("API client not yet initialized");
+        return new USGUIManager(getLogger(), apiClient);
     }
 
     /**
