@@ -36,8 +36,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
     compileOnly 'com.mojang:authlib:1.5.21'
 
-    implementation 'it.fulminazzo:FulmiCollection:1.8'
-    implementation 'it.fulminazzo:Configurations:1.6.3'
+    implementation 'it.fulminazzo:FulmiCommands:1.0.0'
     implementation 'it.fulminazzo:yagl:4.3'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
@@ -73,6 +72,7 @@ shadowJar {
     relocate('it.fulminazzo.yamlparser', "it.fulminazzo.${project.name}.yamlparser")
     relocate('it.fulminazzo.tagparser', "it.fulminazzo.${project.name}.tagparser")
     relocate('it.fulminazzo.fulmicollection', "it.fulminazzo.${project.name}.fulmicollection")
+    relocate('it.fulminazzo.fulmicommands', "it.fulminazzo.${project.name}.fulmicommands")
     relocate('it.fulminazzo.yagl', "it.fulminazzo.${project.name}.yagl")
     relocate('com.google.gson', "it.fulminazzo.${project.name}.gson")
     relocate('com.moandjiezana.toml', "it.fulminazzo.${project.name}.toml")
