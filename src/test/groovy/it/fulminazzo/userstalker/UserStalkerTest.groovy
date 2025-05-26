@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker
 import it.fulminazzo.fulmicommands.FulmiException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationType
+import it.fulminazzo.userstalker.client.APIClientException
 import org.bukkit.Server
 import org.bukkit.plugin.PluginManager
 import spock.lang.Specification
@@ -49,6 +50,7 @@ class UserStalkerTest extends Specification {
         method               | arguments           || exception
         'setupConfiguration' | []                  || new ConfigurationException('config.yml')
         'setupMessages'      | [Messages.values()] || new ConfigurationException('messages.yml')
+        'setupApiClient'     | []                  || new APIClientException('API client')
     }
 
     def 'test that disable disables the plugin'() {
