@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker
 import it.fulminazzo.fulmicommands.FulmiException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationType
+import it.fulminazzo.userstalker.cache.ProfileCache
 import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.client.APIClientException
 import org.bukkit.Server
@@ -31,6 +32,7 @@ class UserStalkerTest extends Specification {
         plugin.messagesType >> ConfigurationType.YAML
 
         plugin.onEnable() >> { callRealMethod() }
+        plugin.onDisable() >> { callRealMethod() }
     }
 
     def 'test that onEnable does not throw if an error happens during #method'() {
@@ -53,6 +55,37 @@ class UserStalkerTest extends Specification {
         'setupMessages'      | [Messages.values()] || new ConfigurationException('messages.yml')
         'setupApiClient'     | []                  || new APIClientException('API client')
         'setupProfileCache'  | []                  || new ProfileCacheException('Profile cache')
+    }
+
+    def 'test that onDisable closes profileCache'() {
+        given:
+        def profileCache = Mock(ProfileCache)
+
+        and:
+        plugin.profileCache = profileCache
+
+        when:
+        plugin.onDisable()
+
+        then:
+        1 * profileCache.close()
+    }
+
+    def 'test that onDisable does not throw'() {
+        given:
+        def profileCache = Mock(ProfileCache)
+        profileCache.close() >> {
+            throw new ProfileCacheException('General error')
+        }
+
+        and:
+        plugin.profileCache = profileCache
+
+        when:
+        plugin.onDisable()
+
+        then:
+        noExceptionThrown()
     }
 
     def 'test that setupGUIManager throws if apiClient is null'() {
