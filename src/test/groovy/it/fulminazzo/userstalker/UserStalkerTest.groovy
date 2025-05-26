@@ -1,7 +1,8 @@
 package it.fulminazzo.userstalker
 
 import it.fulminazzo.fulmicommands.FulmiException
-import it.fulminazzo.fulmicommands.messages.DefaultFulmiMessages
+import it.fulminazzo.fulmicommands.configuration.ConfigurationException
+import it.fulminazzo.fulmicommands.configuration.ConfigurationType
 import spock.lang.Specification
 
 import java.util.logging.Logger
@@ -14,12 +15,37 @@ class UserStalkerTest extends Specification {
 
     void setup() {
         plugin = Mock(UserStalker)
-        plugin.setupConfiguration() >> { callRealMethod() }
-        plugin.configuration >> { callRealMethod() }
-        plugin.setupMessages(_ as DefaultFulmiMessages[]) >> { callRealMethod() }
-        plugin.messages >> { callRealMethod() }
+
         plugin.logger >> Logger.getLogger(getClass().simpleName)
         plugin.pluginDirectory >> PLUGIN_DIRECTORY
+
+        plugin.configuration >> { callRealMethod() }
+        plugin.configurationType >> ConfigurationType.YAML
+
+        plugin.messages >> { callRealMethod() }
+        plugin.messagesType >> ConfigurationType.YAML
+
+        plugin.onEnable() >> { callRealMethod() }
+    }
+
+    def 'test that onEnable does not throw if an error happens during #method'() {
+        given:
+        if (arguments.size() == 0)
+            plugin."$method"() >> { throw exception }
+        else
+            plugin."$method"(*arguments) >> { throw exception }
+
+        when:
+        plugin.onEnable()
+
+        then:
+        noExceptionThrown()
+        1 * plugin.disable()
+
+        where:
+        method               | arguments           || exception
+        'setupConfiguration' | []                  || new ConfigurationException('config.yml')
+        'setupMessages'      | [Messages.values()] || new ConfigurationException('messages.yml')
     }
 
     def 'test that getConfiguration throws if not initialized'() {
