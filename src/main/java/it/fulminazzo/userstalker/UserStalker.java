@@ -10,9 +10,14 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 
 public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin {
+    private static @Nullable UserStalker instance;
 
     private @Nullable FileConfiguration configuration;
     private @Nullable FileConfiguration messages;
+
+    public UserStalker() {
+        instance = this;
+    }
 
     @Override
     public void onEnable() {
@@ -39,6 +44,11 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     @Override
     public @NotNull File getPluginDirectory() {
         return getDataFolder();
+    }
+
+    public static @NotNull UserStalker getInstance() {
+        if (instance == null) throw new IllegalStateException("Plugin not yet initialized");
+        return instance;
     }
 
 }
