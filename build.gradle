@@ -37,7 +37,7 @@ dependencies {
     compileOnly 'com.mojang:authlib:1.5.21'
 
     implementation 'it.fulminazzo:FulmiCommands:1.0.0'
-    implementation 'it.fulminazzo:yagl:4.3'
+    implementation 'it.fulminazzo:yagl:4.4'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
