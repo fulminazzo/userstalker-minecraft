@@ -54,7 +54,20 @@ class UserStalkerTest extends Specification {
         'setupConfiguration' | []                  || new ConfigurationException('config.yml')
         'setupMessages'      | [Messages.values()] || new ConfigurationException('messages.yml')
         'setupApiClient'     | []                  || new APIClientException('API client')
-        'setupProfileCache'  | []                  || new ProfileCacheException('Profile cache')
+    }
+
+    def 'test that onEnable does not throw if an error happens during setupProfileCache'() {
+        given:
+        plugin.setupProfileCache() >> {
+            throw new ProfileCacheException('Profile cache')
+        }
+
+        when:
+        plugin.onEnable()
+
+        then:
+        noExceptionThrown()
+        0 * plugin.disable()
     }
 
     def 'test that onDisable closes profileCache'() {

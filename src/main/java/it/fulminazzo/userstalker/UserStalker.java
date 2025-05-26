@@ -50,7 +50,13 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
             messages = setupMessages(Messages.values());
 
             getLogger().info("Setting up skin cache");
-            profileCache = setupProfileCache();
+            try {
+                profileCache = setupProfileCache();
+            } catch (ProfileCacheException e) {
+                getLogger().warning("An error occurred while setting up the skin cache");
+                getLogger().warning(e.getMessage());
+                getLogger().warning("Continuing setup without skin cache. Players heads skins will not be available");
+            }
 
             getLogger().info("Setting up internal API client");
             apiClient = setupApiClient();
@@ -59,7 +65,7 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
             guiManager = setupGUIManager();
 
             getLogger().info("UserStalker setup complete");
-        } catch (ConfigurationException | APIClientException | ProfileCacheException e) {
+        } catch (ConfigurationException | APIClientException e) {
             getLogger().severe(e.getMessage());
             disable();
             return;
