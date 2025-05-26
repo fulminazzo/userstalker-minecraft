@@ -6,6 +6,7 @@ import it.fulminazzo.fulmicommands.configuration.ConfigurationType
 import it.fulminazzo.userstalker.cache.ProfileCache
 import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.client.APIClientException
+import it.fulminazzo.userstalker.gui.MockProfileCache
 import org.bukkit.Server
 import org.bukkit.plugin.PluginManager
 import spock.lang.Specification
@@ -84,14 +85,8 @@ class UserStalkerTest extends Specification {
         1 * profileCache.close()
     }
 
-    def 'test that onDisable does not throw'() {
+    def 'test that onDisable does not throw with #profileCache'() {
         given:
-        def profileCache = Mock(ProfileCache)
-        profileCache.close() >> {
-            throw new ProfileCacheException('General error')
-        }
-
-        and:
         plugin.profileCache = profileCache
 
         when:
@@ -99,6 +94,9 @@ class UserStalkerTest extends Specification {
 
         then:
         noExceptionThrown()
+
+        where:
+        profileCache << [new MockProfileCache(), null]
     }
 
     def 'test that setupGUIManager throws if apiClient is null'() {
