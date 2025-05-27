@@ -128,7 +128,7 @@ public final class GUIs {
      * @return the gui
      */
     public static @NotNull DataGUI<UserLogin> defaultUserLogins() {
-        return USER_LOGINS_GUI_PROVIDER.apply(54).setTitle("&c<user>'s logins");
+        return USER_LOGINS_GUI_PROVIDER.apply(54).setTitle("&c<username>'s logins");
     }
 
     /**

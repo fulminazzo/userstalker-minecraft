@@ -172,7 +172,7 @@ class GUIsTest extends Specification {
                 .setPreviousPage(47, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&ePrevious page'))
                 .setNextPage(51, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&eNext page'))
                 .setContents(49, Item.newItem(Material.OBSIDIAN.name().toLowerCase()).setDisplayName('&fCurrent page: &e<page>&8/&a<pages>'))
-                .setTitle('&c<user>\'s logins')
+                .setTitle('&c<username>\'s logins')
 
         expect:
         defaultGUI == expected
