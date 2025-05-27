@@ -7,16 +7,17 @@ import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
  * A class responsible for creating and displaying all the plugin 
  */
+@Builder(builderMethodName = "internalBuilder", access = AccessLevel.PACKAGE)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class USGUIManager {
 
