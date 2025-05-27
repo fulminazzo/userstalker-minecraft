@@ -117,7 +117,7 @@ public final class GUIs {
                                 "&eShows the number of logins per user,",
                                 "&esorted from highest to lowest."
                         )
-                        .setVariable("action", "open-gui-top")
+                        .setVariable("action", USGUIAction.OPEN_GUI_TOP.serialize())
                 )
                 .setContents(30, ItemGUIContent.newInstance(Material.EMERALD_BLOCK.name().toLowerCase())
                         .setDisplayName("&2Newest users logins")
@@ -125,7 +125,7 @@ public final class GUIs {
                                 "&eShows the latest users logins",
                                 "&esorted by newest."
                         )
-                        .setVariable("action", "open-gui-newest")
+                        .setVariable("action", USGUIAction.OPEN_GUI_NEWEST.serialize())
                 )
                 .setContents(32, ItemGUIContent.newInstance(Material.GOLD_BLOCK.name().toLowerCase())
                         .setDisplayName("&6Monthly users logins")
@@ -134,11 +134,11 @@ public final class GUIs {
                                 "&esorted from highest to lowest",
                                 "&eof the current month."
                         )
-                        .setVariable("action", "open-gui-monthly")
+                        .setVariable("action", USGUIAction.OPEN_GUI_MONTHLY.serialize())
                 )
                 .setContents(45, ItemGUIContent.newInstance(Material.BARRIER.name().toLowerCase())
                         .setDisplayName("&cClose")
-                        .setVariable("action", "close")
+                        .setVariable("action", USGUIAction.CLOSE.serialize())
                 );
     }
 
