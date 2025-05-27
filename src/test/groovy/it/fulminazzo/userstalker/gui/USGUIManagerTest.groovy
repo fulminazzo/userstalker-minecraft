@@ -160,4 +160,30 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultBackItem()           | 'items.back'                 || 'backGUIContent'
     }
 
+    def 'test that getBackContentOffset of #slot returns #expected'() {
+        given:
+        def file = new File(pluginDirectory, 'guis.yml')
+        if (file.exists()) file.delete()
+        FileUtils.createNewFile(file)
+
+        and:
+        def config = FileConfiguration.newConfiguration(file)
+        config.set('misc.back-offset', slot)
+        config.save()
+
+        when:
+        manager.setup(pluginDirectory)
+
+        then:
+        manager.backGUIContentSlotOffset == expected
+
+        where:
+        slot || expected
+        null || -9
+        0    || -9
+        10   || -9
+        -1   || -1
+        -3   || -3
+    }
+
 }
