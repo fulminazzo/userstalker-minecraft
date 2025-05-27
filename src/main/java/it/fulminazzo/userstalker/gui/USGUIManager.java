@@ -4,6 +4,7 @@ import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.yagl.actions.GUIItemAction;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
@@ -58,16 +59,18 @@ public final class USGUIManager {
      *
      * @param <T>     the type of the data
      * @param gui     the gui
-     * @param content the content to use to display data. Will be parsed using {@link #prepareContent(GUIContent, Object)}
      * @param data    the data
+     * @param content the content to use to display data. Will be parsed using {@link #prepareContent(GUIContent, Object, GUIItemAction)}
+     * @param onClick the action executed upon clicking on the content
      * @return the parsed gui
      */
     <T> @NotNull DataGUI<T> prepareGUI(
             @NotNull DataGUI<T> gui,
+            final @NotNull Collection<T> data,
             final @NotNull GUIContent content,
-            final @NotNull Collection<T> data
+            final @Nullable GUIItemAction onClick
     ) {
-        gui = DataGUI.newGUI(gui.size(), o -> prepareContent(content, o), data).copyFrom(gui, false);
+        gui = DataGUI.newGUI(gui.size(), o -> prepareContent(content, o, onClick), data).copyFrom(gui, false);
         if (backGUIContent != null) {
             int slot = gui.size() - backGUIContentSlotOffset;
             if (slot < 0) {
@@ -82,11 +85,18 @@ public final class USGUIManager {
      *
      * @param content the content
      * @param data    the data
+     * @param onClick the action executed upon clicking on the content
      * @return the parsed content
      */
-    @NotNull GUIContent prepareContent(@NotNull GUIContent content, final @NotNull Object data) {
+    @NotNull GUIContent prepareContent(
+            @NotNull GUIContent content,
+            final @NotNull Object data,
+            final @Nullable GUIItemAction onClick
+    ) {
         content = setupVariables(content.copy(), data);
-        return setupMetadataConversion((ItemGUIContent) content, cache);
+        content = setupMetadataConversion((ItemGUIContent) content, cache);
+        if (onClick != null) content.onClickItem(onClick);
+        return content;
     }
 
     /**
