@@ -18,8 +18,10 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.logging.Logger;
 
+import static it.fulminazzo.userstalker.gui.GUIs.*;
+
 /**
- * A class responsible for creating and displaying all the plugin GUIs.
+ * A class responsible for creating and displaying all the plugin 
  */
 public final class USGUIManager {
     private final @NotNull Logger logger;
@@ -76,37 +78,37 @@ public final class USGUIManager {
                 .onCreated(c -> {
                     logger.info(String.format("Created new configuration file: %s/guis.yml", pluginDirectory.getPath()));
 
-                    c.set("guis.top-users-logins", GUIs.defaultTopUsersLogins());
-                    c.set("items.top-users-logins", GUIs.defaultUserLoginCountItem());
+                    c.set("guis.top-users-logins", defaultTopUsersLogins());
+                    c.set("items.top-users-logins", defaultUserLoginCountItem());
 
-                    c.set("guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
-                    c.set("items.monthly-users-logins", GUIs.defaultUserLoginCountItem());
+                    c.set("guis.monthly-users-logins", defaultMonthlyUsersLogins());
+                    c.set("items.monthly-users-logins", defaultUserLoginCountItem());
 
-                    c.set("guis.newest-users-logins", GUIs.defaultNewestUsersLogins());
-                    c.set("items.newest-users-logins", GUIs.defaultNamedUserLoginItem());
+                    c.set("guis.newest-users-logins", defaultNewestUsersLogins());
+                    c.set("items.newest-users-logins", defaultNamedUserLoginItem());
 
-                    c.set("guis.user-logins", GUIs.defaultUserLogins());
-                    c.set("items.user-logins", GUIs.defaultUserLoginItem());
+                    c.set("guis.user-logins", defaultUserLogins());
+                    c.set("items.user-logins", defaultUserLoginItem());
 
-                    c.set("items.back", GUIs.defaultBackItem());
+                    c.set("items.back", defaultBackItem());
 
                     c.save();
                 })
                 .build();
 
-        topUsersLoginsGUI = getGUI(config, "guis.top-users-logins", GUIs.defaultTopUsersLogins());
-        topUsersLoginsGUIContent = getContent(config, "items.top-users-logins", GUIs.defaultUserLoginCountItem());
+        topUsersLoginsGUI = getGUI(config, "guis.top-users-logins", defaultTopUsersLogins());
+        topUsersLoginsGUIContent = getContent(config, "items.top-users-logins", defaultUserLoginCountItem());
 
-        monthlyUsersLoginsGUI = getGUI(config, "guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
-        monthlyUsersLoginsGUIContent = getContent(config, "items.monthly-users-logins", GUIs.defaultUserLoginCountItem());
+        monthlyUsersLoginsGUI = getGUI(config, "guis.monthly-users-logins", defaultMonthlyUsersLogins());
+        monthlyUsersLoginsGUIContent = getContent(config, "items.monthly-users-logins", defaultUserLoginCountItem());
 
-        newestUsersLoginsGUI = getGUI(config, "guis.newest-users-logins", GUIs.defaultNewestUsersLogins());
-        newestUsersLoginsGUIContent = getContent(config, "items.newest-users-logins", GUIs.defaultNamedUserLoginItem());
+        newestUsersLoginsGUI = getGUI(config, "guis.newest-users-logins", defaultNewestUsersLogins());
+        newestUsersLoginsGUIContent = getContent(config, "items.newest-users-logins", defaultNamedUserLoginItem());
 
-        userLoginsGUI = getGUI(config, "guis.user-logins", GUIs.defaultUserLogins());
-        userLoginsGUIContent = getContent(config, "items.user-logins", GUIs.defaultUserLoginItem());
+        userLoginsGUI = getGUI(config, "guis.user-logins", defaultUserLogins());
+        userLoginsGUIContent = getContent(config, "items.user-logins", defaultUserLoginItem());
 
-        backGUIContent = getContent(config, "items.back", GUIs.defaultBackItem());
+        backGUIContent = getContent(config, "items.back", defaultBackItem());
     }
 
     private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
