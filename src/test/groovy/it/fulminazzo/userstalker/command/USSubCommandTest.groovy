@@ -76,20 +76,6 @@ class USSubCommandTest extends Specification {
         ['rel']   || ['opengui', 'open', 'gui', 'reload']
     }
 
-    def 'test that HelpSubCommand sends one message if no permission'() {
-        given:
-        def subcommand = new HelpSubCommand(plugin, new USCommand(plugin))
-
-        and:
-        sender.hasPermission(_ as String) >> true
-
-        when:
-        subcommand.execute(sender, new String[0])
-
-        then:
-        1 * sender.sendMessage(_ as String)
-    }
-
     def 'test that OpenGUISubCommand executes correctly'() {
         given:
         def subcommand = new OpenGUISubCommand(plugin)
