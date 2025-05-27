@@ -42,6 +42,7 @@ class USGUIManagerBuilderTest extends Specification {
 
         where:
         defaultObject                    | path                         || objectName
+        GUIs.defaultMainMenu()           | 'guis.main-menu'             || 'mainMenuGUI'
         GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'      || 'topUsersLoginsGUI'
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins'  || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'   || 'newestUsersLoginsGUI'
@@ -75,6 +76,7 @@ class USGUIManagerBuilderTest extends Specification {
 
         where:
         defaultGUI                       | path                        || guiName
+        GUIs.defaultMainMenu()           | 'guis.main-menu'             || 'mainMenuGUI'
         GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'     || 'topUsersLoginsGUI'
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
@@ -129,6 +131,7 @@ class USGUIManagerBuilderTest extends Specification {
 
         where:
         defaultObject                    | path                         || objectName
+        GUIs.defaultMainMenu()           | 'guis.main-menu'             || 'mainMenuGUI'
         GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'      || 'topUsersLoginsGUI'
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins'  || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'   || 'newestUsersLoginsGUI'
@@ -154,6 +157,7 @@ class USGUIManagerBuilderTest extends Specification {
 
         where:
         defaultObject                    | path                         || objectName
+        GUIs.defaultMainMenu()           | 'guis.main-menu'             || 'mainMenuGUI'
         GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'      || 'topUsersLoginsGUI'
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins'  || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'   || 'newestUsersLoginsGUI'
