@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker.command;
 
 import it.fulminazzo.userstalker.UserStalker;
+import lombok.Getter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 public final class USCommand implements TabExecutor {
     private final @NotNull UserStalker plugin;
+    @Getter
     private final @NotNull List<USSubCommand> subCommands;
 
     /**
