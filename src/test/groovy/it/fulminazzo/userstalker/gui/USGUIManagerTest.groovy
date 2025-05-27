@@ -5,6 +5,7 @@ import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.userstalker.meta.SMMockItemFactory
+import it.fulminazzo.yagl.GUIManager
 import it.fulminazzo.yagl.contents.ItemGUIContent
 import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.guis.GUI
@@ -12,6 +13,7 @@ import it.fulminazzo.yagl.items.BukkitItem
 import it.fulminazzo.yagl.parsers.GUIYAGLParser
 import it.fulminazzo.yagl.viewers.Viewer
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.mockito.Mockito
 import spock.lang.Specification
 
@@ -36,6 +38,31 @@ class USGUIManagerTest extends Specification {
                 .apiClient(Mock(USAsyncApiClient))
                 .pluginDirectory(PLUGIN_DIRECTORY)
                 .build()
+    }
+
+    def 'test that openUserLoginsGUI of valid opens GUI'() {
+        given:
+        def player = Mock(Player)
+
+        when:
+        manager.openUserLoginsGUI(player, 'valid')
+
+        then:
+        def viewer = GUIManager.getViewer(player)
+        viewer != null
+        viewer.openGUI != null
+        viewer.openGUI.title == GUIs.defaultUserLogins().title.replace('<username>', 'valid')
+    }
+
+    def 'test that openUserLoginsGUI of invalid does not throw'() {
+        given:
+        def player = Mock(Player)
+
+        when:
+        manager.openUserLoginsGUI(player, 'invalid')
+
+        then:
+        noExceptionThrown()
     }
 
     def 'test that prepareGUI sets correct back action'() {
