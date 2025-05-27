@@ -2,6 +2,7 @@ package it.fulminazzo.userstalker.gui;
 
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
 import it.fulminazzo.userstalker.builder.LoggedBuilder;
+import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManagerBuilder, ConfigurationException> {
     private @Nullable USAsyncApiClient apiClient;
+
+    private @Nullable ProfileCache skinCache;
 
     @Override
     public @NotNull USGUIManager build() throws ConfigurationException {
@@ -39,6 +42,17 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
      */
     public @NotNull USGUIManagerBuilder apiClient(@Nullable USAsyncApiClient apiClient) {
         this.apiClient = apiClient;
+        return this;
+    }
+
+    /**
+     * Sets the skin cache.
+     *
+     * @param skinCache the skin cache
+     * @return this builder
+     */
+    public @NotNull USGUIManagerBuilder skinCache(@Nullable ProfileCache skinCache) {
+        this.skinCache = skinCache;
         return this;
     }
 
