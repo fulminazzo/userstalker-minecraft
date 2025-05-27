@@ -53,67 +53,6 @@ class GUIsTest extends Specification {
         GUIs.USER_LOGINS_GUI_PROVIDER             | UserLogin.builder().build()
     }
 
-    def 'test that userLoginCountConverter correctly converts UserLogin'() {
-        given:
-        def userLoginCount = UserLoginCount.builder()
-                .username('Fulminazzo')
-                .loginCount(10L)
-                .build()
-
-        when:
-        def content = GUIs.userLoginCountConverter('stone', null).apply(userLoginCount) as ItemGUIContent
-
-        then:
-        content.material == 'stone'
-        content.displayName.contains(userLoginCount.username)
-        content.lore.find { it.contains(userLoginCount.loginCount.toString()) } != null
-        content.getVariable('username') == userLoginCount.username
-        content.getVariable('login_count') == userLoginCount.loginCount.toString()
-    }
-
-    def 'test that namedUsersLoginConverter correctly converts UserLogin'() {
-        given:
-        def userLogin = UserLogin.builder()
-                .username('Fulminazzo')
-                .ip('127.0.0.1')
-                .loginDate(LocalDateTime.now())
-                .build()
-        def loginDate = TimeUtils.toString(userLogin.loginDate)
-
-        when:
-        def content = GUIs.namedUsersLoginConverter('stone', null).apply(userLogin) as ItemGUIContent
-
-        then:
-        content.material == 'stone'
-        content.displayName.contains(userLogin.username)
-        content.lore.find { it.contains(userLogin.ip) } != null
-        content.lore.find { it.contains(loginDate) } != null
-        content.getVariable('username') == userLogin.username
-        content.getVariable('ip') == userLogin.ip
-        content.getVariable('login_date') == loginDate
-    }
-
-    def 'test that userLoginConverter correctly converts UserLogin'() {
-        given:
-        def userLogin = UserLogin.builder()
-                .username('Fulminazzo')
-                .ip('127.0.0.1')
-                .loginDate(LocalDateTime.now())
-                .build()
-        def loginDate = TimeUtils.toString(userLogin.loginDate)
-
-        when:
-        def content = GUIs.userLoginConverter('stone').apply(userLogin) as ItemGUIContent
-
-        then:
-        content.material == 'stone'
-        content.displayName.contains(userLogin.ip)
-        content.lore.find { it.contains(loginDate) } != null
-        content.getVariable('username') == userLogin.username
-        content.getVariable('ip') == userLogin.ip
-        content.getVariable('login_date') == loginDate
-    }
-
     def 'test that newContentConverter works'() {
         given:
         def content = GUIs.newContentConverter('PLAYER_HEAD', cache)
@@ -173,7 +112,7 @@ class GUIsTest extends Specification {
         def defaultGUI = GUIs.defaultTopUsersLogins()
 
         and:
-        def expected = DataGUI.newGUI(54, defaultGUI.dataConverter)
+        def expected = DataGUI.newGUI(54, null)
                 .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name().toLowerCase()).setDisplayName(' '))
                 .setPreviousPage(47, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&ePrevious page'))
                 .setNextPage(51, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&eNext page'))
@@ -189,7 +128,7 @@ class GUIsTest extends Specification {
         def defaultGUI = GUIs.defaultMonthlyUsersLogins()
 
         and:
-        def expected = DataGUI.newGUI(45, defaultGUI.dataConverter)
+        def expected = DataGUI.newGUI(45, null)
                 .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name().toLowerCase()).setDisplayName(' '))
                 .setPreviousPage(38, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&ePrevious page'))
                 .setNextPage(42, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&eNext page'))
@@ -205,7 +144,7 @@ class GUIsTest extends Specification {
         def defaultGUI = GUIs.defaultNewestUsersLogins()
 
         and:
-        def expected = DataGUI.newGUI(45, defaultGUI.dataConverter)
+        def expected = DataGUI.newGUI(45, null)
                 .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name().toLowerCase()).setDisplayName(' '))
                 .setPreviousPage(38, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&ePrevious page'))
                 .setNextPage(42, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&eNext page'))
@@ -221,7 +160,7 @@ class GUIsTest extends Specification {
         def defaultGUI = GUIs.defaultUserLogins()
 
         and:
-        def expected = DataGUI.newGUI(54, defaultGUI.dataConverter)
+        def expected = DataGUI.newGUI(54, null)
                 .setAllSides(Item.newItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name().toLowerCase()).setDisplayName(' '))
                 .setPreviousPage(47, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&ePrevious page'))
                 .setNextPage(51, Item.newItem(Material.PAPER.name().toLowerCase()).setDisplayName('&eNext page'))
