@@ -33,6 +33,41 @@ class USSubCommandTest extends Specification {
         UserStalker.instance = plugin
     }
 
+    def 'test that HelpSubCommand sends #number messages for arguments #args'() {
+        given:
+        def subcommand = new HelpSubCommand(plugin, new USCommand(plugin))
+
+        and:
+        sender.hasPermission(_ as String) >> true
+
+        when:
+        subcommand.execute(sender, args.toArray())
+
+        then:
+        number * sender.sendMessage(_ as String)
+
+        where:
+        number || args
+        1      || ['notexisting']
+        2      || ['o']
+        1      || ['?']
+        3      || []
+    }
+
+    def 'test that HelpSubCommand sends one message if no permission'() {
+        given:
+        def subcommand = new HelpSubCommand(plugin, new USCommand(plugin))
+
+        and:
+        sender.hasPermission(_ as String) >> true
+
+        when:
+        subcommand.execute(sender, args.toArray())
+
+        then:
+        1 * sender.sendMessage(_ as String)
+    }
+
     def 'test that OpenGUISubCommand executes correctly'() {
         given:
         def subcommand = new OpenGUISubCommand(plugin)
