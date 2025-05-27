@@ -80,7 +80,7 @@ public final class USGUIManager {
                         l,
                         newestUsersLoginsGUIContent,
                         (v, g, c) -> openUserLoginsGUI(player, c.getVariable("username"), g)
-                ),
+                ).open(GUIManager.getViewer(player)),
                 () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
     }
