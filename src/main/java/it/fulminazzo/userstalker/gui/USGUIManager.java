@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class USGUIManager {
 
-    private final @NotNull Logger logger;
     private final @NotNull USAsyncApiClient client;
 
     private final @Nullable ProfileCache cache;
