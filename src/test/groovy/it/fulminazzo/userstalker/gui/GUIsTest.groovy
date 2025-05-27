@@ -97,7 +97,7 @@ class GUIsTest extends Specification {
         when:
         def content = GUIs.setupMetadataConversion(
                 ItemGUIContent.newInstance(material),
-                cache
+                profileCache
         )
         content.setVariable('username', username)
 
