@@ -8,6 +8,7 @@ import it.fulminazzo.yagl.actions.GUIItemAction;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
+import it.fulminazzo.yagl.guis.GUI;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -57,25 +58,32 @@ public final class USGUIManager {
     /**
      * Returns a copy of the given GUI.
      *
-     * @param <T>     the type of the data
-     * @param gui     the gui
-     * @param data    the data
-     * @param content the content to use to display data. Will be parsed using {@link #prepareContent(GUIContent, Object, GUIItemAction)}
-     * @param onClick the action executed upon clicking on the content
+     * @param <T>         the type of the data
+     * @param previousGUI the gui that should be opened upon clicking on the back item
+     * @param gui         the gui
+     * @param data        the data
+     * @param content     the content to use to display data. Will be parsed using {@link #prepareContent(GUIContent, Object, GUIItemAction)}
+     * @param onClick     the action executed upon clicking on the content
      * @return the parsed gui
      */
     <T> @NotNull DataGUI<T> prepareGUI(
+            final @Nullable GUI previousGUI,
             @NotNull DataGUI<T> gui,
             final @NotNull Collection<T> data,
             final @NotNull GUIContent content,
             final @Nullable GUIItemAction onClick
     ) {
         gui = DataGUI.newGUI(gui.size(), o -> prepareContent(content, o, onClick), data).copyFrom(gui, false);
-        if (backGUIContent != null) {
+        if (backGUIContent != null && previousGUI != null) {
             int slot = gui.size() - backGUIContentSlotOffset;
             if (slot < 0) {
                 //TODO: error
-            } else gui.setContents(slot, backGUIContent);
+            } else {
+                gui.onCloseGUI((v, g) -> previousGUI.open(v));
+                gui.setContents(slot, backGUIContent.copy()
+                        .onClickItem((v, g, c) -> previousGUI.open(v))
+                );
+            }
         }
         return gui;
     }
