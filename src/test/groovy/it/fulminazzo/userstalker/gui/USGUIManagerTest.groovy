@@ -110,11 +110,11 @@ class USGUIManagerTest extends Specification {
         def gui = DataGUI.newGUI(27, null)
 
         and:
-        new Refl<>(manager).setFieldObject('backGUIContentSlotOffset', 36)
+        new Refl<>(manager).setFieldObject('backGUIContentSlotOffset', -36)
 
         when:
         manager.prepareGUI(
-                null,
+                Mock(GUI),
                 gui,
                 ['data'],
                 ItemGUIContent.newInstance('STONE'),
