@@ -2,6 +2,8 @@ package it.fulminazzo.userstalker.gui
 
 import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.jbukkit.BukkitUtils
+import it.fulminazzo.userstalker.MockFileConfiguration
+import it.fulminazzo.userstalker.UserStalker
 import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.userstalker.meta.SMMockItemFactory
 import it.fulminazzo.yagl.GUIManager
@@ -29,6 +31,14 @@ class USGUIManagerTest extends Specification {
     void setupSpec() {
         BukkitUtils.setupServer()
         Mockito.when(Bukkit.getServer().getItemFactory()).thenReturn(new SMMockItemFactory())
+
+        def messages = new MockFileConfiguration([
+                'internal-error': 'Internal error'
+        ])
+
+        def plugin = Mock(UserStalker)
+        plugin.messages >> messages
+        UserStalker.instance = plugin
 
         GUIYAGLParser.addAllParsers()
 
