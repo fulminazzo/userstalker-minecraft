@@ -126,6 +126,16 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     }
 
     /**
+     * Gets api client.
+     *
+     * @return the api client
+     */
+    public @NotNull USAsyncApiClient getApiClient() {
+        if (apiClient == null) throw new IllegalStateException("API client not yet initialized");
+        return apiClient;
+    }
+
+    /**
      * Sets up a new api client.
      *
      * @return the api client
