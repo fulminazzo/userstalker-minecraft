@@ -26,7 +26,11 @@ public final class USCommand implements TabExecutor {
      */
     public USCommand(final @NotNull UserStalker plugin) {
         this.plugin = plugin;
-        this.subCommands = Arrays.asList();
+        this.subCommands = Arrays.asList(
+                new OpenGUISubCommand(plugin),
+                new ReloadSubCommand(plugin),
+                new HelpSubCommand(plugin, this)
+        );
     }
 
     @Override
