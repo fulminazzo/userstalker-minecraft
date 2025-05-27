@@ -12,6 +12,7 @@ import it.fulminazzo.yagl.Metadatable;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
+import it.fulminazzo.yagl.guis.GUI;
 import it.fulminazzo.yagl.guis.PageableGUI;
 import it.fulminazzo.yagl.items.BukkitItem;
 import it.fulminazzo.yagl.items.Item;
@@ -93,6 +94,51 @@ public final class GUIs {
     public static @NotNull GUIContent defaultBackItem() {
         return ItemGUIContent.newInstance(Material.BARRIER.name().toLowerCase())
                 .setDisplayName("&cBack");
+    }
+
+    /**
+     * Returns the default main menu gui.
+     *
+     * @return the gui
+     */
+    public static @NotNull GUI defaultMainMenu() {
+        ItemGUIContent border = ItemGUIContent.newInstance(Material.LIGHT_BLUE_STAINED_GLASS_PANE.name().toLowerCase())
+                .setDisplayName(" ");
+        return GUI.newGUI(54)
+                .setTitle("&cUserStalker Main Menu")
+                .setAllSides(border)
+                .setContents(9, border)
+                .setContents(16, border)
+                .setContents(37, border)
+                .setContents(43, border)
+                .setContents(22, ItemGUIContent.newInstance(Material.DIAMOND_BLOCK.name().toLowerCase())
+                        .setDisplayName("&bTop users logins")
+                        .setLore(
+                                "&eShows the number of logins per user,",
+                                "&esorted from highest to lowest."
+                        )
+                        .setVariable("action", "open-gui-top")
+                )
+                .setContents(30, ItemGUIContent.newInstance(Material.EMERALD_BLOCK.name().toLowerCase())
+                        .setDisplayName("&2Newest users logins")
+                        .setLore(
+                                "&eShows the latest users logins",
+                                "&esorted by newest."
+                        )
+                        .setVariable("action", "open-gui-newest")
+                )
+                .setContents(32, ItemGUIContent.newInstance(Material.GOLD_BLOCK.name().toLowerCase())
+                        .setDisplayName("&6Monthly users logins")
+                        .setLore(
+                                "&eShows the number of logins per user,",
+                                "&esorted from highest to lowest",
+                                "&eof the current month."
+                        )
+                        .setVariable("action", "open-gui-monthly")
+                )
+                .setContents(45, ItemGUIContent.newInstance(Material.BARRIER.name().toLowerCase())
+                        .setDisplayName("&cClose")
+                );
     }
 
     /**
