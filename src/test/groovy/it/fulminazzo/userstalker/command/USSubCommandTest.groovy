@@ -41,7 +41,7 @@ class USSubCommandTest extends Specification {
         sender.hasPermission(_ as String) >> true
 
         when:
-        subcommand.execute(sender, args.toArray())
+        subcommand.execute(sender, args.toArray(new String[0]))
 
         then:
         number * sender.sendMessage(_ as String)
@@ -59,21 +59,21 @@ class USSubCommandTest extends Specification {
         def subcommand = new HelpSubCommand(plugin, new USCommand(plugin))
 
         and:
-        sender.hasPermission(_ as String) >> { args ->
-            String perm = args[0]
+        sender.hasPermission(_ as String) >> { a ->
+            String perm = a[0]
             return !perm.contains('help')
         }
 
         when:
-        def list = subcommand.tabComplete(sender, args.toArray())
+        def list = subcommand.tabComplete(sender, args.toArray(new String[0]))
 
         then:
         list == expected
 
         where:
-        args    || expected
-        []      || []
-        ['rel'] || ['reload', 'opengui', 'open', 'gui']
+        args || expected
+        []        || []
+        ['rel']   || ['opengui', 'open', 'gui', 'reload']
     }
 
     def 'test that HelpSubCommand sends one message if no permission'() {
@@ -84,7 +84,7 @@ class USSubCommandTest extends Specification {
         sender.hasPermission(_ as String) >> true
 
         when:
-        subcommand.execute(sender, args.toArray())
+        subcommand.execute(sender, new String[0])
 
         then:
         1 * sender.sendMessage(_ as String)
