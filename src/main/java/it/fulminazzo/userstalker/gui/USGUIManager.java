@@ -67,6 +67,25 @@ public final class USGUIManager {
     }
 
     /**
+     * Queries the {@link #client} to get the top monthly accesses on the server.
+     * Then, it shows them in a GUI.
+     *
+     * @param player the player
+     */
+    public void openMonthlyUserLoginsGUI(final @NotNull Player player) {
+        client.getMonthlyUserLoginsAndThen(
+                l -> prepareGUI(
+                        mainMenu(),
+                        monthlyUsersLoginsGUI,
+                        l,
+                        monthlyUsersLoginsGUIContent,
+                        (v, g, c) -> openUserLoginsGUI(player, c.getVariable("username"), g)
+                ).open(GUIManager.getViewer(player)),
+                () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
+        );
+    }
+
+    /**
      * Queries the {@link #client} to get the newest accesses on the server.
      * Then, it shows them in a GUI.
      *
