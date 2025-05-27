@@ -15,6 +15,7 @@ import it.fulminazzo.yagl.parsers.GUIYAGLParser
 import it.fulminazzo.yagl.viewers.Viewer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
 import org.mockito.Mockito
 import spock.lang.Specification
 
@@ -30,6 +31,7 @@ class USGUIManagerTest extends Specification {
 
     void setupSpec() {
         BukkitUtils.setupServer()
+        Mockito.when(Bukkit.getServer().isPrimaryThread()).thenReturn(true)
         Mockito.when(Bukkit.getServer().getItemFactory()).thenReturn(new SMMockItemFactory())
 
         def messages = new MockFileConfiguration([
@@ -42,6 +44,8 @@ class USGUIManagerTest extends Specification {
 
         GUIYAGLParser.addAllParsers()
 
+        new GUIManager()
+
         manager = USGUIManager.builder()
                 .logger(Logger.getLogger(getClass().simpleName))
                 .apiClient(new MockAPIClient())
@@ -52,6 +56,13 @@ class USGUIManagerTest extends Specification {
     def 'test that openUserLoginsGUI of valid opens GUI'() {
         given:
         def player = Mock(Player)
+        player.uniqueId >> UUID.randomUUID()
+        player.name >> 'Fulminazzo'
+        player.displayName >> 'Fulminazzo'
+        player.server >> Bukkit.server
+
+        and:
+        BukkitUtils.PLAYERS.add(player)
 
         when:
         manager.openUserLoginsGUI(player, 'valid')
@@ -61,6 +72,7 @@ class USGUIManagerTest extends Specification {
         viewer != null
         viewer.openGUI != null
         viewer.openGUI.title == GUIs.defaultUserLogins().title.replace('<username>', 'valid')
+        1 * player.openInventory(_ as Inventory)
     }
 
     def 'test that openUserLoginsGUI of invalid does not throw'() {
@@ -72,6 +84,7 @@ class USGUIManagerTest extends Specification {
 
         then:
         noExceptionThrown()
+        1 * player.sendMessage(_ as String)
     }
 
     def 'test that prepareGUI sets correct back action'() {
