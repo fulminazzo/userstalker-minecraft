@@ -12,6 +12,7 @@ import it.fulminazzo.yagl.guis.GUI;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +34,7 @@ import static it.fulminazzo.userstalker.gui.GUIs.setupVariables;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class USGUIManager {
 
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(USGUIManager.class);
     private final @Nullable Logger logger;
 
     private final @NotNull USAsyncApiClient client;
@@ -72,24 +74,29 @@ public final class USGUIManager {
      */
     <T> @NotNull DataGUI<T> prepareGUI(
             final @Nullable GUI previousGUI,
-            @NotNull DataGUI<T> gui,
+            final @NotNull DataGUI<T> gui,
             final @NotNull Collection<T> data,
             final @NotNull GUIContent content,
             final @Nullable GUIItemAction onClick
     ) {
-        gui = DataGUI.newGUI(gui.size(), o -> prepareContent(content, o, onClick), data).copyFrom(gui, false);
+        final @NotNull DataGUI<T> newGUI = DataGUI
+                .newGUI(gui.size(), o -> prepareContent(content, o, onClick), data)
+                .copyFrom(gui, false);
         if (backGUIContent != null && previousGUI != null) {
-            int slot = gui.size() + backGUIContentSlotOffset;
+            final int slot = newGUI.size() + backGUIContentSlotOffset;
             if (slot < 0) {
-                //TODO: error
+                getLogger().ifPresent(logger ->
+                        logger.warning(String.format("Invalid slot for back item provided: offset %s is too low for size %s",
+                                backGUIContentSlotOffset,
+                                newGUI.size())));
             } else {
-                gui.onCloseGUI((v, g) -> previousGUI.open(v));
-                gui.setContents(slot, backGUIContent.copy()
+                newGUI.onCloseGUI((v, g) -> previousGUI.open(v));
+                newGUI.setContents(slot, backGUIContent.copy()
                         .onClickItem((v, g, c) -> previousGUI.open(v))
                 );
             }
         }
-        return gui;
+        return newGUI;
     }
 
     /**
