@@ -20,7 +20,7 @@ abstract class USSubCommand {
     protected final @NotNull UserStalker plugin;
     private final @NotNull List<String> aliases;
     private final @NotNull String permission;
-    private final @NotNull String description;
+    private final @NotNull Messages description;
 
     /**
      * Instantiates a new sub command.
@@ -37,7 +37,7 @@ abstract class USSubCommand {
         this.plugin = plugin;
         this.aliases = Arrays.asList(aliases);
         this.permission = String.format("%s.command.%s", plugin.getName(), permission).toLowerCase();
-        this.description = description.getMessage();
+        this.description = description;
     }
 
     /**
