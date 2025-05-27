@@ -9,6 +9,7 @@ import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.guis.GUI
 import it.fulminazzo.yagl.items.BukkitItem
 import it.fulminazzo.yagl.parsers.GUIYAGLParser
+import it.fulminazzo.yagl.viewers.Viewer
 import org.bukkit.Bukkit
 import org.mockito.Mockito
 import spock.lang.Specification
@@ -33,7 +34,7 @@ class USGUIManagerTest extends Specification {
                 .build()
     }
 
-    def 'test that prepareGUI sets correct backGUIContent'() {
+    def 'test that prepareGUI sets correct back action'() {
         given:
         def gui = DataGUI.newGUI(27, null)
 
@@ -50,10 +51,9 @@ class USGUIManagerTest extends Specification {
         def contents = gui.getContents(18)
 
         then:
-        if (backGUIContent != null && previousGUI != null) {
-            contents.size() > 0
-            contents.get(0) == backGUIContent
-        } else contents.size() == 0
+        contents.size() > 0
+        def content = contents.get(0)
+        content == backGUIContent
 
         where:
         previousGUI | backGUIContent
@@ -61,6 +61,29 @@ class USGUIManagerTest extends Specification {
         Mock(GUI)   | null
         null        | ItemGUIContent.newInstance('BARRIER')
         Mock(GUI)   | ItemGUIContent.newInstance('BARRIER')
+    }
+
+    def 'test that prepareGUI ignores back content when content is #backGUIContent and previous GUI is #previousGUI'() {
+        given:
+        def gui = DataGUI.newGUI(27, null)
+
+        when:
+        gui = manager.prepareGUI(
+                previousGUI,
+                gui,
+                ['data'],
+                ItemGUIContent.newInstance('STONE'),
+                (v, g, c) -> { }
+        )
+
+        then:
+        gui.getContents(18).size() == 0
+
+        where:
+        previousGUI | backGUIContent
+        null        | null
+        Mock(GUI)   | null
+        null        | ItemGUIContent.newInstance('BARRIER')
     }
 
     def 'test that prepareContent correctly updates content when action is #action'() {
