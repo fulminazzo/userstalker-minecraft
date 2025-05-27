@@ -161,10 +161,8 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
     private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
                                   final @NotNull String path,
                                   final @NotNull DataGUI<T> defaultGUI) {
-        if (config.contains(path)) {
-            DataGUI<T> gui = config.get(path, DataGUI.class);
-            if (gui != null) return gui;
-        }
+        DataGUI<T> gui = config.get(path, DataGUI.class);
+        if (gui != null) return gui;
         getLogger().ifPresent(logger -> logger.warning(String.format("Could not find gui \"%s\" in guis.yml. Using default GUI", path)));
         return defaultGUI;
     }
@@ -172,10 +170,8 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
     private GUIContent getContent(final @NotNull FileConfiguration config,
                                   final @NotNull String path,
                                   final @NotNull GUIContent defaultContent) {
-        if (config.contains(path)) {
-            ItemGUIContent item = config.get(path, ItemGUIContent.class);
-            if (item != null) return item;
-        }
+        ItemGUIContent item = config.get(path, ItemGUIContent.class);
+        if (item != null) return item;
         getLogger().ifPresent(logger -> logger.warning(String.format("Could not find item \"%s\" in guis.yml. Using default item", path)));
         return defaultContent;
     }
