@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.gui
 
+import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.yagl.parsers.GUIYAGLParser
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
@@ -187,6 +188,20 @@ class USGUIManagerBuilderTest extends Specification {
         10   || -9
         -1   || -1
         -3   || -3
+    }
+
+    def 'test that #methodName throws if not specified'() {
+        given:
+        def builder = new USGUIManagerBuilder()
+
+        when:
+        builder."$methodName"()
+
+        then:
+        thrown(ConfigurationException)
+
+        where:
+        methodName << ['getPluginDirectory', 'getApiClient']
     }
 
 }
