@@ -7,6 +7,7 @@ import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.cache.ProfileCacheException;
 import it.fulminazzo.userstalker.client.APIClientException;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
+import it.fulminazzo.userstalker.command.USCommand;
 import it.fulminazzo.userstalker.gui.USGUIManager;
 import it.fulminazzo.userstalker.listener.PlayerListener;
 import it.fulminazzo.yagl.parsers.GUIYAGLParser;
@@ -49,6 +50,8 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
             forceDisable();
             return;
         }
+
+        getCommand("userstalker").setExecutor(new USCommand(this));
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
 
