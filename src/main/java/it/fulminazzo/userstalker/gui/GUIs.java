@@ -86,6 +86,16 @@ public final class GUIs {
     }
 
     /**
+     * Gets the default back item.
+     *
+     * @return the gui content
+     */
+    public static @NotNull GUIContent defaultBackItem() {
+        return ItemGUIContent.newInstance(Material.BARRIER.name().toLowerCase())
+                .setDisplayName("&cBack");
+    }
+
+    /**
      * Returns the default top users logins gui.
      *
      * @return the gui
