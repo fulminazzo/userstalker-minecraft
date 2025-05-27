@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import static it.fulminazzo.userstalker.gui.GUIs.setupMetadataConversion;
@@ -108,6 +109,15 @@ public final class USGUIManager {
         content = setupMetadataConversion((ItemGUIContent) content, cache);
         if (onClick != null) content.onClickItem(onClick);
         return content;
+    }
+
+    /**
+     * Gets the logger.
+     *
+     * @return an optional containing the logger (if not null)
+     */
+    @NotNull Optional<Logger> getLogger() {
+        return Optional.ofNullable(logger);
     }
 
     /**
