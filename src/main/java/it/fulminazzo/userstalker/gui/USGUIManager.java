@@ -12,13 +12,15 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.logging.Logger;
-
 /**
  * A class responsible for creating and displaying all the plugin 
  */
-@Builder(builderMethodName = "internalBuilder", access = AccessLevel.PACKAGE)
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder(
+        builderMethodName = "internalBuilder",
+        access = AccessLevel.PACKAGE,
+        builderClassName = "USGUIManagerInternalBuilder"
+)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class USGUIManager {
 
     private final @NotNull USAsyncApiClient client;
