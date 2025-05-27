@@ -3,12 +3,15 @@ package it.fulminazzo.userstalker
 import it.fulminazzo.fulmicommands.FulmiException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationType
+import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.cache.ProfileCache
 import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.client.APIClientException
 import it.fulminazzo.userstalker.gui.MockProfileCache
+import org.bukkit.Bukkit
 import org.bukkit.Server
 import org.bukkit.plugin.PluginManager
+import org.mockito.Mockito
 import spock.lang.Specification
 
 import java.util.logging.Logger
@@ -20,6 +23,10 @@ class UserStalkerTest extends Specification {
     private UserStalker plugin
 
     void setup() {
+        BukkitUtils.setupServer()
+        def pluginManager = Mock(PluginManager)
+        Mockito.when(Bukkit.server.pluginManager).thenReturn(pluginManager)
+
         plugin = Mock(UserStalker)
 
         plugin.logger >> Logger.getLogger(getClass().simpleName)
