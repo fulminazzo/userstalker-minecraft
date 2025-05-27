@@ -22,9 +22,13 @@ public enum Messages implements DefaultFulmiMessages {
     CONSOLE_CANNOT_EXECUTE("error.console-cannot-execute", "<prefix>&cConsole cannot execute this command."),
     RELOAD_UNSUCCESSFUL("general.reload-unsuccessful", "<prefix>&cPlugin reload failed with error: &4<error>&c. " +
             "Check console for more details"),
+    SUBCOMMAND_NOT_FOUND("error.subcommand-not-found", "<prefix>&cNo such subcommand: &4<subcommand>"),
 
     HELP_RELOAD("help.reload", "Reloads the plugin configurations"),
-    HELP_OPEN_GUI("help.open-gui", "Opens the main plugin GUI")
+    HELP_OPEN_GUI("help.open-gui", "Opens the main plugin GUI"),
+    HELP_HELP("help.help", "Shows descriptions for the requested subcommands"),
+
+    HELP_DESCRIPTION("help.description", "&c/<name> &8- &e<description>")
 
     ;
 
