@@ -39,6 +39,8 @@ public final class USGUIManager {
     private DataGUI<UserLogin> userLoginsGUI;
     private GUIContent userLoginsGUIContent;
 
+    private GUIContent backGUIContent;
+
     /**
      * Instantiates a new GUI manager.
      *
@@ -86,6 +88,8 @@ public final class USGUIManager {
                     c.set("guis.user-logins", GUIs.defaultUserLogins());
                     c.set("items.user-logins", GUIs.defaultUserLoginItem());
 
+                    c.set("items.back", GUIs.defaultBackItem());
+
                     c.save();
                 })
                 .build();
@@ -101,6 +105,8 @@ public final class USGUIManager {
 
         userLoginsGUI = getGUI(config, "guis.user-logins", GUIs.defaultUserLogins());
         userLoginsGUIContent = getContent(config, "items.user-logins", GUIs.defaultUserLoginItem());
+
+        backGUIContent = getContent(config, "items.back", GUIs.defaultBackItem());
     }
 
     private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
