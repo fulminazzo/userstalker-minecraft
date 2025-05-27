@@ -36,7 +36,9 @@ class USGUIManagerTest extends Specification {
         Mockito.when(Bukkit.getServer().getItemFactory()).thenReturn(new SMMockItemFactory())
 
         def messages = new MockFileConfiguration([
-                'internal-error': 'Internal error'
+                'general': [
+                        'internal-error': 'Internal error'
+                ]
         ])
 
         def plugin = Mock(UserStalker)
