@@ -56,16 +56,13 @@ class USGUIManagerTest extends Specification {
                 .build()
     }
 
+    void cleanup() {
+        BukkitUtils.PLAYERS.clear()
+    }
+
     def 'test that openNewestUserLoginsGUI of valid opens GUI'() {
         given:
-        def player = Mock(Player)
-        player.uniqueId >> UUID.randomUUID()
-        player.name >> 'Fulminazzo'
-        player.displayName >> 'Fulminazzo'
-        player.server >> Bukkit.server
-
-        and:
-        BukkitUtils.PLAYERS.add(player)
+        def player = getNewPlayer()
 
         when:
         manager.openNewestUserLoginsGUI(player)
@@ -80,14 +77,7 @@ class USGUIManagerTest extends Specification {
 
     def 'test that openUserLoginsGUI of valid opens GUI'() {
         given:
-        def player = Mock(Player)
-        player.uniqueId >> UUID.randomUUID()
-        player.name >> 'Fulminazzo'
-        player.displayName >> 'Fulminazzo'
-        player.server >> Bukkit.server
-
-        and:
-        BukkitUtils.PLAYERS.add(player)
+        def player = getNewPlayer()
 
         when:
         manager.openUserLoginsGUI(player, 'valid')
@@ -246,6 +236,16 @@ class USGUIManagerTest extends Specification {
     def 'test manager does load'() {
         expect:
         true
+    }
+
+    private Player getNewPlayer() {
+        def player = Mock(Player)
+        player.uniqueId >> UUID.randomUUID()
+        player.name >> 'Fulminazzo'
+        player.displayName >> 'Fulminazzo'
+        player.server >> Bukkit.server
+        BukkitUtils.PLAYERS.add(player)
+        return player
     }
 
 }
