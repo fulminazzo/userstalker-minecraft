@@ -82,6 +82,7 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
         int backGUIContentSlotOffset = getBackContentOffset(config);
 
         return USGUIManager.internalBuilder()
+                .logger(getLogger().orElse(null))
                 .client(getApiClient())
                 .cache(skinCache)
                 .topUsersLoginsGUI(topUsersLoginsGUI)

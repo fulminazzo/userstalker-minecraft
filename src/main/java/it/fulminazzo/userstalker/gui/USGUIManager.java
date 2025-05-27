@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import static it.fulminazzo.userstalker.gui.GUIs.setupMetadataConversion;
 import static it.fulminazzo.userstalker.gui.GUIs.setupVariables;
@@ -30,6 +31,8 @@ import static it.fulminazzo.userstalker.gui.GUIs.setupVariables;
 )
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class USGUIManager {
+
+    private final @Nullable Logger logger;
 
     private final @NotNull USAsyncApiClient client;
 
