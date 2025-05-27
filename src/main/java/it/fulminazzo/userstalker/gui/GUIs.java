@@ -138,6 +138,7 @@ public final class GUIs {
                 )
                 .setContents(45, ItemGUIContent.newInstance(Material.BARRIER.name().toLowerCase())
                         .setDisplayName("&cClose")
+                        .setVariable("action", "close")
                 );
     }
 
