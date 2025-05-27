@@ -23,8 +23,7 @@ final class HelpSubCommand extends USSubCommand {
         List<USSubCommand> commands = command.getExecutableCommands(sender).collect(Collectors.toList());
         if (args.length == 1) {
             String argument = args[0];
-            commands.removeIf(c -> c.getAliases().stream()
-                    .anyMatch(a -> a.toLowerCase().startsWith(argument.toLowerCase())));
+            commands.removeIf(c -> !c.matches(argument));
             if (commands.isEmpty()) {
                 sender.sendMessage(Messages.SUBCOMMAND_NOT_FOUND.getMessage()
                         .replace("<subcommand>", argument));
