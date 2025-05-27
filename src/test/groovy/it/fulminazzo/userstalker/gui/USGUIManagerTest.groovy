@@ -2,7 +2,6 @@ package it.fulminazzo.userstalker.gui
 
 import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.jbukkit.BukkitUtils
-import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.userstalker.meta.SMMockItemFactory
 import it.fulminazzo.yagl.GUIManager
@@ -35,7 +34,7 @@ class USGUIManagerTest extends Specification {
 
         manager = USGUIManager.builder()
                 .logger(Logger.getLogger(getClass().simpleName))
-                .apiClient(Mock(USAsyncApiClient))
+                .apiClient(new MockAPIClient())
                 .pluginDirectory(PLUGIN_DIRECTORY)
                 .build()
     }
