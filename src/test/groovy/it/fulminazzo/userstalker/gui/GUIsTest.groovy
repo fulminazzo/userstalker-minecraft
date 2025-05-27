@@ -53,10 +53,12 @@ class GUIsTest extends Specification {
         GUIs.USER_LOGINS_GUI_PROVIDER             | UserLogin.builder().build()
     }
 
-    def 'test that newContentConverter works'() {
+    def 'test that setupMetadataConversion works'() {
         given:
-        def content = GUIs.newContentConverter('PLAYER_HEAD', cache)
-                .setVariable('username', 'valid')
+        def content = GUIs.setupMetadataConversion(
+                ItemGUIContent.newInstance('PLAYER_HEAD'),
+                cache
+        ).setVariable('username', 'valid')
 
         when:
         def itemStack = content.render().copy(BukkitItem).create()
@@ -68,10 +70,12 @@ class GUIsTest extends Specification {
         skullMeta.profile.name == 'valid'
     }
 
-    def 'test that newContentConverter does not throw'() {
+    def 'test that setupMetadataConversion does not throw'() {
         given:
-        def content = GUIs.newContentConverter('PLAYER_HEAD', cache)
-                .setVariable('username', 'error')
+        def content = GUIs.setupMetadataConversion(
+                ItemGUIContent.newInstance('PLAYER_HEAD'),
+                cache
+        ).setVariable('username', 'error')
 
         and:
         def plugin = Mock(JavaPlugin)
@@ -89,9 +93,12 @@ class GUIsTest extends Specification {
         noExceptionThrown()
     }
 
-    def 'test that newContentConverter returns expected content'() {
+    def 'test that setupMetadataConversion returns expected content'() {
         when:
-        def content = GUIs.newContentConverter(material, profileCache)
+        def content = GUIs.setupMetadataConversion(
+                ItemGUIContent.newInstance(material),
+                cache
+        )
         content.setVariable('username', username)
 
         def render = content.render().copy(BukkitItem).create()
