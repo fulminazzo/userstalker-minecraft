@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * The main command of UserStalker.
@@ -47,6 +48,16 @@ public final class USCommand implements TabExecutor {
                                                @NotNull String alias,
                                                @NotNull String[] args) {
         return Collections.emptyList();
+    }
+
+    /**
+     * Gets the executable commands.
+     *
+     * @param sender the sender
+     * @return the executable commands
+     */
+    @NotNull Stream<USSubCommand> getExecutableCommands(@NotNull CommandSender sender) {
+        return getSubCommands().stream().filter(c -> sender.hasPermission(c.getPermission()));
     }
 
 }

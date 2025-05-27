@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 final class HelpSubCommand extends USSubCommand {
     private final @NotNull USCommand command;
@@ -21,7 +20,7 @@ final class HelpSubCommand extends USSubCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String[] args) {
-        List<USSubCommand> commands = getExecutableCommands(sender).collect(Collectors.toList());
+        List<USSubCommand> commands = command.getExecutableCommands(sender).collect(Collectors.toList());
         if (args.length == 1) {
             String argument = args[0];
             commands.removeIf(c -> c.getAliases().stream()
@@ -46,17 +45,12 @@ final class HelpSubCommand extends USSubCommand {
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
         List<String> list = new ArrayList<>();
         if (args.length == 1)
-            list.addAll(getExecutableCommands(sender)
+            list.addAll(command.getExecutableCommands(sender)
                     .map(USSubCommand::getAliases)
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList())
             );
         return list;
-    }
-
-    private @NotNull Stream<USSubCommand> getExecutableCommands(@NotNull CommandSender sender) {
-        return command.getSubCommands().stream()
-                .filter(c -> sender.hasPermission(c.getPermission()));
     }
 
 }
