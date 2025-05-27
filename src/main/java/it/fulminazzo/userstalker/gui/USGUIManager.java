@@ -5,12 +5,16 @@ import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.yagl.contents.GUIContent;
+import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.fulminazzo.userstalker.gui.GUIs.setupMetadataConversion;
+import static it.fulminazzo.userstalker.gui.GUIs.setupVariables;
 
 /**
  * A class responsible for creating and displaying all the plugin
@@ -46,6 +50,18 @@ public final class USGUIManager {
     // getMonthlyUserLoginsAndThen
     // getNewestUserLoginsAndThen
     // getUserLoginsAndThen
+
+    /**
+     * Returns a copy of the given content with variables parsed from the object data.
+     *
+     * @param content the content
+     * @param data    the data
+     * @return the parsed content
+     */
+    @NotNull GUIContent prepareContent(@NotNull GUIContent content, final @NotNull Object data) {
+        content = setupVariables(content.copy(), data);
+        return setupMetadataConversion((ItemGUIContent) content, cache);
+    }
 
     /**
      * Returns a new builder to create an instance of gui manager.
