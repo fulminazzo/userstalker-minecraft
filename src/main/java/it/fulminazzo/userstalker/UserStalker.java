@@ -100,6 +100,16 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     }
 
     /**
+     * Gets gui manager.
+     *
+     * @return the gui manager
+     */
+    public @NotNull USGUIManager getGUIManager() {
+        if (guiManager == null) throw new IllegalStateException("GUI manager not yet initialized");
+        return guiManager;
+    }
+
+    /**
      * Sets up a new GUI manager.
      *
      * @return the gui manager
