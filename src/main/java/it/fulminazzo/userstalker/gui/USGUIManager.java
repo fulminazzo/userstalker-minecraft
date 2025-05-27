@@ -29,7 +29,9 @@ public final class USGUIManager {
 
     private DataGUI<UserLoginCount> topUsersLoginsGUI;
     private DataGUI<UserLoginCount> monthlyUsersLoginsGUI;
+
     private DataGUI<UserLogin> newestUsersLoginsGUI;
+    private GUIContent newestUsersLoginsGUIContent;
 
     private DataGUI<UserLogin> userLoginsGUI;
     private GUIContent userLoginsGUIContent;
@@ -71,7 +73,9 @@ public final class USGUIManager {
 
                     c.set("guis.top-users-logins", GUIs.defaultTopUsersLogins());
                     c.set("guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
+
                     c.set("guis.newest-users-logins", GUIs.defaultNewestUsersLogins());
+                    c.set("items.newest-users-logins", GUIs.defaultNamedUserLoginItem());
 
                     c.set("guis.user-logins", GUIs.defaultUserLogins());
                     c.set("items.user-logins", GUIs.defaultUserLoginItem());
@@ -82,7 +86,9 @@ public final class USGUIManager {
 
         topUsersLoginsGUI = getGUI(config, "guis.top-users-logins", GUIs.defaultTopUsersLogins());
         monthlyUsersLoginsGUI = getGUI(config, "guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
+
         newestUsersLoginsGUI = getGUI(config, "guis.newest-users-logins", GUIs.defaultNewestUsersLogins());
+        newestUsersLoginsGUIContent = getContent(config, "items.newest-users-logins", GUIs.defaultNamedUserLoginItem());
 
         userLoginsGUI = getGUI(config, "guis.user-logins", GUIs.defaultUserLogins());
         userLoginsGUIContent = getContent(config, "items.user-logins", GUIs.defaultUserLoginItem());
