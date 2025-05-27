@@ -132,7 +132,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
-        GUIs.defaultBackItem()           | 'items.back'                 || 'backGUIContent'
+        null                             | 'items.back'                 || 'backGUIContent'
     }
 
     def 'test setup with file but object not available uses default #objectName'() {
@@ -157,7 +157,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
-        GUIs.defaultBackItem()           | 'items.back'                 || 'backGUIContent'
+        null                             | 'items.back'                 || 'backGUIContent'
     }
 
     def 'test that getBackContentOffset of #slot returns #expected'() {
