@@ -43,28 +43,7 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     @Override
     public void onEnable() {
         try {
-            getLogger().info("Starting setup process");
-
-            getLogger().info("Loading config.yml file");
-            configuration = setupConfiguration();
-
-            getLogger().info("Loading messages.yml file");
-            messages = setupMessages(Messages.values());
-
-            getLogger().info("Setting up skin cache");
-            try {
-                profileCache = setupProfileCache();
-            } catch (ProfileCacheException e) {
-                getLogger().warning("An error occurred while setting up the skin cache");
-                getLogger().warning(e.getMessage());
-                getLogger().warning("Continuing setup without skin cache. Heads skins will not be available");
-            }
-
-            getLogger().info("Setting up internal API client");
-            apiClient = setupApiClient();
-
-            getLogger().info("Setting up GUI manager");
-            guiManager = setupGUIManager();
+            enable();
         } catch (ConfigurationException | APIClientException e) {
             getLogger().severe(e.getMessage());
             forceDisable();
@@ -76,20 +55,60 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         getLogger().info("UserStalker setup complete");
     }
 
+    /**
+     * Executes the plugin enabling process.
+     *
+     * @throws ConfigurationException in case any errors occur
+     * @throws APIClientException     in case any errors occur
+     */
+    public void enable() throws ConfigurationException, APIClientException {
+        getLogger().info("Starting setup process");
+
+        getLogger().info("Loading config.yml file");
+        configuration = setupConfiguration();
+
+        getLogger().info("Loading messages.yml file");
+        messages = setupMessages(Messages.values());
+
+        getLogger().info("Setting up skin cache");
+        try {
+            profileCache = setupProfileCache();
+        } catch (ProfileCacheException e) {
+            getLogger().warning("An error occurred while setting up the skin cache");
+            getLogger().warning(e.getMessage());
+            getLogger().warning("Continuing setup without skin cache. Heads skins will not be available");
+        }
+
+        getLogger().info("Setting up internal API client");
+        apiClient = setupApiClient();
+
+        getLogger().info("Setting up GUI manager");
+        guiManager = setupGUIManager();
+    }
+
     @Override
     public void onDisable() {
         try {
-            getLogger().info("Starting shutdown process");
-
-            if (profileCache != null) {
-                getLogger().info("Shutting down skin cache");
-                profileCache.close();
-            }
-
-            getLogger().info("Shutdown complete. Goodbye");
+            disable();
         } catch (ProfileCacheException e) {
             getLogger().severe(e.getMessage());
         }
+    }
+
+    /**
+     * Executes the plugin disabling process.
+     *
+     * @throws ProfileCacheException in case any errors occur
+     */
+    public void disable() throws ProfileCacheException {
+        getLogger().info("Starting shutdown process");
+
+        if (profileCache != null) {
+            getLogger().info("Shutting down skin cache");
+            profileCache.close();
+        }
+
+        getLogger().info("Shutdown complete. Goodbye");
     }
 
     /**
