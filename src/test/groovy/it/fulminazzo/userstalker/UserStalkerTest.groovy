@@ -33,7 +33,9 @@ class UserStalkerTest extends Specification {
         plugin.messagesType >> ConfigurationType.YAML
 
         plugin.onEnable() >> { callRealMethod() }
+        plugin.enable() >> { callRealMethod() }
         plugin.onDisable() >> { callRealMethod() }
+        plugin.disable() >> { callRealMethod() }
     }
 
     def 'test that onEnable does not throw if an error happens during #method'() {

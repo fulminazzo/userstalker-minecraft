@@ -66,9 +66,9 @@ class USSubCommandTest extends Specification {
         list == expected
 
         where:
-        args || expected
-        []        || []
-        ['rel']   || ['opengui', 'open', 'gui', 'reload']
+        args    || expected
+        []      || []
+        ['rel'] || ['reload']
     }
 
     def 'test that OpenGUISubCommand executes correctly'() {
