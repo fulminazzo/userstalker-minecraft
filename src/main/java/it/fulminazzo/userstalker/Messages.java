@@ -13,8 +13,10 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @RequiredArgsConstructor
 public enum Messages implements DefaultFulmiMessages {
-    PREFIX("prefix", "&6User&cStalker &8» &f")
-    ;
+    PREFIX("prefix", "&6User&cStalker &8» &f"),
+
+    INTERNAL_ERROR_OCCURRED("internal-error", "<prefix>&cAn internal error occurred. " +
+            "Please notify an administrator about this");
 
     private final String path;
     private final String defaultMessage;
