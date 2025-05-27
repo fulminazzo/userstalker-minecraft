@@ -1,8 +1,6 @@
 package it.fulminazzo.userstalker.gui
 
-
 import it.fulminazzo.userstalker.client.USAsyncApiClient
-import it.fulminazzo.yagl.guis.DataGUI
 import it.fulminazzo.yagl.parsers.GUIYAGLParser
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils
@@ -24,7 +22,7 @@ class USGUIManagerTest extends Specification {
         GUIYAGLParser.addAllParsers()
     }
 
-    def 'test setup with no file uses and saves default #guiName'() {
+    def 'test setup with no file uses and saves default #objectName'() {
         given:
         def file = new File(pluginDirectory, 'guis.yml')
         if (file.exists()) file.delete()
@@ -33,16 +31,17 @@ class USGUIManagerTest extends Specification {
         manager.setup(pluginDirectory)
 
         then:
-        manager."$guiName" == defaultGUI
+        manager."$objectName" == defaultObject
         def config = FileConfiguration.newConfiguration(file)
-        config.get(path, DataGUI) == defaultGUI
+        config.get(path, defaultObject.class) == defaultObject
 
         where:
-        defaultGUI                       | path                        || guiName
+        defaultObject                    | path                        || objectName
         GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'     || 'topUsersLoginsGUI'
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
+        GUIs.defaultUserLoginItem()      | 'items.user-logins'         || 'userLoginsGUIContent'
     }
 
     def 'test setup with file uses stored #guiName GUI'() {
@@ -73,7 +72,32 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
     }
 
-    def 'test setup with file but GUI null uses default #guiName GUI'() {
+    def 'test setup with file uses stored #itemName GUI'() {
+        given:
+        def file = new File(pluginDirectory, 'guis.yml')
+        if (file.exists()) file.delete()
+        FileUtils.createNewFile(file)
+
+        and:
+        def item = defaultItem.setVariable('Hello', 'world!')
+
+        and:
+        def config = FileConfiguration.newConfiguration(file)
+        config.set(path, item)
+        config.save()
+
+        when:
+        manager.setup(pluginDirectory)
+
+        then:
+        manager."$itemName" == item
+
+        where:
+        defaultItem                 | path                || itemName
+        GUIs.defaultUserLoginItem() | 'items.user-logins' || 'userLoginsGUIContent'
+    }
+
+    def 'test setup with file but object null uses default #objectName object'() {
         given:
         def file = new File(pluginDirectory, 'guis.yml')
         if (file.exists()) file.delete()
@@ -88,17 +112,18 @@ class USGUIManagerTest extends Specification {
         manager.setup(pluginDirectory)
 
         then:
-        manager."$guiName" == defaultGUI
+        manager."$objectName" == defaultObject
 
         where:
-        defaultGUI                       | path                        || guiName
+        defaultObject                    | path                        || objectName
         GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'     || 'topUsersLoginsGUI'
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
+        GUIs.defaultUserLoginItem()      | 'items.user-logins'         || 'userLoginsGUIContent'
     }
 
-    def 'test setup with file but GUI not available uses default #guiName GUI'() {
+    def 'test setup with file but object not available uses default #objectName'() {
         given:
         def file = new File(pluginDirectory, 'guis.yml')
         if (file.exists()) file.delete()
@@ -108,14 +133,15 @@ class USGUIManagerTest extends Specification {
         manager.setup(pluginDirectory)
 
         then:
-        manager."$guiName" == defaultGUI
+        manager."$objectName" == defaultObject
 
         where:
-        defaultGUI                       | path                        || guiName
+        defaultObject                    | path                        || objectName
         GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'     || 'topUsersLoginsGUI'
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
+        GUIs.defaultUserLoginItem()      | 'items.user-logins'         || 'userLoginsGUIContent'
     }
 
 }
