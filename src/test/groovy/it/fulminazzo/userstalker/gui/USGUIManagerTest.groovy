@@ -156,7 +156,7 @@ class USGUIManagerTest extends Specification {
 
     def 'test that #managerMethod of invalid does not throw'() {
         given:
-        def player = Mock(Player)
+        def player = getNewPlayer()
 
         and:
         client."$clientMethod"()
@@ -310,6 +310,7 @@ class USGUIManagerTest extends Specification {
         player.name >> 'Fulminazzo'
         player.displayName >> 'Fulminazzo'
         player.server >> Bukkit.server
+        player.online >> true
         BukkitUtils.PLAYERS.add(player)
         return player
     }
