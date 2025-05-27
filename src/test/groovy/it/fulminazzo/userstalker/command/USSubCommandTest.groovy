@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.command
 
+import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.userstalker.UserStalker
 import it.fulminazzo.userstalker.cache.ProfileCacheException
@@ -9,7 +10,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import spock.lang.Specification
 
-import javax.naming.ConfigurationException
 import java.util.logging.Logger
 
 class USSubCommandTest extends Specification {
@@ -78,21 +78,20 @@ class USSubCommandTest extends Specification {
 
     def 'test that ReloadSubCommand does not throw for exception #exception'() {
         given:
-        def subcommand = new ReloadSubCommand(plugin)
-
-        and:
         plugin.reload() >> {
             throw exception
         }
+
+        and:
+        def subcommand = new ReloadSubCommand(plugin)
 
         when:
         subcommand.execute(sender, new String[0])
 
         then:
         noExceptionThrown()
-        1 * plugin.reload()
         1 * sender.sendMessage(_ as String)
-        1 * plugin.forceReload()
+        1 * plugin.forceDisable()
 
         where:
         exception << [
