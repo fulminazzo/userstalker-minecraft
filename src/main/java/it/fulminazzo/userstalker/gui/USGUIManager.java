@@ -1,9 +1,11 @@
 package it.fulminazzo.userstalker.gui;
 
+import it.fulminazzo.userstalker.Messages;
 import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.yagl.GUIManager;
 import it.fulminazzo.yagl.actions.GUIItemAction;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
@@ -12,6 +14,7 @@ import it.fulminazzo.yagl.guis.GUI;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,15 +57,34 @@ public final class USGUIManager {
     private final @Nullable GUIContent backGUIContent;
     private final int backGUIContentSlotOffset;
 
+    // getTopUserLoginsAndThen
+    // getMonthlyUserLoginsAndThen
+    // getNewestUserLoginsAndThen
+    // getUserLoginsAndThen
     public @NotNull GUI mainMenu() {
         //TODO:
         return GUI.newGUI(9);
     }
 
-    // getTopUserLoginsAndThen
-    // getMonthlyUserLoginsAndThen
-    // getNewestUserLoginsAndThen
-    // getUserLoginsAndThen
+    /**
+     * Queries the {@link #client} to get the latest accesses of the given username.
+     * Then, it shows them in a GUI.
+     *
+     * @param player   the player to open the GUI for
+     * @param username the username of the user
+     */
+    public void openUserLoginsGUI(final @NotNull Player player, final @NotNull String username) {
+        client.getUserLoginsAndThen(username,
+                l -> prepareGUI(
+                        mainMenu(),
+                        userLoginsGUI,
+                        l,
+                        userLoginsGUIContent,
+                        null
+                ).open(GUIManager.getViewer(player)),
+                () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
+        );
+    }
 
     /**
      * Returns a copy of the given GUI.
