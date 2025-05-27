@@ -25,6 +25,7 @@ class USGUIManagerTest extends Specification {
 
     private static final File PLUGIN_DIRECTORY = new File('build/resources/test/usguimanager')
 
+    private static MockAPIClient client
     private static USGUIManager manager
 
     private static boolean clicked = false
@@ -46,9 +47,11 @@ class USGUIManagerTest extends Specification {
 
         new GUIManager()
 
+        client = new MockAPIClient()
+
         manager = USGUIManager.builder()
                 .logger(Logger.getLogger(getClass().simpleName))
-                .apiClient(new MockAPIClient())
+                .apiClient(client)
                 .pluginDirectory(PLUGIN_DIRECTORY)
                 .build()
     }
@@ -75,16 +78,26 @@ class USGUIManagerTest extends Specification {
         1 * player.openInventory(_ as Inventory)
     }
 
-    def 'test that openUserLoginsGUI of invalid does not throw'() {
+    def 'test that #managerMethod of invalid does not throw'() {
         given:
         def player = Mock(Player)
 
+        and:
+        client."$clientMethod"()
+
         when:
-        manager.openUserLoginsGUI(player, 'invalid')
+        if (managerMethod == 'openUserLoginsGUI')
+            manager.openUserLoginsGUI(player, 'invalid')
+        else
+            manager."$managerMethod"(player)
 
         then:
         noExceptionThrown()
         1 * player.sendMessage(_ as String)
+
+        where:
+        managerMethod       | clientMethod
+        'openUserLoginsGUI' | 'toString'
     }
 
     def 'test that prepareGUI sets correct back action'() {
