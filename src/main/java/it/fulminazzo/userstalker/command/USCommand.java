@@ -64,6 +64,7 @@ public final class USCommand implements TabExecutor {
             list.addAll(getExecutableCommands(sender)
                     .map(USSubCommand::getAliases)
                     .flatMap(Collection::stream)
+                    .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList())
             );
         else if (args.length > 1)
