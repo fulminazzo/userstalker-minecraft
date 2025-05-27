@@ -16,7 +16,6 @@ import java.util.stream.Stream;
  * The main command of UserStalker.
  */
 public final class USCommand implements TabExecutor {
-    private final @NotNull UserStalker plugin;
     @Getter
     private final @NotNull List<USSubCommand> subCommands;
 
@@ -26,7 +25,6 @@ public final class USCommand implements TabExecutor {
      * @param plugin the plugin
      */
     public USCommand(final @NotNull UserStalker plugin) {
-        this.plugin = plugin;
         this.subCommands = Arrays.asList(
                 new OpenGUISubCommand(plugin),
                 new ReloadSubCommand(plugin),
