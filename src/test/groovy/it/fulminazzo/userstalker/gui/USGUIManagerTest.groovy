@@ -83,8 +83,11 @@ class USGUIManagerTest extends Specification {
         def actualContent = actualGui.getContents(0).get(0)
         def action = actualContent.clickItemAction()
         action.isPresent()
+
+        when:
         action.get().execute(guiViewer.key, actualGui, actualContent)
 
+        then:
         1 * player.openInventory(_ as Inventory)
 
         def newGuiViewer = GUIManager.getOpenGUIViewer(player)
@@ -125,8 +128,11 @@ class USGUIManagerTest extends Specification {
         def actualContent = actualGui.getContents(0).get(0)
         def action = actualContent.clickItemAction()
         action.isPresent()
+
+        when:
         action.get().execute(guiViewer.key, actualGui, actualContent)
 
+        then:
         1 * player.closeInventory()
     }
 
@@ -190,8 +196,11 @@ class USGUIManagerTest extends Specification {
         def content = gui.getContents(10).get(0)
         def action = content.clickItemAction()
         action.isPresent()
+
+        when:
         action.get().execute(guiViewer.key, gui, content)
 
+        then:
         1 * player.openInventory(_ as Inventory)
 
         def newGuiViewer = GUIManager.getOpenGUIViewer(player)
