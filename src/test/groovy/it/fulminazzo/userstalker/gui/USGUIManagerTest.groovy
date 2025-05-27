@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.gui
 
+import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.userstalker.domain.UserLogin
@@ -36,6 +37,15 @@ class USGUIManagerTest extends Specification {
 
     def 'test that prepareGUI sets correct back action'() {
         given:
+        def openings = 0
+
+        and:
+        def previousGUI = Mock(GUI)
+        previousGUI.open(_) >> { openings++ }
+        def viewer = Mock(Viewer)
+
+        and:
+        def backGUIContent = ItemGUIContent.newInstance('BARRIER')
         def gui = DataGUI.newGUI(27, null)
 
         and:
@@ -56,14 +66,17 @@ class USGUIManagerTest extends Specification {
         then:
         contents.size() > 0
         def content = contents.get(0)
-        content == backGUIContent
+        content.copy().onClickItem(null) == backGUIContent
 
-        where:
-        previousGUI | backGUIContent
-        null        | null
-        Mock(GUI)   | null
-        null        | ItemGUIContent.newInstance('BARRIER')
-        Mock(GUI)   | ItemGUIContent.newInstance('BARRIER')
+        def itemAction = content.clickItemAction()
+        itemAction.isPresent()
+        itemAction.get().execute(viewer, previousGUI, content)
+        openings == 1
+
+        def closeAction = gui.closeGUIAction()
+        closeAction.isPresent()
+        closeAction.get().execute(viewer, previousGUI)
+        openings == 2
     }
 
     def 'test that prepareGUI ignores back content when content is #backGUIContent and previous GUI is #previousGUI'() {
