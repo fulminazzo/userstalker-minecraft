@@ -82,7 +82,6 @@ class USSubCommandTest extends Specification {
 
         and:
         plugin.reload() >> {
-            println ('OKKK')
             throw exception
         }
 
@@ -97,8 +96,8 @@ class USSubCommandTest extends Specification {
 
         where:
         exception << [
-//                new ProfileCacheException('Profile cache'),
-//                new APIClientException('Api client'),
+                new ProfileCacheException('Profile cache'),
+                new APIClientException('Api client'),
                 new ConfigurationException('Configuration')
         ]
     }
