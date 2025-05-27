@@ -42,7 +42,7 @@ public final class USCommand implements TabExecutor {
         else {
             String argument = args[0];
             USSubCommand subCommand = getSubCommands().stream()
-                    .filter(c -> c.matches(argument))
+                    .filter(c -> c.getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(argument)))
                     .findFirst().orElse(null);
             if (subCommand == null)
                 sender.sendMessage(Messages.SUBCOMMAND_NOT_FOUND.getMessage()
@@ -68,7 +68,8 @@ public final class USCommand implements TabExecutor {
             );
         else if (args.length > 1)
             getExecutableCommands(sender)
-                    .filter(c -> c.matches(args[0]))
+                    .filter(c -> c.getAliases().stream().anyMatch(a ->
+                            a.toLowerCase().startsWith(args[0].toLowerCase())))
                     .findFirst()
                     .ifPresent(c ->
                             list.addAll(c.tabComplete(sender, Arrays.copyOfRange(args, 1, args.length)))
