@@ -3,7 +3,9 @@ package it.fulminazzo.userstalker.command
 import it.fulminazzo.userstalker.UserStalker
 import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.client.APIClientException
+import it.fulminazzo.userstalker.gui.USGUIManager
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import spock.lang.Specification
 
 import javax.naming.ConfigurationException
@@ -18,6 +20,41 @@ class USSubCommandTest extends Specification {
         plugin = Mock(UserStalker)
 
         sender = Mock(CommandSender)
+    }
+
+    def 'test that OpenGUISubCommand executes correctly'() {
+        given:
+        def subcommand = new OpenGUISubCommand(plugin)
+
+        and:
+        def player = Mock(Player)
+
+        and:
+        def guiManager = Mock(USGUIManager)
+        plugin.getGUIManager() >> guiManager
+
+        when:
+        subcommand.execute(player, new String[0])
+
+        then:
+        noExceptionThrown()
+        1 * guiManager.openMainMenuGUI(player)
+    }
+
+    def 'test that OpenGUISubCommand refutes for non-player senders'() {
+        given:
+        def subcommand = new OpenGUISubCommand(plugin)
+
+        and:
+        def guiManager = Mock(USGUIManager)
+        plugin.getGUIManager() >> guiManager
+
+        when:
+        subcommand.execute(sender, new String[0])
+
+        then:
+        noExceptionThrown()
+        1 * sender.sendMessage(_ as String)
     }
 
     def 'test that ReloadSubCommand executes correctly'() {
