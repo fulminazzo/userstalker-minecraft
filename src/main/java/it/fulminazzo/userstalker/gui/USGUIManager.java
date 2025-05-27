@@ -12,7 +12,6 @@ import it.fulminazzo.yagl.guis.GUI;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +33,6 @@ import static it.fulminazzo.userstalker.gui.GUIs.setupVariables;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class USGUIManager {
 
-    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(USGUIManager.class);
     private final @Nullable Logger logger;
 
     private final @NotNull USAsyncApiClient client;
