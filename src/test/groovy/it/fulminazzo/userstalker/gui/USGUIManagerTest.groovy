@@ -45,6 +45,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
+        GUIs.defaultBackItem()           | 'items.back'                 || 'backGUIContent'
     }
 
     def 'test setup with file uses stored #guiName GUI'() {
@@ -101,6 +102,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
+        GUIs.defaultBackItem()           | 'items.back'                 || 'backGUIContent'
     }
 
     def 'test setup with file but object null uses default #objectName object'() {
@@ -130,6 +132,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
+        GUIs.defaultBackItem()           | 'items.back'                 || 'backGUIContent'
     }
 
     def 'test setup with file but object not available uses default #objectName'() {
@@ -154,6 +157,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
+        GUIs.defaultBackItem()           | 'items.back'                 || 'backGUIContent'
     }
 
 }
