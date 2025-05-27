@@ -27,9 +27,9 @@ public enum USGUIAction {
      * If not found, null is returned.
      *
      * @param serialized the serialized string
-     * @return the us gui action
+     * @return the gui action
      */
-    public @Nullable USGUIAction deserialize(final @NotNull String serialized) {
+    public static @Nullable USGUIAction deserialize(final @NotNull String serialized) {
         for (USGUIAction action : USGUIAction.values())
             if (action.serialize().equals(serialized))
                 return action;
