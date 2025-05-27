@@ -23,6 +23,8 @@ public enum Messages implements DefaultFulmiMessages {
     RELOAD_UNSUCCESSFUL("general.reload-unsuccessful", "<prefix>&cPlugin reload failed with error: &4<error>&c. " +
             "Check console for more details"),
     SUBCOMMAND_NOT_FOUND("error.subcommand-not-found", "<prefix>&cNo such subcommand: &4<subcommand>"),
+    NOT_ENOUGH_ARGUMENTS("error.not-enough-arguments", "<prefix>&cYou did not specify enough arguments"),
+    NOT_ENOUGH_PERMISSIONS("error.not-enough-permissions", "<prefix>&cYou do not have enough permissions to execute that subcommand"),
 
     HELP_RELOAD("help.reload", "Reloads the plugin configurations"),
     HELP_OPEN_GUI("help.open-gui", "Opens the main plugin GUI"),
