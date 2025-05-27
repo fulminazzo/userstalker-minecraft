@@ -67,21 +67,20 @@ public final class USGUIManager {
     }
 
     /**
-     * Queries the {@link #client} to get the latest accesses of the given username.
+     * Queries the {@link #client} to get the newest accesses on the server.
      * Then, it shows them in a GUI.
      *
-     * @param player   the player to open the GUI for
-     * @param username the username of the user
+     * @param player the player
      */
-    public void openUserLoginsGUI(final @NotNull Player player, final @NotNull String username) {
-        client.getUserLoginsAndThen(username,
+    public void openNewestUserLoginsGUI(final @NotNull Player player) {
+        client.getNewestUserLoginsAndThen(
                 l -> prepareGUI(
                         mainMenu(),
-                        userLoginsGUI,
+                        newestUsersLoginsGUI,
                         l,
-                        userLoginsGUIContent,
-                        null
-                ).open(GUIManager.getViewer(player)),
+                        newestUsersLoginsGUIContent,
+                        (v, g, c) -> openUserLoginsGUI(player, c.getVariable("username"), g)
+                ),
                 () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
     }
