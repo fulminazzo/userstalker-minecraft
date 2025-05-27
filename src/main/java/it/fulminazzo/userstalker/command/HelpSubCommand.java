@@ -29,9 +29,6 @@ final class HelpSubCommand extends USSubCommand {
                         .replace("<subcommand>", argument));
                 return;
             }
-        } else if (commands.isEmpty()) {
-            sender.sendMessage(Messages.SUBCOMMANDS_NO_PERMISSIONS.getMessage());
-            return;
         }
         commands.forEach(c -> sender.sendMessage(Messages.HELP_DESCRIPTION.getMessage()
                 .replace("<name>", c.getAliases().get(0))
