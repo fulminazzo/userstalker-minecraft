@@ -54,6 +54,28 @@ class USSubCommandTest extends Specification {
         3      || []
     }
 
+    def 'test that HelpSubCommand tabComplete returns #expected for #args'() {
+        given:
+        def subcommand = new HelpSubCommand(plugin, new USCommand(plugin))
+
+        and:
+        sender.hasPermission(_ as String) >> { args ->
+            String perm = args[0]
+            return !perm.contains('help')
+        }
+
+        when:
+        def list = subcommand.tabComplete(sender, args.toArray())
+
+        then:
+        list == expected
+
+        where:
+        args    || expected
+        []      || []
+        ['rel'] || ['reload', 'opengui', 'open', 'gui']
+    }
+
     def 'test that HelpSubCommand sends one message if no permission'() {
         given:
         def subcommand = new HelpSubCommand(plugin, new USCommand(plugin))
