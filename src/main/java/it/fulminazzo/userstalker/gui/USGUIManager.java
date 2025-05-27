@@ -7,6 +7,8 @@ import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
+import it.fulminazzo.yagl.contents.GUIContent;
+import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import lombok.Builder;
@@ -28,7 +30,9 @@ public final class USGUIManager {
     private DataGUI<UserLoginCount> topUsersLoginsGUI;
     private DataGUI<UserLoginCount> monthlyUsersLoginsGUI;
     private DataGUI<UserLogin> newestUsersLoginsGUI;
+
     private DataGUI<UserLogin> userLoginsGUI;
+    private GUIContent userLoginsGUIContent;
 
     /**
      * Instantiates a new GUI manager.
@@ -68,7 +72,9 @@ public final class USGUIManager {
                     c.set("guis.top-users-logins", GUIs.defaultTopUsersLogins());
                     c.set("guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
                     c.set("guis.newest-users-logins", GUIs.defaultNewestUsersLogins());
+
                     c.set("guis.user-logins", GUIs.defaultUserLogins());
+                    c.set("items.user-logins", GUIs.defaultUserLoginItem());
 
                     c.save();
                 })
@@ -77,10 +83,11 @@ public final class USGUIManager {
         topUsersLoginsGUI = getGUI(config, "guis.top-users-logins", GUIs.defaultTopUsersLogins());
         monthlyUsersLoginsGUI = getGUI(config, "guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
         newestUsersLoginsGUI = getGUI(config, "guis.newest-users-logins", GUIs.defaultNewestUsersLogins());
+
         userLoginsGUI = getGUI(config, "guis.user-logins", GUIs.defaultUserLogins());
+        userLoginsGUIContent = getContent(config, "items.user-logins", GUIs.defaultUserLoginItem());
     }
 
-    @SuppressWarnings("unchecked")
     private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
                                   final @NotNull String path,
                                   final @NotNull DataGUI<T> defaultGUI) {
@@ -90,6 +97,17 @@ public final class USGUIManager {
         }
         logger.warning(String.format("Could not find gui \"%s\" in guis.yml. Using default GUI", path));
         return defaultGUI;
+    }
+
+    private GUIContent getContent(final @NotNull FileConfiguration config,
+                                  final @NotNull String path,
+                                  final @NotNull GUIContent defaultContent) {
+        if (config.contains(path)) {
+            ItemGUIContent item = config.get(path, ItemGUIContent.class);
+            if (item != null) return item;
+        }
+        logger.warning(String.format("Could not find item \"%s\" in guis.yml. Using default item", path));
+        return defaultContent;
     }
 
 }
