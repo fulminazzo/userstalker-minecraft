@@ -17,10 +17,10 @@ abstract class USSubCommand {
     /**
      * The Plugin.
      */
-    protected final UserStalker plugin;
-    private final List<String> aliases;
-    private final String permission;
-    private final String description;
+    protected final @NotNull UserStalker plugin;
+    private final @NotNull List<String> aliases;
+    private final @NotNull String permission;
+    private final @NotNull String description;
 
     /**
      * Instantiates a new sub command.
