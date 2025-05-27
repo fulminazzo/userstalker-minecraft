@@ -87,6 +87,38 @@ public final class USGUIManager {
     }
 
     /**
+     * Queries the {@link #client} to get the latest accesses of the given username.
+     * Then, it shows them in a GUI.
+     *
+     * @param player   the player to open the GUI for
+     * @param username the username of the user
+     */
+    public void openUserLoginsGUI(final @NotNull Player player, final @NotNull String username) {
+        openUserLoginsGUI(player, username, mainMenu());
+    }
+
+    /**
+     * Queries the {@link #client} to get the latest accesses of the given username.
+     * Then, it shows them in a GUI.
+     *
+     * @param player      the player to open the GUI for
+     * @param username    the username of the user
+     * @param previousGUI the previous gui
+     */
+    void openUserLoginsGUI(final @NotNull Player player, final @NotNull String username, final @NotNull GUI previousGUI) {
+        client.getUserLoginsAndThen(username,
+                l -> prepareGUI(
+                        previousGUI,
+                        userLoginsGUI,
+                        l,
+                        userLoginsGUIContent,
+                        null
+                ).open(GUIManager.getViewer(player)),
+                () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
+        );
+    }
+
+    /**
      * Returns a copy of the given GUI.
      *
      * @param <T>         the type of the data
