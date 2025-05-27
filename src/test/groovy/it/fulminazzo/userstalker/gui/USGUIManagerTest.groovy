@@ -60,6 +60,21 @@ class USGUIManagerTest extends Specification {
         BukkitUtils.PLAYERS.clear()
     }
 
+    def 'test that openTopUserLoginsGUI of valid opens GUI'() {
+        given:
+        def player = getNewPlayer()
+
+        when:
+        manager.openTopUserLoginsGUI(player)
+
+        then:
+        def viewer = GUIManager.getViewer(player)
+        viewer != null
+        viewer.openGUI != null
+        viewer.openGUI.title == GUIs.defaultTopUsersLogins().title
+        1 * player.openInventory(_ as Inventory)
+    }
+
     def 'test that openMonthlyUserLoginsGUI of valid opens GUI'() {
         given:
         def player = getNewPlayer()
@@ -124,6 +139,7 @@ class USGUIManagerTest extends Specification {
 
         where:
         managerMethod              | clientMethod
+        'openTopUserLoginsGUI'     | 'disableTop'
         'openMonthlyUserLoginsGUI' | 'disableMonthly'
         'openNewestUserLoginsGUI'  | 'disableNewest'
         'openUserLoginsGUI'        | 'toString'
