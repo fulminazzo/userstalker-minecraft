@@ -17,9 +17,9 @@ import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public class MockAPIClient extends USAsyncApiClient {
-    private boolean topUsersEnabled;
-    private boolean monthlyUsersEnabled;
-    private boolean newestUsersEnabled;
+    private boolean topUsersEnabled = true;
+    private boolean monthlyUsersEnabled = true;
+    private boolean newestUsersEnabled = true;
 
     public MockAPIClient() throws APIClientException {
         super(Logger.getLogger("MockAPIClient"), generateMockConfiguration());
