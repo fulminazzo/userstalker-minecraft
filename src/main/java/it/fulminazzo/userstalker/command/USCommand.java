@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.command;
 
+import it.fulminazzo.userstalker.Messages;
 import it.fulminazzo.userstalker.UserStalker;
 import lombok.Getter;
 import org.bukkit.command.Command;
@@ -38,7 +39,21 @@ public final class USCommand implements TabExecutor {
                              @NotNull Command command,
                              @NotNull String label,
                              @NotNull String[] args) {
-        return false;
+        if (args.length == 0)
+            sender.sendMessage(Messages.NOT_ENOUGH_ARGUMENTS.getMessage());
+        else {
+            String argument = args[0];
+            USSubCommand subCommand = getSubCommands().stream()
+                    .filter(c -> c.matches(argument))
+                    .findFirst().orElse(null);
+            if (subCommand == null)
+                sender.sendMessage(Messages.SUBCOMMAND_NOT_FOUND.getMessage()
+                        .replace("<subcommand>", argument));
+            else if (!sender.hasPermission(subCommand.getPermission()))
+                sender.sendMessage(Messages.NOT_ENOUGH_PERMISSIONS.getMessage());
+            else subCommand.execute(sender, Arrays.copyOfRange(args, 1, args.length));
+        }
+        return true;
     }
 
     @Override
