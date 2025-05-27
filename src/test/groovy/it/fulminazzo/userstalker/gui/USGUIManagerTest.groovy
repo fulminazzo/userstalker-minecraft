@@ -110,6 +110,28 @@ class USGUIManagerTest extends Specification {
         USGUIAction.CLOSE            || null
     }
 
+    def 'test that openMainMenuGUI with action #action does not throw'() {
+        given:
+        def player = getNewPlayer()
+
+        and:
+        def content = ItemGUIContent.newInstance('STONE')
+        content.setVariable('action', action)
+        def gui = GUI.newGUI(9).addContent(content)
+
+        and:
+        new Refl<>(manager).setFieldObject('mainMenuGUI', gui)
+
+        when:
+        manager.openMainMenuGUI(player)
+
+        then:
+        noExceptionThrown()
+
+        where:
+        action << [null, 'invalid']
+    }
+
     def 'test that openTopUsersLoginsGUI of valid opens GUI'() {
         given:
         def player = getNewPlayer()
