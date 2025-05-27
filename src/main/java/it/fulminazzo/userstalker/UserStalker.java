@@ -61,7 +61,7 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
      * @throws ConfigurationException in case any errors occur
      * @throws APIClientException     in case any errors occur
      */
-    public void enable() throws ConfigurationException, APIClientException {
+    void enable() throws ConfigurationException, APIClientException {
         getLogger().info("Starting setup process");
 
         getLogger().info("Loading config.yml file");
@@ -100,7 +100,7 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
      *
      * @throws ProfileCacheException in case any errors occur
      */
-    public void disable() throws ProfileCacheException {
+    void disable() throws ProfileCacheException {
         getLogger().info("Starting shutdown process");
 
         if (profileCache != null) {
@@ -109,6 +109,18 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         }
 
         getLogger().info("Shutdown complete. Goodbye");
+    }
+
+    /**
+     * Reloads the plugin.
+     *
+     * @throws ProfileCacheException  in case any errors occur
+     * @throws ConfigurationException in case any errors occur
+     * @throws APIClientException     in case any errors occur
+     */
+    public void reload() throws ProfileCacheException, ConfigurationException, APIClientException {
+        disable();
+        enable();
     }
 
     /**
