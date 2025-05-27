@@ -54,6 +54,11 @@ public final class USGUIManager {
     private final @Nullable GUIContent backGUIContent;
     private final int backGUIContentSlotOffset;
 
+    public @NotNull GUI mainMenu() {
+        //TODO:
+        return GUI.newGUI(9);
+    }
+
     // getTopUserLoginsAndThen
     // getMonthlyUserLoginsAndThen
     // getNewestUserLoginsAndThen
