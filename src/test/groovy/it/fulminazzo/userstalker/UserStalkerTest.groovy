@@ -48,7 +48,7 @@ class UserStalkerTest extends Specification {
 
         then:
         noExceptionThrown()
-        1 * plugin.disable()
+        1 * plugin.forceDisable()
 
         where:
         method               | arguments           || exception
@@ -69,7 +69,7 @@ class UserStalkerTest extends Specification {
 
         then:
         noExceptionThrown()
-        0 * plugin.disable()
+        0 * plugin.forceDisable()
     }
 
     def 'test that onDisable closes profileCache'() {
@@ -111,7 +111,7 @@ class UserStalkerTest extends Specification {
         thrown(IllegalStateException)
     }
 
-    def 'test that disable disables the plugin'() {
+    def 'test that forceDisable disables the plugin'() {
         given:
         def manager = Mock(PluginManager)
         def server = Mock(Server)
@@ -119,10 +119,10 @@ class UserStalkerTest extends Specification {
 
         and:
         plugin.server >> server
-        plugin.disable() >> { callRealMethod() }
+        plugin.forceDisable() >> { callRealMethod() }
 
         when:
-        plugin.disable()
+        plugin.forceDisable()
 
         then:
         1 * manager.disablePlugin(plugin)
