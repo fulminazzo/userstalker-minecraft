@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.command;
 
+import it.fulminazzo.userstalker.Messages;
 import it.fulminazzo.userstalker.UserStalker;
 import lombok.Getter;
 import org.bukkit.command.CommandSender;
@@ -19,20 +20,24 @@ abstract class USSubCommand {
     protected final UserStalker plugin;
     private final List<String> aliases;
     private final String permission;
+    private final String description;
 
     /**
      * Instantiates a new sub command.
      *
-     * @param plugin     the plugin
-     * @param permission the permission
-     * @param aliases    the aliases
+     * @param plugin      the plugin
+     * @param permission  the permission
+     * @param description the description
+     * @param aliases     the aliases
      */
     public USSubCommand(final @NotNull UserStalker plugin,
                         final @NotNull String permission,
+                        final @NotNull Messages description,
                         final @NotNull String... aliases) {
         this.plugin = plugin;
         this.aliases = Arrays.asList(aliases);
         this.permission = String.format("%s.command.%s", plugin.getName(), permission).toLowerCase();
+        this.description = description.getMessage();
     }
 
     /**
