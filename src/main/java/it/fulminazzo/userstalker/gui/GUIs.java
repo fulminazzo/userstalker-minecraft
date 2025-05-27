@@ -132,19 +132,24 @@ public final class GUIs {
     }
 
     /**
-     * Creates a new basic {@link GUIContent} converter.
+     * Converts the given {@link ItemGUIContent} internal {@link Item}
+     * to a {@link BukkitItem} to support metadata conversion.
      *
-     * @param materialName the material name
-     * @param cache        the cache to use to lookup skin in case of {@link Material#PLAYER_HEAD} provided
-     * @return the gui content
+     * @param from  the content to convert
+     * @param cache the profile cache
+     * @return the content itself
      */
-    static @NotNull ItemGUIContent newContentConverter(final @NotNull String materialName, final @Nullable ProfileCache cache) {
-        BukkitItem item = BukkitItem.newItem(materialName);
-        ItemGUIContent content = ItemGUIContent.newInstance(item);
+    static @NotNull ItemGUIContent setupMetadataConversion(
+            final @NotNull ItemGUIContent from,
+            final @Nullable ProfileCache cache
+    ) {
+        Refl<?> refl = new Refl<>(from);
+        Item internalItem = refl.getFieldObject("item");
+        BukkitItem item = internalItem.copy(BukkitItem.class);
         item.setMetadata(ItemMeta.class, itemMeta -> {
             if (cache == null) return;
             if (itemMeta instanceof SkullMeta) {
-                String username = content.getVariable("username");
+                String username = from.getVariable("username");
                 if (username == null) return;
                 SkullMeta skullMeta = (SkullMeta) itemMeta;
                 try {
@@ -154,7 +159,8 @@ public final class GUIs {
                 }
             }
         });
-        return content;
+        refl.setFieldObject("item", item);
+        return from;
     }
 
     /**
