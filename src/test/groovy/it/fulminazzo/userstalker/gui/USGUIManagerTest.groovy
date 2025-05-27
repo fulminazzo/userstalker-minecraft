@@ -105,6 +105,40 @@ class USGUIManagerTest extends Specification {
         1 * player.openInventory(_ as Inventory)
     }
 
+    def 'test that #methodName opens user logins GUI upon click on content'() {
+        given:
+        def player = getNewPlayer()
+
+        when:
+        manager."$methodName"(player)
+
+        then:
+        def guiViewer = GUIManager.getOpenGUIViewer(player)
+        guiViewer.isPresent()
+        def gui = guiViewer.value
+
+        def content = gui.getContents(10).get(0)
+        def action = content.clickItemAction()
+        action.isPresent()
+        action.get().execute(guiViewer.key, gui, content)
+
+        1 * player.openInventory(_ as Inventory)
+
+        def newGuiViewer = GUIManager.getOpenGUIViewer(player)
+        newGuiViewer.isPresent()
+        def newGui = newGuiViewer.value
+
+        newGui != gui
+        newGui.title == '&cAlex\'s logins'
+
+        where:
+        methodName << [
+                'openTopUsersLoginsGUI',
+                'openMonthlyUsersLoginsGUI',
+                'openNewestUsersLoginsGUI',
+        ]
+    }
+
     def 'test that openUserLoginsGUI of valid opens GUI'() {
         given:
         def player = getNewPlayer()
