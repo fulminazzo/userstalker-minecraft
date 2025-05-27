@@ -105,6 +105,26 @@ class USGUIManagerTest extends Specification {
         null        | ItemGUIContent.newInstance('BARRIER')
     }
 
+    def 'test that prepareGUI with invalid back content slot offset does not throw'() {
+        given:
+        def gui = DataGUI.newGUI(27, null)
+
+        and:
+        new Refl<>(manager).setFieldObject('backGUIContentSlotOffset', 36)
+
+        when:
+        manager.prepareGUI(
+                null,
+                gui,
+                ['data'],
+                ItemGUIContent.newInstance('STONE'),
+                (v, g, c) -> { }
+        )
+
+        then:
+        noExceptionThrown()
+    }
+
     def 'test that prepareContent correctly updates content when action is #action'() {
         given:
         def content = ItemGUIContent.newInstance('PLAYER_HEAD')
