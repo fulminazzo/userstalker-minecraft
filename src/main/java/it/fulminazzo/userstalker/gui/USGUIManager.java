@@ -75,7 +75,7 @@ public final class USGUIManager {
     ) {
         gui = DataGUI.newGUI(gui.size(), o -> prepareContent(content, o, onClick), data).copyFrom(gui, false);
         if (backGUIContent != null && previousGUI != null) {
-            int slot = gui.size() - backGUIContentSlotOffset;
+            int slot = gui.size() + backGUIContentSlotOffset;
             if (slot < 0) {
                 //TODO: error
             } else {
