@@ -157,6 +157,7 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
         return new ConfigurationException(message);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
                                   final @NotNull String path,
                                   final @NotNull DataGUI<T> defaultGUI) {
