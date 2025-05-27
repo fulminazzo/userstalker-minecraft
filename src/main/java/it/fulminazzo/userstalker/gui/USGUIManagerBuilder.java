@@ -9,11 +9,14 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+
 /**
  * A builder to create {@link USGUIManager} instances.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManagerBuilder, ConfigurationException> {
+    private @Nullable File pluginDirectory;
     private @Nullable USAsyncApiClient apiClient;
 
     private @Nullable ProfileCache skinCache;
@@ -21,6 +24,28 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
     @Override
     public @NotNull USGUIManager build() throws ConfigurationException {
         return null;
+    }
+
+    /**
+     * Gets plugin directory.
+     *
+     * @return the plugin directory
+     * @throws ConfigurationException an exception thrown in case the plugin directory has not been provided
+     */
+    @NotNull File getPluginDirectory() throws ConfigurationException {
+        if (pluginDirectory == null) throw new ConfigurationException("No plugin directory specified");
+        return pluginDirectory;
+    }
+
+    /**
+     * Sets the plugin directory.
+     *
+     * @param pluginDirectory the plugin directory
+     * @return this builder
+     */
+    public @NotNull USGUIManagerBuilder pluginDirectory(@Nullable File pluginDirectory) {
+        this.pluginDirectory = pluginDirectory;
+        return this;
     }
 
     /**
