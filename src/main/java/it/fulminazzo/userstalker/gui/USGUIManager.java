@@ -43,6 +43,8 @@ public final class USGUIManager {
 
     private final @Nullable ProfileCache cache;
 
+    private final @NotNull GUI mainMenuGUI;
+
     private final @NotNull DataGUI<UserLoginCount> topUsersLoginsGUI;
     private final @NotNull GUIContent topUsersLoginsGUIContent;
 
