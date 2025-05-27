@@ -61,13 +61,21 @@ public final class USGUIManager {
     private final @Nullable GUIContent backGUIContent;
     private final int backGUIContentSlotOffset;
 
+    /**
+     * Opens the main menu gui for the specified player.
+     *
+     * @param player the player
+     */
+    public void openMainMenuGUI(final @NotNull Player player) {
+        mainMenuGUI().open(GUIManager.getViewer(player));
+    }
 
     /**
      * Returns the main menu gui.
      *
      * @return the gui
      */
-    public @NotNull GUI mainMenuGUI() {
+    @NotNull GUI mainMenuGUI() {
         GUI gui = mainMenuGUI.copy();
         for (GUIContent content : gui.getContents()) {
             String action = content.getVariable("action");
