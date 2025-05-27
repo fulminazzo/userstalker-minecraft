@@ -38,6 +38,9 @@ class USGUIManagerTest extends Specification {
         given:
         def gui = DataGUI.newGUI(27, null)
 
+        and:
+        new Refl<>(manager).setFieldObject('backGUIContent', backGUIContent)
+
         when:
         gui = manager.prepareGUI(
                 previousGUI,
@@ -66,6 +69,9 @@ class USGUIManagerTest extends Specification {
     def 'test that prepareGUI ignores back content when content is #backGUIContent and previous GUI is #previousGUI'() {
         given:
         def gui = DataGUI.newGUI(27, null)
+
+        and:
+        new Refl<>(manager).setFieldObject('backGUIContent', backGUIContent)
 
         when:
         gui = manager.prepareGUI(
