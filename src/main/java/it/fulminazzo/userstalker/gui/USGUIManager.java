@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -79,7 +80,8 @@ public final class USGUIManager {
                         topUsersLoginsGUI,
                         l,
                         topUsersLoginsGUIContent,
-                        (v, g, c) -> openUserLoginsGUI(player, c.getVariable("username"), g)
+                        (v, g, c) ->
+                                openUserLoginsGUI(player, Objects.requireNonNull(c.getVariable("username")), g)
                 ).open(GUIManager.getViewer(player)),
                 () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
@@ -98,7 +100,8 @@ public final class USGUIManager {
                         monthlyUsersLoginsGUI,
                         l,
                         monthlyUsersLoginsGUIContent,
-                        (v, g, c) -> openUserLoginsGUI(player, c.getVariable("username"), g)
+                        (v, g, c) ->
+                                openUserLoginsGUI(player, Objects.requireNonNull(c.getVariable("username")), g)
                 ).open(GUIManager.getViewer(player)),
                 () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
@@ -117,7 +120,8 @@ public final class USGUIManager {
                         newestUsersLoginsGUI,
                         l,
                         newestUsersLoginsGUIContent,
-                        (v, g, c) -> openUserLoginsGUI(player, c.getVariable("username"), g)
+                        (v, g, c) ->
+                                openUserLoginsGUI(player, Objects.requireNonNull(c.getVariable("username")), g)
                 ).open(GUIManager.getViewer(player)),
                 () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
