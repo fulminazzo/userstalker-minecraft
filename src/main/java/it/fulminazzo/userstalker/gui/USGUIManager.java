@@ -111,7 +111,7 @@ public final class USGUIManager {
         userLoginsGUI = getGUI(config, "guis.user-logins", defaultUserLogins());
         userLoginsGUIContent = getContent(config, "items.user-logins", defaultUserLoginItem());
 
-        backGUIContent = getContent(config, "items.back", defaultBackItem());
+        backGUIContent = config.get("items.back", ItemGUIContent.class);
 
         backGUIContentSlotOffset = getBackContentOffset(config);
     }
