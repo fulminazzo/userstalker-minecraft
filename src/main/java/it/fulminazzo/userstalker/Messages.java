@@ -15,12 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public enum Messages implements DefaultFulmiMessages {
     PREFIX("prefix", "&6User&cStalker &8» &f"),
 
-    RELOAD_SUCCESSFUL("general.reload-successful", "&aPlugin reload completed successfully"),
+    RELOAD_SUCCESSFUL("general.reload-successful", "<prefix>&aPlugin reload completed successfully"),
 
     INTERNAL_ERROR_OCCURRED("error.internal-error", "<prefix>&cAn internal error occurred. " +
             "Please notify an administrator about this"),
     CONSOLE_CANNOT_EXECUTE("error.console-cannot-execute", "<prefix>&cConsole cannot execute this command."),
-    RELOAD_UNSUCCESSFUL("general.reload-unsuccessful", "&cPlugin reload failed with error: &4<error>&c. " +
+    RELOAD_UNSUCCESSFUL("general.reload-unsuccessful", "<prefix>&cPlugin reload failed with error: &4<error>&c. " +
             "Check console for more details"),
 
     HELP_RELOAD("help.reload", "Reloads the plugin configurations"),
