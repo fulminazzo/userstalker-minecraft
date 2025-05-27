@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A class responsible for creating and displaying all the plugin 
+ * A class responsible for creating and displaying all the plugin
  */
 @Builder(
         builderMethodName = "internalBuilder",
@@ -46,5 +46,14 @@ public final class USGUIManager {
     // getMonthlyUserLoginsAndThen
     // getNewestUserLoginsAndThen
     // getUserLoginsAndThen
+
+    /**
+     * Returns a new builder to create an instance of gui manager.
+     *
+     * @return the gui manager builder
+     */
+    public static @NotNull USGUIManagerBuilder builder() {
+        return new USGUIManagerBuilder();
+    }
 
 }
