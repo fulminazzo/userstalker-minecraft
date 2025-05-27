@@ -26,7 +26,7 @@ public class MockAPIClient extends USAsyncApiClient {
     }
 
     @Override
-    public void getTopUserLoginsAndThen(@NotNull Consumer<List<UserLoginCount>> function, @NotNull Runnable orElse) {
+    public void getTopUsersLoginsAndThen(@NotNull Consumer<List<UserLoginCount>> function, @NotNull Runnable orElse) {
         if (topUsersEnabled) function.accept(Arrays.asList(
                 UserLoginCount.builder().username("Alex").loginCount(20).build(),
                 UserLoginCount.builder().username("Fulminazzo").loginCount(10).build()
@@ -35,7 +35,7 @@ public class MockAPIClient extends USAsyncApiClient {
     }
 
     @Override
-    public void getMonthlyUserLoginsAndThen(@NotNull Consumer<List<UserLoginCount>> function, @NotNull Runnable orElse) {
+    public void getMonthlyUsersLoginsAndThen(@NotNull Consumer<List<UserLoginCount>> function, @NotNull Runnable orElse) {
         if (monthlyUsersEnabled) function.accept(Arrays.asList(
                 UserLoginCount.builder().username("Alex").loginCount(20).build(),
                 UserLoginCount.builder().username("Fulminazzo").loginCount(10).build()
@@ -44,7 +44,7 @@ public class MockAPIClient extends USAsyncApiClient {
     }
 
     @Override
-    public void getNewestUserLoginsAndThen(@NotNull Consumer<List<UserLogin>> function, @NotNull Runnable orElse) {
+    public void getNewestUsersLoginsAndThen(@NotNull Consumer<List<UserLogin>> function, @NotNull Runnable orElse) {
         if (newestUsersEnabled) function.accept(Arrays.asList(
                 UserLogin.builder().username("Alex").ip("127.0.0.1").loginDate(LocalDateTime.now()).build(),
                 UserLogin.builder().username("Fulminazzo").ip("127.0.0.2").loginDate(LocalDateTime.now()).build()

@@ -34,12 +34,12 @@ class USApiClientTest extends Specification {
         noExceptionThrown()
     }
 
-    def 'test that getTopUserLogins returns #expected'() {
+    def 'test that getTopUsersLogins returns #expected'() {
         given:
-        client.query('POST', "/showuserlogins", 201, null, serverResponse)
+        client.query('POST', "/showuserslogins", 201, null, serverResponse)
 
         when:
-        def userLogins = client.getTopUserLogins()
+        def userLogins = client.getTopUsersLogins()
 
         then:
         userLogins == expected
@@ -50,12 +50,12 @@ class USApiClientTest extends Specification {
         true           || MockHttpServer.USER_LOGINS_COUNT
     }
 
-    def 'test that getMonthlyUserLogins returns #expected'() {
+    def 'test that getMonthlyUsersLogins returns #expected'() {
         given:
-        client.query('POST', "/showuserlogins", 201, null, serverResponse)
+        client.query('POST', "/showuserslogins", 201, null, serverResponse)
 
         when:
-        def userLogins = client.getMonthlyUserLogins()
+        def userLogins = client.getMonthlyUsersLogins()
 
         then:
         userLogins == expected
@@ -66,12 +66,12 @@ class USApiClientTest extends Specification {
         true           || MockHttpServer.USER_LOGINS_COUNT
     }
 
-    def 'test that getNewestUserLogins returns #expected'() {
+    def 'test that getNewestUsersLogins returns #expected'() {
         given:
-        client.query('POST', "/showuserlogins", 201, null, serverResponse)
+        client.query('POST', "/showuserslogins", 201, null, serverResponse)
 
         when:
-        def userLogins = client.getNewestUserLogins()
+        def userLogins = client.getNewestUsersLogins()
 
         then:
         userLogins == expected
@@ -103,7 +103,7 @@ class USApiClientTest extends Specification {
         def username = 'Fulminazzo'
 
         and:
-        client.query('POST', "/showuserlogins", 201, null, serverResponse)
+        client.query('POST', "/showuserslogins", 201, null, serverResponse)
 
         when:
         def userLogins = client.getUserLogins(username)

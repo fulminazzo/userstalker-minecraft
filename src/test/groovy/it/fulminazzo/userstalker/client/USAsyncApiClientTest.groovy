@@ -51,20 +51,20 @@ class USAsyncApiClientTest extends Specification {
         noExceptionThrown()
     }
 
-    def 'test getTopUserLoginsAndThen executes given function'() {
+    def 'test getTopUsersLoginsAndThen executes given function'() {
         given:
         def list = null
         def fallback = false
 
         when:
-        client.getTopUserLoginsAndThen(it -> list = it, () -> fallback = true)
+        client.getTopUsersLoginsAndThen(it -> list = it, () -> fallback = true)
 
         then:
         list == MockHttpServer.USER_LOGINS_COUNT
         !fallback
     }
 
-    def 'test getTopUserLoginsAndThen does not throw on APIClientException'() {
+    def 'test getTopUsersLoginsAndThen does not throw on APIClientException'() {
         given:
         def client = newClient('invalid')
 
@@ -72,27 +72,27 @@ class USAsyncApiClientTest extends Specification {
         def fallback = false
 
         when:
-        client.getTopUserLoginsAndThen(null, () -> fallback = true)
+        client.getTopUsersLoginsAndThen(null, () -> fallback = true)
 
         then:
         noExceptionThrown()
         fallback
     }
 
-    def 'test getMonthlyUserLoginsAndThen executes given function'() {
+    def 'test getMonthlyUsersLoginsAndThen executes given function'() {
         given:
         def list = null
         def fallback = false
 
         when:
-        client.getMonthlyUserLoginsAndThen(it -> list = it, () -> fallback = true)
+        client.getMonthlyUsersLoginsAndThen(it -> list = it, () -> fallback = true)
 
         then:
         list == MockHttpServer.USER_LOGINS_COUNT
         !fallback
     }
 
-    def 'test getMonthlyUserLoginsAndThen does not throw on APIClientException'() {
+    def 'test getMonthlyUsersLoginsAndThen does not throw on APIClientException'() {
         given:
         def client = newClient('invalid')
 
@@ -100,27 +100,27 @@ class USAsyncApiClientTest extends Specification {
         def fallback = false
 
         when:
-        client.getMonthlyUserLoginsAndThen(null, () -> fallback = true)
+        client.getMonthlyUsersLoginsAndThen(null, () -> fallback = true)
 
         then:
         noExceptionThrown()
         fallback
     }
 
-    def 'test getNewestUserLoginsAndThen executes given function'() {
+    def 'test getNewestUsersLoginsAndThen executes given function'() {
         given:
         def list = null
         def fallback = false
 
         when:
-        client.getNewestUserLoginsAndThen(it -> list = it, () -> fallback = true)
+        client.getNewestUsersLoginsAndThen(it -> list = it, () -> fallback = true)
 
         then:
         list == MockHttpServer.USER_LOGINS
         !fallback
     }
 
-    def 'test getNewestUserLoginsAndThen does not throw on APIClientException'() {
+    def 'test getNewestUsersLoginsAndThen does not throw on APIClientException'() {
         given:
         def client = newClient('invalid')
 
@@ -128,7 +128,7 @@ class USAsyncApiClientTest extends Specification {
         def fallback = false
 
         when:
-        client.getNewestUserLoginsAndThen(null, () -> fallback = true)
+        client.getNewestUsersLoginsAndThen(null, () -> fallback = true)
 
         then:
         noExceptionThrown()
@@ -212,7 +212,7 @@ class USAsyncApiClientTest extends Specification {
         def configuration = new MockFileConfiguration([
                 'userstalker-http-server': [
                         'address': host,
-                        'port': PORT
+                        'port'   : PORT
                 ]
         ])
 

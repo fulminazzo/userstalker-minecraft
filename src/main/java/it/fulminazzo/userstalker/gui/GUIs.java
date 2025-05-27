@@ -114,7 +114,7 @@ public final class GUIs {
     }
 
     /**
-     * Returns the default newest user logins gui.
+     * Returns the default newest users logins gui.
      *
      * @return the gui
      */

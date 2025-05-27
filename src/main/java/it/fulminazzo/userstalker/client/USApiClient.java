@@ -51,36 +51,36 @@ public final class USApiClient {
     }
 
     /**
-     * Gets the top user logins of all time.
+     * Gets the top users logins of all time.
      *
-     * @return the user logins count
+     * @return the users logins count
      * @throws APIClientException the exception thrown in case of any errors
      */
-    public @NotNull List<UserLoginCount> getTopUserLogins() throws APIClientException {
+    public @NotNull List<UserLoginCount> getTopUsersLogins() throws APIClientException {
         List<?> result = query("GET", "/top", HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
         return convertGeneralListToListOf(result, UserLoginCount.class);
     }
 
     /**
-     * Gets the top user logins of the month.
+     * Gets the top users logins of the month.
      *
-     * @return the user logins count
+     * @return the users logins count
      * @throws APIClientException the exception thrown in case of any errors
      */
-    public @NotNull List<UserLoginCount> getMonthlyUserLogins() throws APIClientException {
+    public @NotNull List<UserLoginCount> getMonthlyUsersLogins() throws APIClientException {
         List<?> result = query("GET", "/month", HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
         return convertGeneralListToListOf(result, UserLoginCount.class);
     }
 
     /**
-     * Gets the newest user logins.
+     * Gets the newest users logins.
      *
-     * @return the user logins
+     * @return the users logins
      * @throws APIClientException the exception thrown in case of any errors
      */
-    public @NotNull List<UserLogin> getNewestUserLogins() throws APIClientException {
+    public @NotNull List<UserLogin> getNewestUsersLogins() throws APIClientException {
         List<?> result = query("GET", "/newest", HttpURLConnection.HTTP_OK, List.class, null);
         if (result == null) return new ArrayList<>();
         return convertGeneralListToListOf(result, UserLogin.class);

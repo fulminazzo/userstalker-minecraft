@@ -53,17 +53,17 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets the top user logins of all time and executes the given function.
+     * Gets the top users logins of all time and executes the given function.
      *
      * @param function the function to executed
      * @param orElse   the function executed in case an error occurs
      */
-    public void getTopUserLoginsAndThen(
+    public void getTopUsersLoginsAndThen(
             final @NotNull Consumer<List<UserLoginCount>> function,
             final @NotNull Runnable orElse
     ) {
         try {
-            @NotNull List<UserLoginCount> userLoginsCount = client.getTopUserLogins();
+            @NotNull List<UserLoginCount> userLoginsCount = client.getTopUsersLogins();
             function.accept(userLoginsCount);
         } catch (APIClientException e) {
             logger.warning(e.getMessage());
@@ -72,17 +72,17 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets the top user logins of the month and executes the given function.
+     * Gets the top users logins of the month and executes the given function.
      *
      * @param function the function to executed
      * @param orElse   the function executed in case an error occurs
      */
-    public void getMonthlyUserLoginsAndThen(
+    public void getMonthlyUsersLoginsAndThen(
             final @NotNull Consumer<List<UserLoginCount>> function,
             final @NotNull Runnable orElse
     ) {
         try {
-            @NotNull List<UserLoginCount> userLoginsCount = client.getMonthlyUserLogins();
+            @NotNull List<UserLoginCount> userLoginsCount = client.getMonthlyUsersLogins();
             function.accept(userLoginsCount);
         } catch (APIClientException e) {
             logger.warning(e.getMessage());
@@ -91,17 +91,17 @@ public abstract class USAsyncApiClient {
     }
 
     /**
-     * Gets the newest user logins and executes the given function.
+     * Gets the newest users logins and executes the given function.
      *
      * @param function the function to executed
      * @param orElse   the function executed in case an error occurs
      */
-    public void getNewestUserLoginsAndThen(
+    public void getNewestUsersLoginsAndThen(
             final @NotNull Consumer<List<UserLogin>> function,
             final @NotNull Runnable orElse
     ) {
         try {
-            @NotNull List<UserLogin> userLogins = client.getNewestUserLogins();
+            @NotNull List<UserLogin> userLogins = client.getNewestUsersLogins();
             function.accept(userLogins);
         } catch (APIClientException e) {
             logger.warning(e.getMessage());

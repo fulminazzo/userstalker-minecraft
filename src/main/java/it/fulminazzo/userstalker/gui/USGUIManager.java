@@ -58,9 +58,9 @@ public final class USGUIManager {
     private final @Nullable GUIContent backGUIContent;
     private final int backGUIContentSlotOffset;
 
-    // getTopUserLoginsAndThen
-    // getMonthlyUserLoginsAndThen
-    // getNewestUserLoginsAndThen
+    // getTopUsersLoginsAndThen
+    // getMonthlyUsersLoginsAndThen
+    // getNewestUsersLoginsAndThen
     // getUserLoginsAndThen
     public @NotNull GUI mainMenu() {
         //TODO:
@@ -73,8 +73,8 @@ public final class USGUIManager {
      *
      * @param player the player
      */
-    public void openTopUserLoginsGUI(final @NotNull Player player) {
-        client.getTopUserLoginsAndThen(
+    public void openTopUsersLoginsGUI(final @NotNull Player player) {
+        client.getTopUsersLoginsAndThen(
                 l -> prepareGUI(
                         mainMenu(),
                         topUsersLoginsGUI,
@@ -93,8 +93,8 @@ public final class USGUIManager {
      *
      * @param player the player
      */
-    public void openMonthlyUserLoginsGUI(final @NotNull Player player) {
-        client.getMonthlyUserLoginsAndThen(
+    public void openMonthlyUsersLoginsGUI(final @NotNull Player player) {
+        client.getMonthlyUsersLoginsAndThen(
                 l -> prepareGUI(
                         mainMenu(),
                         monthlyUsersLoginsGUI,
@@ -113,8 +113,8 @@ public final class USGUIManager {
      *
      * @param player the player
      */
-    public void openNewestUserLoginsGUI(final @NotNull Player player) {
-        client.getNewestUserLoginsAndThen(
+    public void openNewestUsersLoginsGUI(final @NotNull Player player) {
+        client.getNewestUsersLoginsAndThen(
                 l -> prepareGUI(
                         mainMenu(),
                         newestUsersLoginsGUI,

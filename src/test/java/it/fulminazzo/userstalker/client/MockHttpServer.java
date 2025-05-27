@@ -41,7 +41,7 @@ public class MockHttpServer implements HttpHandler {
     private final HttpServer server;
 
     private List<?> usernames;
-    private boolean showUserLogins = true;
+    private boolean showUsersLogins = true;
 
     public MockHttpServer(int port) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -73,14 +73,14 @@ public class MockHttpServer implements HttpHandler {
         if (path.equalsIgnoreCase("/valid")) sendResponse(httpExchange, "OK");
         else if (path.equalsIgnoreCase("/complex")) sendResponse(httpExchange, USER_LOGIN);
         else if (path.equalsIgnoreCase("/top"))
-            sendResponse(httpExchange, showUserLogins ? USER_LOGINS_COUNT : null);
+            sendResponse(httpExchange, showUsersLogins ? USER_LOGINS_COUNT : null);
         else if (path.equalsIgnoreCase("/month"))
-            sendResponse(httpExchange, showUserLogins ? USER_LOGINS_COUNT : null);
+            sendResponse(httpExchange, showUsersLogins ? USER_LOGINS_COUNT : null);
         else if (path.equalsIgnoreCase("/newest"))
-            sendResponse(httpExchange, showUserLogins ? USER_LOGINS : null);
+            sendResponse(httpExchange, showUsersLogins ? USER_LOGINS : null);
         else if (path.equalsIgnoreCase("/usernames")) sendResponse(httpExchange, usernames);
         else if (path.equalsIgnoreCase("/" + USER_LOGIN.getUsername()))
-            sendResponse(httpExchange, showUserLogins ? USER_LOGINS : null);
+            sendResponse(httpExchange, showUsersLogins ? USER_LOGINS : null);
         else httpExchange.sendResponseHeaders(404, 0);
     }
 
@@ -95,8 +95,8 @@ public class MockHttpServer implements HttpHandler {
         } else if (path.equalsIgnoreCase("/usernames")) {
             usernames = readInputBody(httpExchange, List.class);
             sendResponse(httpExchange, 201, "OK");
-        } else if (path.equalsIgnoreCase("/showuserlogins")) {
-            showUserLogins = readInputBody(httpExchange, Boolean.class);
+        } else if (path.equalsIgnoreCase("/showuserslogins")) {
+            showUsersLogins = readInputBody(httpExchange, Boolean.class);
             sendResponse(httpExchange, 201, "OK");
         } else httpExchange.sendResponseHeaders(404, 0);
     }

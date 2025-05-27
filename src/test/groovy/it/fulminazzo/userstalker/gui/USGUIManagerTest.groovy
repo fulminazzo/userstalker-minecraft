@@ -60,12 +60,12 @@ class USGUIManagerTest extends Specification {
         BukkitUtils.PLAYERS.clear()
     }
 
-    def 'test that openTopUserLoginsGUI of valid opens GUI'() {
+    def 'test that openTopUsersLoginsGUI of valid opens GUI'() {
         given:
         def player = getNewPlayer()
 
         when:
-        manager.openTopUserLoginsGUI(player)
+        manager.openTopUsersLoginsGUI(player)
 
         then:
         def viewer = GUIManager.getViewer(player)
@@ -75,12 +75,12 @@ class USGUIManagerTest extends Specification {
         1 * player.openInventory(_ as Inventory)
     }
 
-    def 'test that openMonthlyUserLoginsGUI of valid opens GUI'() {
+    def 'test that openMonthlyUsersLoginsGUI of valid opens GUI'() {
         given:
         def player = getNewPlayer()
 
         when:
-        manager.openMonthlyUserLoginsGUI(player)
+        manager.openMonthlyUsersLoginsGUI(player)
 
         then:
         def viewer = GUIManager.getViewer(player)
@@ -90,12 +90,12 @@ class USGUIManagerTest extends Specification {
         1 * player.openInventory(_ as Inventory)
     }
 
-    def 'test that openNewestUserLoginsGUI of valid opens GUI'() {
+    def 'test that openNewestUsersLoginsGUI of valid opens GUI'() {
         given:
         def player = getNewPlayer()
 
         when:
-        manager.openNewestUserLoginsGUI(player)
+        manager.openNewestUsersLoginsGUI(player)
 
         then:
         def viewer = GUIManager.getViewer(player)
@@ -138,11 +138,11 @@ class USGUIManagerTest extends Specification {
         1 * player.sendMessage(_ as String)
 
         where:
-        managerMethod              | clientMethod
-        'openTopUserLoginsGUI'     | 'disableTop'
-        'openMonthlyUserLoginsGUI' | 'disableMonthly'
-        'openNewestUserLoginsGUI'  | 'disableNewest'
-        'openUserLoginsGUI'        | 'toString'
+        managerMethod               | clientMethod
+        'openTopUsersLoginsGUI'     | 'disableTop'
+        'openMonthlyUsersLoginsGUI' | 'disableMonthly'
+        'openNewestUsersLoginsGUI'  | 'disableNewest'
+        'openUserLoginsGUI'         | 'toString'
     }
 
     def 'test that prepareGUI sets correct back action'() {
