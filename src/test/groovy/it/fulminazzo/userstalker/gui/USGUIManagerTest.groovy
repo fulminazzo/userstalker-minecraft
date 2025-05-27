@@ -56,6 +56,28 @@ class USGUIManagerTest extends Specification {
                 .build()
     }
 
+    def 'test that openNewestUserLoginsGUI of valid opens GUI'() {
+        given:
+        def player = Mock(Player)
+        player.uniqueId >> UUID.randomUUID()
+        player.name >> 'Fulminazzo'
+        player.displayName >> 'Fulminazzo'
+        player.server >> Bukkit.server
+
+        and:
+        BukkitUtils.PLAYERS.add(player)
+
+        when:
+        manager.openNewestUserLoginsGUI(player)
+
+        then:
+        def viewer = GUIManager.getViewer(player)
+        viewer != null
+        viewer.openGUI != null
+        viewer.openGUI.title == GUIs.defaultNewestUsersLogins().title
+        1 * player.openInventory(_ as Inventory)
+    }
+
     def 'test that openUserLoginsGUI of valid opens GUI'() {
         given:
         def player = Mock(Player)
@@ -96,8 +118,9 @@ class USGUIManagerTest extends Specification {
         1 * player.sendMessage(_ as String)
 
         where:
-        managerMethod       | clientMethod
-        'openUserLoginsGUI' | 'toString'
+        managerMethod             | clientMethod
+        'openUserLoginsGUI'       | 'toString'
+        'openNewestUserLoginsGUI' | 'disableNewest'
     }
 
     def 'test that prepareGUI sets correct back action'() {
