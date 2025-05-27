@@ -22,6 +22,7 @@ class USGUIManagerBuilderTest extends Specification {
                 .logger(logger)
                 .apiClient(Mock(USAsyncApiClient))
                 .pluginDirectory(PLUGIN_DIRECTORY)
+                .skinCache(null)
 
         GUIYAGLParser.addAllParsers()
     }
