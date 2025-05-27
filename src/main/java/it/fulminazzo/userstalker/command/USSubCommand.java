@@ -32,7 +32,7 @@ abstract class USSubCommand {
                         final @NotNull String... aliases) {
         this.plugin = plugin;
         this.aliases = Arrays.asList(aliases);
-        this.permission = permission.toLowerCase();
+        this.permission = String.format("%s.command.%s", plugin.getName(), permission).toLowerCase();
     }
 
     /**
