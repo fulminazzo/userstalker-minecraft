@@ -11,6 +11,7 @@ import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
 import it.fulminazzo.yagl.guis.GUI;
+import it.fulminazzo.yagl.viewers.Viewer;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -103,6 +104,17 @@ public final class USGUIManager {
      * @param player the player
      */
     public void openTopUsersLoginsGUI(final @NotNull Player player) {
+        Viewer viewer = GUIManager.getViewer(player);
+        openTopUsersLoginsGUI(viewer);
+    }
+
+    /**
+     * Queries the {@link #client} to get the top accesses on the server.
+     * Then, it shows them in a GUI.
+     *
+     * @param viewer the viewer
+     */
+    void openTopUsersLoginsGUI(final @NotNull Viewer viewer) {
         client.getTopUsersLoginsAndThen(
                 l -> prepareGUI(
                         mainMenuGUI(),
@@ -110,9 +122,9 @@ public final class USGUIManager {
                         l,
                         topUsersLoginsGUIContent,
                         (v, g, c) ->
-                                openUserLoginsGUI(player, Objects.requireNonNull(c.getVariable("username")), g)
-                ).open(GUIManager.getViewer(player)),
-                () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
+                                openUserLoginsGUI(viewer, Objects.requireNonNull(c.getVariable("username")), g)
+                ).open(viewer),
+                () -> viewer.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
     }
 
@@ -123,6 +135,17 @@ public final class USGUIManager {
      * @param player the player
      */
     public void openMonthlyUsersLoginsGUI(final @NotNull Player player) {
+        Viewer viewer = GUIManager.getViewer(player);
+        openMonthlyUsersLoginsGUI(viewer);
+    }
+
+    /**
+     * Queries the {@link #client} to get the top monthly accesses on the server.
+     * Then, it shows them in a GUI.
+     *
+     * @param viewer the viewer
+     */
+    void openMonthlyUsersLoginsGUI(final @NotNull Viewer viewer) {
         client.getMonthlyUsersLoginsAndThen(
                 l -> prepareGUI(
                         mainMenuGUI(),
@@ -130,9 +153,9 @@ public final class USGUIManager {
                         l,
                         monthlyUsersLoginsGUIContent,
                         (v, g, c) ->
-                                openUserLoginsGUI(player, Objects.requireNonNull(c.getVariable("username")), g)
-                ).open(GUIManager.getViewer(player)),
-                () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
+                                openUserLoginsGUI(viewer, Objects.requireNonNull(c.getVariable("username")), g)
+                ).open(viewer),
+                () -> viewer.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
     }
 
@@ -143,6 +166,17 @@ public final class USGUIManager {
      * @param player the player
      */
     public void openNewestUsersLoginsGUI(final @NotNull Player player) {
+        Viewer viewer = GUIManager.getViewer(player);
+        openNewestUsersLoginsGUI(viewer);
+    }
+
+    /**
+     * Queries the {@link #client} to get the newest accesses on the server.
+     * Then, it shows them in a GUI.
+     *
+     * @param viewer the viewer
+     */
+    void openNewestUsersLoginsGUI(final @NotNull Viewer viewer) {
         client.getNewestUsersLoginsAndThen(
                 l -> prepareGUI(
                         mainMenuGUI(),
@@ -150,9 +184,9 @@ public final class USGUIManager {
                         l,
                         newestUsersLoginsGUIContent,
                         (v, g, c) ->
-                                openUserLoginsGUI(player, Objects.requireNonNull(c.getVariable("username")), g)
-                ).open(GUIManager.getViewer(player)),
-                () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
+                                openUserLoginsGUI(viewer, Objects.requireNonNull(c.getVariable("username")), g)
+                ).open(viewer),
+                () -> viewer.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
     }
 
