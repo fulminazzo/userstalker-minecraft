@@ -60,13 +60,40 @@ public final class USGUIManager {
     private final @Nullable GUIContent backGUIContent;
     private final int backGUIContentSlotOffset;
 
-    // getTopUsersLoginsAndThen
-    // getMonthlyUsersLoginsAndThen
-    // getNewestUsersLoginsAndThen
-    // getUserLoginsAndThen
-    public @NotNull GUI mainMenu() {
-        //TODO:
-        return GUI.newGUI(9);
+
+    /**
+     * Returns the main menu gui.
+     *
+     * @return the gui
+     */
+    public @NotNull GUI mainMenuGUI() {
+        GUI gui = mainMenuGUI.copy();
+        for (GUIContent content : gui.getContents()) {
+            String action = content.getVariable("action");
+            if (action != null) {
+                USGUIAction actualAction = USGUIAction.deserialize(action);
+                if (actualAction == null)
+                    getLogger().ifPresent(logger -> logger.warning("Invalid action specified in main menu: " + action));
+                else switch (actualAction) {
+                    case OPEN_GUI_TOP: {
+                        content.onClickItem((v, g, c) -> openTopUsersLoginsGUI(v));
+                        break;
+                    }
+                    case OPEN_GUI_MONTHLY: {
+                        content.onClickItem((v, g, c) -> openMonthlyUsersLoginsGUI(v));
+                        break;
+                    }
+                    case OPEN_GUI_NEWEST: {
+                        content.onClickItem((v, g, c) -> openNewestUsersLoginsGUI(v));
+                        break;
+                    }
+                    default: {
+                        content.onClickItem((v, g, c) -> v.closeGUI());
+                    }
+                }
+            }
+        }
+        return gui;
     }
 
     /**
@@ -78,7 +105,7 @@ public final class USGUIManager {
     public void openTopUsersLoginsGUI(final @NotNull Player player) {
         client.getTopUsersLoginsAndThen(
                 l -> prepareGUI(
-                        mainMenu(),
+                        mainMenuGUI(),
                         topUsersLoginsGUI,
                         l,
                         topUsersLoginsGUIContent,
@@ -98,7 +125,7 @@ public final class USGUIManager {
     public void openMonthlyUsersLoginsGUI(final @NotNull Player player) {
         client.getMonthlyUsersLoginsAndThen(
                 l -> prepareGUI(
-                        mainMenu(),
+                        mainMenuGUI(),
                         monthlyUsersLoginsGUI,
                         l,
                         monthlyUsersLoginsGUIContent,
@@ -118,7 +145,7 @@ public final class USGUIManager {
     public void openNewestUsersLoginsGUI(final @NotNull Player player) {
         client.getNewestUsersLoginsAndThen(
                 l -> prepareGUI(
-                        mainMenu(),
+                        mainMenuGUI(),
                         newestUsersLoginsGUI,
                         l,
                         newestUsersLoginsGUIContent,
@@ -137,7 +164,7 @@ public final class USGUIManager {
      * @param username the username of the user
      */
     public void openUserLoginsGUI(final @NotNull Player player, final @NotNull String username) {
-        openUserLoginsGUI(player, username, mainMenu());
+        openUserLoginsGUI(player, username, mainMenuGUI());
     }
 
     /**
