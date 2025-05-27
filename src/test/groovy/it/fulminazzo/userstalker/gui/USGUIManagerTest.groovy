@@ -41,6 +41,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
+        GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins' || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'         || 'userLoginsGUIContent'
     }
 
@@ -93,8 +94,9 @@ class USGUIManagerTest extends Specification {
         manager."$itemName" == item
 
         where:
-        defaultItem                 | path                || itemName
-        GUIs.defaultUserLoginItem() | 'items.user-logins' || 'userLoginsGUIContent'
+        defaultItem                      | path                        || itemName
+        GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins' || 'newestUsersLoginsGUIContent'
+        GUIs.defaultUserLoginItem()      | 'items.user-logins'         || 'userLoginsGUIContent'
     }
 
     def 'test setup with file but object null uses default #objectName object'() {
@@ -120,6 +122,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
+        GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins' || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'         || 'userLoginsGUIContent'
     }
 
@@ -141,6 +144,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
+        GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins' || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'         || 'userLoginsGUIContent'
     }
 
