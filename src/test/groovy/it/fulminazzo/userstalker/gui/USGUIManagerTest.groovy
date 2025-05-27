@@ -15,6 +15,8 @@ import org.bukkit.Bukkit
 import org.mockito.Mockito
 import spock.lang.Specification
 
+import java.util.logging.Logger
+
 class USGUIManagerTest extends Specification {
 
     private static final File PLUGIN_DIRECTORY = new File('build/resources/test/usguimanager')
@@ -30,6 +32,7 @@ class USGUIManagerTest extends Specification {
         GUIYAGLParser.addAllParsers()
 
         manager = USGUIManager.builder()
+                .logger(Logger.getLogger(getClass().simpleName))
                 .apiClient(Mock(USAsyncApiClient))
                 .pluginDirectory(PLUGIN_DIRECTORY)
                 .build()
