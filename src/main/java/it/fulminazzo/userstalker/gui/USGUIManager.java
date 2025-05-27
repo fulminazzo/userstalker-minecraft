@@ -112,7 +112,7 @@ public final class USGUIManager {
                         l,
                         userLoginsGUIContent,
                         null
-                ).open(GUIManager.getViewer(player)),
+                ).setVariable("username", username).open(GUIManager.getViewer(player)),
                 () -> player.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
     }
