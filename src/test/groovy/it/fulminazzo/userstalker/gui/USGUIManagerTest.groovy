@@ -38,11 +38,11 @@ class USGUIManagerTest extends Specification {
         config.get(path, DataGUI) == defaultGUI
 
         where:
-        defaultGUI                       | path                   || guiName
-        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
-        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
-        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
-        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
+        defaultGUI                       | path                        || guiName
+        GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
     }
 
     def 'test setup with file uses stored #guiName GUI'() {
@@ -66,11 +66,11 @@ class USGUIManagerTest extends Specification {
         manager."$guiName" == dataGUI
 
         where:
-        defaultGUI                       | path                   || guiName
-        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
-        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
-        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
-        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
+        defaultGUI                       | path                        || guiName
+        GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
     }
 
     def 'test setup with file but GUI null uses default #guiName GUI'() {
@@ -91,11 +91,11 @@ class USGUIManagerTest extends Specification {
         manager."$guiName" == defaultGUI
 
         where:
-        defaultGUI                       | path                   || guiName
-        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
-        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
-        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
-        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
+        defaultGUI                       | path                        || guiName
+        GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
     }
 
     def 'test setup with file but GUI not available uses default #guiName GUI'() {
@@ -111,11 +111,11 @@ class USGUIManagerTest extends Specification {
         manager."$guiName" == defaultGUI
 
         where:
-        defaultGUI                       | path                   || guiName
-        GUIs.defaultTopUsersLogins()     | 'top-users-logins'     || 'topUsersLoginsGUI'
-        GUIs.defaultMonthlyUsersLogins() | 'monthly-users-logins' || 'monthlyUsersLoginsGUI'
-        GUIs.defaultNewestUsersLogins()  | 'newest-users-logins'  || 'newestUsersLoginsGUI'
-        GUIs.defaultUserLogins()         | 'user-logins'          || 'userLoginsGUI'
+        defaultGUI                       | path                        || guiName
+        GUIs.defaultTopUsersLogins()     | 'guis.top-users-logins'     || 'topUsersLoginsGUI'
+        GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins' || 'monthlyUsersLoginsGUI'
+        GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'  || 'newestUsersLoginsGUI'
+        GUIs.defaultUserLogins()         | 'guis.user-logins'          || 'userLoginsGUI'
     }
 
 }

@@ -65,19 +65,19 @@ public final class USGUIManager {
                 .onCreated(c -> {
                     logger.info(String.format("Created new configuration file: %s/guis.yml", pluginDirectory.getPath()));
 
-                    c.set("top-users-logins", GUIs.defaultTopUsersLogins());
-                    c.set("monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
-                    c.set("newest-users-logins", GUIs.defaultNewestUsersLogins());
-                    c.set("user-logins", GUIs.defaultUserLogins());
+                    c.set("guis.top-users-logins", GUIs.defaultTopUsersLogins());
+                    c.set("guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
+                    c.set("guis.newest-users-logins", GUIs.defaultNewestUsersLogins());
+                    c.set("guis.user-logins", GUIs.defaultUserLogins());
 
                     c.save();
                 })
                 .build();
 
-        topUsersLoginsGUI = getGUI(config, "top-users-logins", GUIs.defaultTopUsersLogins());
-        monthlyUsersLoginsGUI = getGUI(config, "monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
-        newestUsersLoginsGUI = getGUI(config, "newest-users-logins", GUIs.defaultNewestUsersLogins());
-        userLoginsGUI = getGUI(config, "user-logins", GUIs.defaultUserLogins());
+        topUsersLoginsGUI = getGUI(config, "guis.top-users-logins", GUIs.defaultTopUsersLogins());
+        monthlyUsersLoginsGUI = getGUI(config, "guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
+        newestUsersLoginsGUI = getGUI(config, "guis.newest-users-logins", GUIs.defaultNewestUsersLogins());
+        userLoginsGUI = getGUI(config, "guis.user-logins", GUIs.defaultUserLogins());
     }
 
     @SuppressWarnings("unchecked")
