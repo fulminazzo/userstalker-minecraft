@@ -11,6 +11,7 @@ import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
+import it.fulminazzo.yagl.guis.GUI;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,8 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
                     getLogger().ifPresent(logger ->
                             logger.info(String.format("Created new configuration file: %s/guis.yml", pluginDirectory.getPath())));
 
+                    c.set("guis.main-menu", defaultMainMenu());
+
                     c.set("guis.top-users-logins", defaultTopUsersLogins());
                     c.set("items.top-users-logins", defaultUserLoginCountItem());
 
@@ -64,6 +67,8 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
                     c.save();
                 })
                 .build();
+
+        GUI mainMenuGUI = getGUI(config, "guis.main-menu", defaultMainMenu());
 
         DataGUI<UserLoginCount> topUsersLoginsGUI = getGUI(config, "guis.top-users-logins", defaultTopUsersLogins());
         GUIContent topUsersLoginsGUIContent = getContent(config, "items.top-users-logins", defaultUserLoginCountItem());
@@ -85,6 +90,7 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
                 .logger(getLogger().orElse(null))
                 .client(getApiClient())
                 .cache(skinCache)
+                .mainMenuGUI(mainMenuGUI)
                 .topUsersLoginsGUI(topUsersLoginsGUI)
                 .topUsersLoginsGUIContent(topUsersLoginsGUIContent)
                 .monthlyUsersLoginsGUI(monthlyUsersLoginsGUI)
