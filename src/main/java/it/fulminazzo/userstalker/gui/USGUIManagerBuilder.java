@@ -24,7 +24,7 @@ import static it.fulminazzo.userstalker.gui.GUIs.*;
 /**
  * A builder to create {@link USGUIManager} instances.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManagerBuilder, ConfigurationException> {
     private static final int DEFAULT_BACK_GUI_CONTENT_SLOT_OFFSET = -9;
 
