@@ -23,10 +23,6 @@ class USCommandTest extends Specification {
         command = new USCommand(plugin)
 
         sender = Mock(CommandSender)
-        sender.hasPermission(_ as String) >> { args ->
-            String permission = args[0]
-            return !permission.equals('userstalker.command.reload')
-        }
 
         UserStalker.instance = plugin
     }
@@ -37,6 +33,10 @@ class USCommandTest extends Specification {
 
         and:
         sender.sendMessage(_ as String) >> { a -> sentMessages.add(a[0]) }
+        sender.hasPermission(_ as String) >> { a ->
+            String permission = a[0]
+            return !permission.equals('userstalker.command.reload')
+        }
 
         when:
         command.onCommand(
@@ -61,6 +61,9 @@ class USCommandTest extends Specification {
     }
 
     def 'test that onTabComplete with args #args returns #expected'() {
+        given:
+        sender.hasPermission(_ as String) >> true
+
         when:
         def actual = command.onTabComplete(
                 sender,
