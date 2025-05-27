@@ -60,13 +60,13 @@ class USGUIManagerTest extends Specification {
         BukkitUtils.PLAYERS.clear()
     }
 
-    def 'test that openMainMenuGUI sets the correct action for #actionString'() {
+    def 'test that openMainMenuGUI sets the correct action for #actionEnum'() {
         given:
         def player = getNewPlayer()
 
         and:
         def content = ItemGUIContent.newInstance('STONE')
-        content.setVariable('action', actionString)
+        content.setVariable('action', actionEnum.serialize())
         def gui = GUI.newGUI(9).addContent(content)
 
         and:
@@ -88,7 +88,11 @@ class USGUIManagerTest extends Specification {
         action.get().execute(guiViewer.key, actualGui, actualContent)
 
         then:
-        1 * player.openInventory(_ as Inventory)
+        if (actionEnum == USGUIAction.CLOSE) {
+            1 * player.closeInventory()
+        } else {
+            1 * player.openInventory(_ as Inventory)
+        }
 
         def newGuiViewer = GUIManager.getOpenGUIViewer(player)
         newGuiViewer.isPresent()
@@ -99,41 +103,11 @@ class USGUIManagerTest extends Specification {
         newGui.title == expectedTitle
 
         where:
-        actionString       || expectedTitle
-        USGUIAction.OPEN_GUI_TOP.serialize()|| '&cTop users logins'
-        USGUIAction.OPEN_GUI_MONTHLY.serialize() || '&cMonthly users logins'
-        USGUIAction.OPEN_GUI_NEWEST.serialize()  || '&cNewest users logins'
-    }
-
-    def 'test that openMainMenuGUI closes GUI on close action'() {
-        given:
-        def player = getNewPlayer()
-
-        and:
-        def content = ItemGUIContent.newInstance('STONE')
-        content.setVariable('action', USGUIAction.CLOSE.serialize())
-        def gui = GUI.newGUI(9).addContent(content)
-
-        and:
-        new Refl<>(manager).setFieldObject('mainMenuGUI', gui)
-
-        when:
-        manager.openMainMenuGUI(player)
-
-        then:
-        def guiViewer = GUIManager.getOpenGUIViewer(player)
-        guiViewer.isPresent()
-        def actualGui = guiViewer.value
-
-        def actualContent = actualGui.getContents(0).get(0)
-        def action = actualContent.clickItemAction()
-        action.isPresent()
-
-        when:
-        action.get().execute(guiViewer.key, actualGui, actualContent)
-
-        then:
-        1 * player.closeInventory()
+        actionEnum                   || expectedTitle
+        USGUIAction.OPEN_GUI_TOP     || '&cTop users logins'
+        USGUIAction.OPEN_GUI_MONTHLY || '&cMonthly users logins'
+        USGUIAction.OPEN_GUI_NEWEST  || '&cNewest users logins'
+        USGUIAction.CLOSE            || null
     }
 
     def 'test that openTopUsersLoginsGUI of valid opens GUI'() {
