@@ -24,4 +24,31 @@ class USCommandTest extends Specification {
         sender.hasPermission(_ as String) >> true
     }
 
+    def 'test that onTabComplete with args #args returns #expected'() {
+        when:
+        def actual = command.onTabComplete(
+                sender,
+                null,
+                '',
+                args.toArray(new String[0])
+        )
+
+        then:
+        actual == expected
+
+        where:
+        args            || expected
+        []              || []
+        ['']            || ['opengui', 'open', 'gui', 'reload', 'help', '?']
+        ['op']          || ['opengui', 'open']
+        ['opengui', ''] || []
+        ['open', '']    || []
+        ['gui', '']     || []
+        ['reload', '']  || []
+        ['help', '']    || ['opengui', 'open', 'gui', 'reload', 'help', '?']
+        ['help', 'op']  || ['opengui', 'open']
+        ['help', 'o']   || ['opengui', 'open', 'reload']
+        ['?', '']       || ['opengui', 'open', 'gui', 'reload', 'help', '?']
+    }
+
 }
