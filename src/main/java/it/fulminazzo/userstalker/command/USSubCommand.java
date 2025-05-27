@@ -59,14 +59,4 @@ abstract class USSubCommand {
     public abstract @NotNull List<String> tabComplete(@NotNull CommandSender sender,
                                                       @NotNull String[] args);
 
-    /**
-     * Checks if the given string is equal to one of the aliases of this subcommand.
-     *
-     * @param argument the argument
-     * @return true if it is (case insensitive)
-     */
-    public boolean matches(final @NotNull String argument) {
-        return aliases.stream().anyMatch(a -> a.equalsIgnoreCase(argument));
-    }
-
 }
