@@ -45,6 +45,7 @@ final class HelpSubCommand extends USSubCommand {
             list.addAll(command.getExecutableCommands(sender)
                     .map(USSubCommand::getAliases)
                     .flatMap(Collection::stream)
+                    .filter(s -> s.contains(args[0]))
                     .collect(Collectors.toList())
             );
         return list;
