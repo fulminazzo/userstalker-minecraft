@@ -27,19 +27,19 @@ public final class USGUIManager {
 
     private @Nullable ProfileCache cache;
 
-    private DataGUI<UserLoginCount> topUsersLoginsGUI;
-    private GUIContent topUsersLoginsGUIContent;
+    private @Nullable DataGUI<UserLoginCount> topUsersLoginsGUI;
+    private @Nullable GUIContent topUsersLoginsGUIContent;
 
-    private DataGUI<UserLoginCount> monthlyUsersLoginsGUI;
-    private GUIContent monthlyUsersLoginsGUIContent;
+    private @Nullable DataGUI<UserLoginCount> monthlyUsersLoginsGUI;
+    private @Nullable GUIContent monthlyUsersLoginsGUIContent;
 
-    private DataGUI<UserLogin> newestUsersLoginsGUI;
-    private GUIContent newestUsersLoginsGUIContent;
+    private @Nullable DataGUI<UserLogin> newestUsersLoginsGUI;
+    private @Nullable GUIContent newestUsersLoginsGUIContent;
 
-    private DataGUI<UserLogin> userLoginsGUI;
-    private GUIContent userLoginsGUIContent;
+    private @Nullable DataGUI<UserLogin> userLoginsGUI;
+    private @Nullable GUIContent userLoginsGUIContent;
 
-    private GUIContent backGUIContent;
+    private @Nullable GUIContent backGUIContent;
 
     /**
      * Instantiates a new GUI manager.
