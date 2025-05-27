@@ -28,6 +28,7 @@ public final class USGUIManager {
     private @Nullable ProfileCache cache;
 
     private DataGUI<UserLoginCount> topUsersLoginsGUI;
+    private GUIContent topUsersLoginsGUIContent;
 
     private DataGUI<UserLoginCount> monthlyUsersLoginsGUI;
     private GUIContent monthlyUsersLoginsGUIContent;
@@ -74,6 +75,7 @@ public final class USGUIManager {
                     logger.info(String.format("Created new configuration file: %s/guis.yml", pluginDirectory.getPath()));
 
                     c.set("guis.top-users-logins", GUIs.defaultTopUsersLogins());
+                    c.set("items.top-users-logins", GUIs.defaultUserLoginCountItem());
 
                     c.set("guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
                     c.set("items.monthly-users-logins", GUIs.defaultUserLoginCountItem());
@@ -89,6 +91,7 @@ public final class USGUIManager {
                 .build();
 
         topUsersLoginsGUI = getGUI(config, "guis.top-users-logins", GUIs.defaultTopUsersLogins());
+        topUsersLoginsGUIContent = getContent(config, "items.top-users-logins", GUIs.defaultUserLoginCountItem());
 
         monthlyUsersLoginsGUI = getGUI(config, "guis.monthly-users-logins", GUIs.defaultMonthlyUsersLogins());
         monthlyUsersLoginsGUIContent = getContent(config, "items.monthly-users-logins", GUIs.defaultUserLoginCountItem());
