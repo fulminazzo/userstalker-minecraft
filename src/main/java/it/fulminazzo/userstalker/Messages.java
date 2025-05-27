@@ -15,8 +15,16 @@ import org.jetbrains.annotations.NotNull;
 public enum Messages implements DefaultFulmiMessages {
     PREFIX("prefix", "&6User&cStalker &8» &f"),
 
-    INTERNAL_ERROR_OCCURRED("general.internal-error", "<prefix>&cAn internal error occurred. " +
-            "Please notify an administrator about this");
+    RELOAD_SUCCESSFUL("general.reload-successful", "&aPlugin reload completed successfully"),
+
+    INTERNAL_ERROR_OCCURRED("error.internal-error", "<prefix>&cAn internal error occurred. " +
+            "Please notify an administrator about this"),
+    RELOAD_UNSUCCESSFUL("general.reload-unsuccessful", "&cPlugin reload failed with error: &4<error>&c. " +
+            "Check console for more details"),
+
+    HELP_RELOAD("help.reload", "Reloads the plugin configurations")
+
+    ;
 
     private final String path;
     private final String defaultMessage;
