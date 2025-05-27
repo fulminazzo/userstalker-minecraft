@@ -165,10 +165,10 @@ public class USGUIManagerBuilder extends LoggedBuilder<USGUIManager, USGUIManage
     }
 
     @SuppressWarnings("unchecked")
-    private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
-                                  final @NotNull String path,
-                                  final @NotNull DataGUI<T> defaultGUI) {
-        DataGUI<T> gui = config.get(path, DataGUI.class);
+    private <G extends GUI> G getGUI(final @NotNull FileConfiguration config,
+                                     final @NotNull String path,
+                                     final @NotNull G defaultGUI) {
+        G gui = (G) config.get(path, GUI.class);
         if (gui != null) return gui;
         getLogger().ifPresent(logger -> logger.warning(String.format("Could not find gui \"%s\" in guis.yml. Using default GUI", path)));
         return defaultGUI;
