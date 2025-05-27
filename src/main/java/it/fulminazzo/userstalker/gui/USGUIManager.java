@@ -42,6 +42,7 @@ public final class USGUIManager {
     private @Nullable GUIContent userLoginsGUIContent;
 
     private @Nullable GUIContent backGUIContent;
+    private int backGUIContentSlotOffset = -9;
 
     /**
      * Instantiates a new GUI manager.
@@ -92,6 +93,8 @@ public final class USGUIManager {
 
                     c.set("items.back", defaultBackItem());
 
+                    c.set("misc.back-offset", backGUIContentSlotOffset);
+
                     c.save();
                 })
                 .build();
@@ -109,6 +112,8 @@ public final class USGUIManager {
         userLoginsGUIContent = getContent(config, "items.user-logins", defaultUserLoginItem());
 
         backGUIContent = getContent(config, "items.back", defaultBackItem());
+
+        backGUIContentSlotOffset = getBackContentOffset(config);
     }
 
     private <T> DataGUI<T> getGUI(final @NotNull FileConfiguration config,
@@ -131,6 +136,20 @@ public final class USGUIManager {
         }
         logger.warning(String.format("Could not find item \"%s\" in guis.yml. Using default item", path));
         return defaultContent;
+    }
+
+    private int getBackContentOffset(final @NotNull FileConfiguration config) {
+        String path = "misc.back-offset";
+        Integer slot = config.getInteger(path);
+        if (slot == null) {
+            logger.warning(String.format("Could not find \"%s\" in guis.yml. Using default offset", path));
+            return backGUIContentSlotOffset;
+        }
+        if (slot > -1) {
+            logger.warning("Invalid back-offset specified in guis.yml. Required a negative number lower than or equal to -1. Using default offset");
+            return backGUIContentSlotOffset;
+        }
+        return slot;
     }
 
 }
