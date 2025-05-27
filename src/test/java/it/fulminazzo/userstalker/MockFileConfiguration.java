@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.util.Map;
 
-class MockFileConfiguration extends FileConfiguration {
+public class MockFileConfiguration extends FileConfiguration {
     private final @NotNull Map<?, ?> data;
 
     public MockFileConfiguration(final @NotNull Map<?, ?> data) {
