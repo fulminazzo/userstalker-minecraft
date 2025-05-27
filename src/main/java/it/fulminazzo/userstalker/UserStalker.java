@@ -8,8 +8,10 @@ import it.fulminazzo.userstalker.cache.ProfileCacheException;
 import it.fulminazzo.userstalker.client.APIClientException;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.gui.USGUIManager;
+import it.fulminazzo.userstalker.listener.PlayerListener;
 import it.fulminazzo.yagl.parsers.GUIYAGLParser;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,12 +65,15 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
 
             getLogger().info("Setting up GUI manager");
             guiManager = setupGUIManager();
-
-            getLogger().info("UserStalker setup complete");
         } catch (ConfigurationException | APIClientException e) {
             getLogger().severe(e.getMessage());
             disable();
+            return;
         }
+
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
+
+        getLogger().info("UserStalker setup complete");
     }
 
     @Override
