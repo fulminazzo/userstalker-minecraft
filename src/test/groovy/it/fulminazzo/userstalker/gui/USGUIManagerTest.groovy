@@ -41,6 +41,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins'  || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'   || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'           || 'userLoginsGUI'
+        GUIs.defaultUserLoginCountItem() | 'items.top-users-logins'     || 'topUsersLoginsGUIContent'
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
@@ -96,6 +97,7 @@ class USGUIManagerTest extends Specification {
 
         where:
         defaultItem                      | path                         || itemName
+        GUIs.defaultUserLoginCountItem() | 'items.top-users-logins'     || 'topUsersLoginsGUIContent'
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
@@ -124,6 +126,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins'  || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'   || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'           || 'userLoginsGUI'
+        GUIs.defaultUserLoginCountItem() | 'items.top-users-logins'     || 'topUsersLoginsGUIContent'
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
@@ -147,6 +150,7 @@ class USGUIManagerTest extends Specification {
         GUIs.defaultMonthlyUsersLogins() | 'guis.monthly-users-logins'  || 'monthlyUsersLoginsGUI'
         GUIs.defaultNewestUsersLogins()  | 'guis.newest-users-logins'   || 'newestUsersLoginsGUI'
         GUIs.defaultUserLogins()         | 'guis.user-logins'           || 'userLoginsGUI'
+        GUIs.defaultUserLoginCountItem() | 'items.top-users-logins'     || 'topUsersLoginsGUIContent'
         GUIs.defaultUserLoginCountItem() | 'items.monthly-users-logins' || 'monthlyUsersLoginsGUIContent'
         GUIs.defaultNamedUserLoginItem() | 'items.newest-users-logins'  || 'newestUsersLoginsGUIContent'
         GUIs.defaultUserLoginItem()      | 'items.user-logins'          || 'userLoginsGUIContent'
