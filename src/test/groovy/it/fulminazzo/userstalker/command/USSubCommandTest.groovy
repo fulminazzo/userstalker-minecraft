@@ -14,8 +14,6 @@ import java.util.logging.Logger
 
 class USSubCommandTest extends Specification {
 
-    private final List<String> messages = []
-
     private UserStalker plugin
 
     private CommandSender sender
@@ -26,9 +24,6 @@ class USSubCommandTest extends Specification {
         plugin.logger >> Logger.getLogger(getClass().simpleName)
 
         sender = Mock(CommandSender)
-        sender.sendMessage(_ as String) >> { args ->
-            messages.add(args[0])
-        }
 
         UserStalker.instance = plugin
     }
