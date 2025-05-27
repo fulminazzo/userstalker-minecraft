@@ -53,50 +53,36 @@ public final class GUIs {
                     new ArrayList<UserLogin>()));
 
     /**
-     * Provides a function to convert a {@link UserLoginCount} to a {@link GUIContent}.
+     * Gets the default user login count item.
      *
-     * @param materialName the material name
-     * @param cache        the cache to use to lookup skin in case of {@link Material#PLAYER_HEAD} provided
-     * @return the function
+     * @return the gui content
      */
-    public static @NotNull Function<UserLoginCount, GUIContent> userLoginCountConverter(
-            final @NotNull String materialName,
-            final @Nullable ProfileCache cache
-    ) {
-        return u -> setupVariables(newContentConverter(materialName, cache)
-                .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
-                .setLore(String.format("&fNumber of accesses: &e%s", u.getLoginCount())), u);
+    public static @NotNull GUIContent defaultUserLoginCountItem() {
+        return ItemGUIContent.newInstance(Material.PLAYER_HEAD.name().toLowerCase())
+                .setDisplayName("&fName: &b<username>")
+                .setLore("&fNumber of accesses: &e<login_count>");
     }
 
     /**
-     * Provides a function to convert a {@link UserLogin} to a {@link GUIContent} with the username included.
+     * Gets the default user login item with the username as display name.
      *
-     * @param materialName the material name
-     * @param cache        the cache to use to lookup skin in case of {@link Material#PLAYER_HEAD} provided
-     * @return the function
+     * @return the gui content
      */
-    public static @NotNull Function<UserLogin, GUIContent> namedUsersLoginConverter(
-            final @NotNull String materialName,
-            final @Nullable ProfileCache cache
-    ) {
-        return u -> setupVariables(newContentConverter(materialName, cache)
-                .setDisplayName(String.format("&fName: &b%s", u.getUsername()))
-                .setLore(String.format("&fIp: &c%s", u.getIp()),
-                        String.format("&fLogin date: &a%s", TimeUtils.toString(u.getLoginDate()))), u);
+    public static @NotNull GUIContent defaultNamedUserLoginItem() {
+        return ItemGUIContent.newInstance(Material.PLAYER_HEAD.name().toLowerCase())
+                .setDisplayName("&fName: &b<username>")
+                .setLore("&fIp: &c<ip>", "&fLogin date: &a<login_date>");
     }
 
     /**
-     * Provides a function to convert a {@link UserLogin} to a {@link GUIContent} without the username.
+     * Gets the default user login item.
      *
-     * @param materialName the material name
-     * @return the function
+     * @return the gui content
      */
-    public static @NotNull Function<UserLogin, GUIContent> userLoginConverter(
-            final @NotNull String materialName
-    ) {
-        return u -> setupVariables(ItemGUIContent.newInstance(materialName)
-                .setDisplayName(String.format("&fIp: &c%s", u.getIp()))
-                .setLore(String.format("&fLogin date: &a%s", TimeUtils.toString(u.getLoginDate()))), u);
+    public static @NotNull GUIContent defaultUserLoginItem() {
+        return ItemGUIContent.newInstance(Material.BOOK.name().toLowerCase())
+                .setDisplayName("&fIp: &c<ip>")
+                .setLore("&fLogin date: &a<login_date>");
     }
 
     /**
