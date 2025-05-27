@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 import static it.fulminazzo.userstalker.gui.GUIs.setupMetadataConversion;
 import static it.fulminazzo.userstalker.gui.GUIs.setupVariables;
 
@@ -50,6 +52,30 @@ public final class USGUIManager {
     // getMonthlyUserLoginsAndThen
     // getNewestUserLoginsAndThen
     // getUserLoginsAndThen
+
+    /**
+     * Returns a copy of the given GUI.
+     *
+     * @param <T>     the type of the data
+     * @param gui     the gui
+     * @param content the content to use to display data. Will be parsed using {@link #prepareContent(GUIContent, Object)}
+     * @param data    the data
+     * @return the parsed gui
+     */
+    <T> @NotNull DataGUI<T> prepareGUI(
+            @NotNull DataGUI<T> gui,
+            final @NotNull GUIContent content,
+            final @NotNull Collection<T> data
+    ) {
+        gui = DataGUI.newGUI(gui.size(), o -> prepareContent(content, o), data).copyFrom(gui, false);
+        if (backGUIContent != null) {
+            int slot = gui.size() - backGUIContentSlotOffset;
+            if (slot < 0) {
+                //TODO: error
+            } else gui.setContents(slot, backGUIContent);
+        }
+        return gui;
+    }
 
     /**
      * Returns a copy of the given content with variables parsed from the object data.
