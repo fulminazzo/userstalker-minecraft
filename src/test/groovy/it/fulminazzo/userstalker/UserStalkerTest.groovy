@@ -64,7 +64,7 @@ class UserStalkerTest extends Specification {
         'setupConfiguration' | []                  || new ConfigurationException('config.yml')
         'setupMessages'      | [Messages.values()] || new ConfigurationException('messages.yml')
         'setupApiClient'     | []                  || new APIClientException('API client')
-        'setupGUIManager'    | [] || new ConfigurationException('guis.yml')
+        'setupGUIManager'    | []                  || new ConfigurationException('guis.yml')
     }
 
     def 'test that onEnable does not throw if an error happens during setupProfileCache'() {
@@ -137,28 +137,26 @@ class UserStalkerTest extends Specification {
         1 * manager.disablePlugin(plugin)
     }
 
-    def 'test that getConfiguration throws if not initialized'() {
+    def 'test that #methodName throws if not initialized'() {
+        given:
+        def plugin = Mock(UserStalker)
+
+        and:
+        plugin."$methodName"() >> { callRealMethod() }
+
         when:
-        plugin.configuration
+        plugin."$methodName"()
 
         then:
-        thrown(FulmiException)
-    }
+        thrown(exception)
 
-    def 'test that getMessages throws if not initialized'() {
-        when:
-        plugin.messages
-
-        then:
-        thrown(FulmiException)
-    }
-
-    def 'test that getInstance throws if not initialized'() {
-        when:
-        UserStalker.instance
-
-        then:
-        thrown(IllegalStateException)
+        where:
+        methodName         | exception
+        'getGUIManager'    | IllegalStateException
+        'getApiClient'     | IllegalStateException
+        'getConfiguration' | FulmiException
+        'getMessages'      | FulmiException
+        'getInstance'      | IllegalStateException
     }
 
     def 'test spock tests work'() {
