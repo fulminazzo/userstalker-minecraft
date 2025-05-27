@@ -7,9 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -47,7 +46,21 @@ public final class USCommand implements TabExecutor {
                                                @NotNull Command command,
                                                @NotNull String alias,
                                                @NotNull String[] args) {
-        return Collections.emptyList();
+        final List<String> list = new ArrayList<>();
+        if (args.length == 1)
+            list.addAll(getExecutableCommands(sender)
+                    .map(USSubCommand::getAliases)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList())
+            );
+        else if (args.length > 1)
+            getExecutableCommands(sender)
+                    .filter(c -> c.matches(args[0]))
+                    .findFirst()
+                    .ifPresent(c ->
+                            list.addAll(c.tabComplete(sender, Arrays.copyOfRange(args, 1, args.length)))
+                    );
+        return list;
     }
 
     /**
