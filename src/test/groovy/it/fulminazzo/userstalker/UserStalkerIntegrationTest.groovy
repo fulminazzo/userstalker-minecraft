@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker
 
+import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.userstalker.command.USCommand
 import it.fulminazzo.userstalker.listener.PlayerListener
 import org.bukkit.Bukkit
@@ -37,6 +38,7 @@ class UserStalkerIntegrationTest extends Specification {
     def 'test full cycle load'() {
         given:
         def plugin = new UserStalker()
+        def refl = new Refl(plugin)
 
         when:
         plugin.onEnable()
@@ -51,6 +53,16 @@ class UserStalkerIntegrationTest extends Specification {
         and:
         1 * mockCommand.setExecutor(_ as USCommand)
         1 * mockPluginManager.registerEvents(_ as PlayerListener, _ as UserStalker)
+
+        when:
+        plugin.onDisable()
+
+        then:
+        refl.getFieldObject('configuration') == null
+        refl.getFieldObject('messages') == null
+        refl.getFieldObject('apiClient') == null
+        refl.getFieldObject('profileCache') == null
+        refl.getFieldObject('guiManager') == null
     }
 
 }
