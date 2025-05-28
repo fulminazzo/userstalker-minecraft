@@ -251,8 +251,8 @@ class USAsyncApiClientTest extends Specification {
                 'userstalker-http-server': [
                         'address': host,
                         'port'   : PORT,
-                        'username': 'user',
-                        'password': 'stalker'
+                        'username': 'userstalker',
+                        'password': 'shouldbechangedtoyourliking'
                 ]
         ])
 
