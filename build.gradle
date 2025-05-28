@@ -76,7 +76,7 @@ shadowJar {
     relocate('it.fulminazzo.yagl', "it.fulminazzo.${project.name}.yagl")
     relocate('com.google.gson', "it.fulminazzo.${project.name}.gson")
     relocate('com.moandjiezana.toml', "it.fulminazzo.${project.name}.toml")
-    archiveFileName = "$project.name-${project.version}.jar"
+    archiveFileName = "${project.name}-plugin.jar"
 }
 
 jar {
@@ -108,3 +108,4 @@ processResources {
         expand props
     }
 }
+
