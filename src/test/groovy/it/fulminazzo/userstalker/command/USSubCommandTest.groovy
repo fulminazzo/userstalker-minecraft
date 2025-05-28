@@ -5,6 +5,7 @@ import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.userstalker.UserStalker
 import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.client.APIClientException
+import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.userstalker.gui.USGUIManager
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -72,7 +73,7 @@ class USSubCommandTest extends Specification {
         ['rel'] || ['reload']
     }
 
-    def 'test that OpenGUISubCommand executes correctly'() {
+    def 'test that OpenGUISubCommand executes correctly with arguments #arguments'() {
         given:
         def subcommand = new OpenGUISubCommand(plugin)
 
@@ -83,12 +84,26 @@ class USSubCommandTest extends Specification {
         def guiManager = Mock(USGUIManager)
         plugin.getGUIManager() >> guiManager
 
+        and:
+        def apiClient = Mock(USAsyncApiClient)
+        apiClient.usernames >> ['fulminazzo']
+        plugin.apiClient >> apiClient
+
         when:
-        subcommand.execute(player, new String[0])
+        subcommand.execute(player, arguments.toArray(new String[0]))
 
         then:
         noExceptionThrown()
-        1 * guiManager.openMainMenuGUI(player)
+        if (arguments.size() == 0)
+            1 * guiManager.openMainMenuGUI(player)
+        else
+            1 * guiManager.openUserLoginsGUI(player, *arguments)
+
+        where:
+        arguments << [
+                [],
+                ['Fulminazzo']
+        ]
     }
 
     def 'test that OpenGUISubCommand refutes for non-player senders'() {
