@@ -25,16 +25,21 @@ class USAsyncApiClientTest extends Specification {
         server.stop()
     }
 
-    def 'test notifyUserLogin works'() {
+    def 'test notifyUserLogin works and sets usernames to null'() {
         given:
         def username = 'Fulminazzo'
         def ip = new InetSocketAddress('localhost', 8080)
+
+        and:
+        def refl = new Refl<>(client)
+        refl.setFieldObject('usernames', ['Alex', 'Fulminazzo'])
 
         when:
         client.notifyUserLogin(username, ip)
 
         then:
         noExceptionThrown()
+        refl.getFieldObject('usernames') == null
     }
 
     def 'test notifyUserLogin does not throw on APIClientException'() {
