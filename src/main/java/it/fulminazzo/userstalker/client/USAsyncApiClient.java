@@ -50,6 +50,8 @@ public abstract class USAsyncApiClient {
         runAsync(() -> {
             try {
                 client.notifyUserLogin(username, ip);
+                // Clear usernames as API has been updated
+                usernames = null;
             } catch (APIClientException e) {
                 logger.warning(e.getMessage());
             }
