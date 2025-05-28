@@ -19,6 +19,7 @@ abstract class USSubCommand {
      */
     protected final @NotNull UserStalker plugin;
     private final @NotNull List<String> aliases;
+    private final @NotNull String usage;
     private final @NotNull String permission;
     private final @NotNull Messages description;
 
@@ -33,8 +34,10 @@ abstract class USSubCommand {
     public USSubCommand(final @NotNull UserStalker plugin,
                         final @NotNull String permission,
                         final @NotNull Messages description,
+                        final @NotNull String usage,
                         final @NotNull String... aliases) {
         this.plugin = plugin;
+        this.usage = usage;
         this.aliases = Arrays.asList(aliases);
         this.permission = String.format("%s.command.%s", plugin.getName(), permission).toLowerCase();
         this.description = description;

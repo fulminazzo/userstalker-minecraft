@@ -5,6 +5,7 @@ import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.userstalker.UserStalker
 import it.fulminazzo.userstalker.cache.ProfileCacheException
 import it.fulminazzo.userstalker.client.APIClientException
+import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.userstalker.gui.USGUIManager
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -72,7 +73,7 @@ class USSubCommandTest extends Specification {
         ['rel'] || ['reload']
     }
 
-    def 'test that OpenGUISubCommand executes correctly'() {
+    def 'test that OpenGUISubCommand executes correctly with arguments #arguments'() {
         given:
         def subcommand = new OpenGUISubCommand(plugin)
 
@@ -83,12 +84,50 @@ class USSubCommandTest extends Specification {
         def guiManager = Mock(USGUIManager)
         plugin.getGUIManager() >> guiManager
 
+        and:
+        def apiClient = Mock(USAsyncApiClient)
+        apiClient.usernames >> ['fulminazzo']
+        plugin.apiClient >> apiClient
+
         when:
-        subcommand.execute(player, new String[0])
+        subcommand.execute(player, arguments.toArray(new String[0]))
+
+        then:
+        if (arguments.size() == 0)
+            1 * guiManager.openMainMenuGUI(player)
+        else
+            1 * guiManager.openUserLoginsGUI(player, *arguments)
+
+        where:
+        arguments << [
+                [],
+                ['Fulminazzo']
+        ]
+    }
+
+    def 'test that OpenGUISubCommand sends error message for invalid username'() {
+        given:
+        def subcommand = new OpenGUISubCommand(plugin)
+
+        and:
+        def player = Mock(Player)
+
+        and:
+        def guiManager = Mock(USGUIManager)
+        plugin.getGUIManager() >> guiManager
+
+        and:
+        def apiClient = Mock(USAsyncApiClient)
+        apiClient.usernames >> ['fulminazzo']
+        plugin.apiClient >> apiClient
+
+        when:
+        subcommand.execute(player, new String[]{'notexisting'})
 
         then:
         noExceptionThrown()
-        1 * guiManager.openMainMenuGUI(player)
+        1 * player.sendMessage(_ as String)
+        0 * guiManager.openUserLoginsGUI(player, _ as String)
     }
 
     def 'test that OpenGUISubCommand refutes for non-player senders'() {
@@ -105,6 +144,27 @@ class USSubCommandTest extends Specification {
         then:
         noExceptionThrown()
         1 * sender.sendMessage(_ as String)
+    }
+
+    def 'test that OpenGUISubCommand tabComplete returns #expected for #sender'() {
+        given:
+        def subcommand = new OpenGUISubCommand(plugin)
+
+        and:
+        def apiClient = Mock(USAsyncApiClient)
+        apiClient.usernames >> ['fulminazzo']
+        plugin.apiClient >> apiClient
+
+        when:
+        def list = subcommand.tabComplete(sender, new String[]{''})
+
+        then:
+        list == expected
+
+        where:
+        sender              || expected
+        Mock(CommandSender) || []
+        Mock(Player)        || ['fulminazzo']
     }
 
     def 'test that ReloadSubCommand executes correctly'() {

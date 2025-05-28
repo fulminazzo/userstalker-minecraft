@@ -14,7 +14,7 @@ final class HelpSubCommand extends USSubCommand {
     private final @NotNull USCommand command;
 
     public HelpSubCommand(@NotNull UserStalker plugin, @NotNull USCommand command) {
-        super(plugin, "help", Messages.HELP_HELP, "help", "?");
+        super(plugin, "help", Messages.HELP_HELP, "<subcommand> ", "help", "?");
         this.command = command;
     }
 
@@ -34,6 +34,7 @@ final class HelpSubCommand extends USSubCommand {
         commands.forEach(c -> sender.sendMessage(Messages.HELP_DESCRIPTION.getMessage()
                 .replace("<command>", plugin.getName().toLowerCase())
                 .replace("<name>", c.getAliases().get(0))
+                .replace("<usage>", c.getUsage())
                 .replace("<aliases>", String.join(", ", c.getAliases()))
                 .replace("<description>", c.getDescription().getMessage())
         ));

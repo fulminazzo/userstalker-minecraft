@@ -23,7 +23,7 @@ final class ReloadSubCommand extends USSubCommand {
      * @param plugin the plugin
      */
     public ReloadSubCommand(@NotNull UserStalker plugin) {
-        super(plugin, "reload", Messages.HELP_RELOAD, "reload");
+        super(plugin, "reload", Messages.HELP_RELOAD, "", "reload");
     }
 
     @Override

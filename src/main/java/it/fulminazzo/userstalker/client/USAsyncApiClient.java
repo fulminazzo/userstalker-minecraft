@@ -4,8 +4,10 @@ import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
@@ -18,6 +20,8 @@ public abstract class USAsyncApiClient {
     private final @NotNull Logger logger;
 
     private final @NotNull USApiClient client;
+
+    private @Nullable List<String> usernames;
 
     /**
      * Instantiates a new async api client.
@@ -46,6 +50,8 @@ public abstract class USAsyncApiClient {
         runAsync(() -> {
             try {
                 client.notifyUserLogin(username, ip);
+                // Clear usernames as API has been updated
+                usernames = null;
             } catch (APIClientException e) {
                 logger.warning(e.getMessage());
             }
@@ -107,6 +113,24 @@ public abstract class USAsyncApiClient {
             logger.warning(e.getMessage());
             orElse.run();
         }
+    }
+
+    /**
+     * Gets the usernames from the internal client.
+     * If {@link #usernames} is null, {@link #getUsernamesAndThen(Consumer, Runnable)} is used
+     * to update the usernames.
+     *
+     * @return the usernames
+     */
+    public @NotNull List<String> getUsernames() {
+        if (usernames == null) {
+            usernames = new ArrayList<>();
+            getUsernamesAndThen(
+                    l -> usernames.addAll(l),
+                    () -> usernames = null
+            );
+            return new ArrayList<>();
+        } else return usernames;
     }
 
     /**

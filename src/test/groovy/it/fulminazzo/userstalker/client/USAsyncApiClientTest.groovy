@@ -1,10 +1,12 @@
 package it.fulminazzo.userstalker.client
 
+import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.userstalker.utils.GsonUtils
 import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
 
+import java.util.function.Consumer
 import java.util.logging.Logger
 
 class USAsyncApiClientTest extends Specification {
@@ -24,16 +26,21 @@ class USAsyncApiClientTest extends Specification {
         server.stop()
     }
 
-    def 'test notifyUserLogin works'() {
+    def 'test notifyUserLogin works and sets usernames to null'() {
         given:
         def username = 'Fulminazzo'
         def ip = new InetSocketAddress('localhost', 8080)
+
+        and:
+        def refl = new Refl<>(client)
+        refl.setFieldObject('usernames', ['Alex', 'Fulminazzo'])
 
         when:
         client.notifyUserLogin(username, ip)
 
         then:
         noExceptionThrown()
+        refl.getFieldObject('usernames') == null
     }
 
     def 'test notifyUserLogin does not throw on APIClientException'() {
@@ -133,6 +140,37 @@ class USAsyncApiClientTest extends Specification {
         then:
         noExceptionThrown()
         fallback
+    }
+
+    def 'test getUsernames returns #expected if usernames is #usernames'() {
+        given:
+        queryServer('usernames', 'POST', ['Alex', 'Fulminazzo'])
+
+        and:
+        new Refl<>(client).setFieldObject('usernames', usernames)
+
+        when:
+        def actualUsernames = client.usernames
+
+        then:
+        actualUsernames == expected
+
+        where:
+        expected               || usernames
+        []                     || null
+        ['Alex', 'Fulminazzo'] || ['Alex', 'Fulminazzo']
+    }
+
+    def 'test getUsernames sets usernames to null on error'() {
+        given:
+        def client = newClient('invalid')
+
+        when:
+        client.usernames
+
+        then:
+        noExceptionThrown()
+        new Refl<>(client).getFieldObject('usernames') == null
     }
 
     def 'test getUsernamesAndThen executes given function'() {
