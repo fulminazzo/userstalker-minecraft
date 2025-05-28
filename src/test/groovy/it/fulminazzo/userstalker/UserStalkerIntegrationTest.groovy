@@ -17,7 +17,7 @@ import java.util.logging.Logger
 
 /**
  * This is not a proper integration test, as it uses
- * a mock version of {@link org.bukkit.plugin.java.JavaPlugin}.
+ * a mock version of {@link JavaPlugin}.
  * However, for the purpose of these tests, it is enough.
  */
 class UserStalkerIntegrationTest extends Specification {
@@ -43,7 +43,8 @@ class UserStalkerIntegrationTest extends Specification {
         server.pluginManager >> mockPluginManager
         server.scheduler >> scheduler
 
-        if (Bukkit.server == null) Bukkit.server = server
+        new Refl<>(Bukkit).setFieldObject('server', null)
+        Bukkit.server = server
     }
 
     def 'test full cycle load and reload'() {
