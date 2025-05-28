@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.client
 
+import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.userstalker.utils.GsonUtils
 import org.jetbrains.annotations.NotNull
@@ -133,6 +134,25 @@ class USAsyncApiClientTest extends Specification {
         then:
         noExceptionThrown()
         fallback
+    }
+
+    def 'test getUsernames returns #expected if usernames is #usernames'() {
+        given:
+        queryServer('usernames', 'POST', ['Alex', 'Fulminazzo'])
+
+        and:
+        new Refl<>(client).setFieldObject('usernames', usernames)
+
+        when:
+        def actualUsernames = client.getUsernames()
+
+        then:
+        actualUsernames == expected
+
+        where:
+        expected               || usernames
+        ['Alex', 'Fulminazzo'] || null
+        ['Alex', 'Fulminazzo'] || ['Alex', 'Fulminazzo']
     }
 
     def 'test getUsernamesAndThen executes given function'() {
