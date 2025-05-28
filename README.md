@@ -178,79 +178,62 @@ guis:
     next_page: { ... }
 items:
   # The item used to display the data entries in the top-users-logins GUI
+  # Available variables:
+  # - <username> : the username of the user
+  # - <login_count> : the number of accesses of the user to the server
   top-users-logins:
     item:
       material: player_head
-      amount: 1
-      durability: 0
       display-name: '&fName: &b<username>'
       lore:
         - '&fNumber of accesses: &e<login_count>'
-      enchantments: []
-      item-flags: []
-      unbreakable: false
       custom-model-data: 0
-    priority: 0
-    variables: {}
     type: ITEM
   # The item used to display the data entries in the monthly-users-logins GUI
+  # Available variables:
+  # - <username> : the username of the user
+  # - <login_count> : the number of accesses of the user to the server
   monthly-users-logins:
     item:
       material: player_head
-      amount: 1
-      durability: 0
       display-name: '&fName: &b<username>'
       lore:
         - '&fNumber of accesses: &e<login_count>'
-      enchantments: []
-      item-flags: []
-      unbreakable: false
       custom-model-data: 0
-    priority: 0
-    variables: {}
     type: ITEM
   # The item used to display the data entries in the newest-users-logins GUI
+  # Available variables:
+  # - <username> : the username of the user
+  # - <ip> : the ip of the user at the time of the login
+  # - <login_date> : the time of the login
   newest-users-logins:
     item:
       material: player_head
-      amount: 1
-      durability: 0
       display-name: '&fName: &b<username>'
       lore:
         - '&fIp: &c<ip>'
         - '&fLogin date: &a<login_date>'
-      enchantments: []
-      item-flags: []
-      unbreakable: false
       custom-model-data: 0
-    priority: 0
-    variables: {}
     type: ITEM
   # The item used to display the data entries in the user-logins GUI
+  # Available variables:
+  # - <username> : the username of the user
+  # - <ip> : the ip of the user at the time of the login
+  # - <login_date> : the time of the login
   user-logins:
     item:
       material: book
-      amount: 1
-      durability: 0
       display-name: '&fIp: &c<ip>'
       lore:
         - '&fLogin date: &a<login_date>'
-      enchantments: []
-      item-flags: []
-      unbreakable: false
       custom-model-data: 0
     type: ITEM
   # The item used to go to the previous GUI.
   back:
     item:
       material: barrier
-      amount: 1
-      durability: 0
       display-name: '&cBack'
       lore: []
-      enchantments: []
-      item-flags: []
-      unbreakable: false
       custom-model-data: 0
     type: ITEM
 misc:
