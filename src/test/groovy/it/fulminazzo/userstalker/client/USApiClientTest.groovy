@@ -16,7 +16,7 @@ class USApiClientTest extends Specification {
         server = new MockHttpServer(PORT)
         server.start()
 
-        client = new USApiClient('http://localhost', PORT)
+        client = new USApiClient('http://localhost', PORT, 'user', 'stalker')
     }
 
     void cleanupSpec() {
@@ -172,7 +172,7 @@ class USApiClientTest extends Specification {
 
     def 'test that query rethrows IOException with APIClientException'() {
         given:
-        def client = new USApiClient('http://localhost', 11223)
+        def client = new USApiClient('http://localhost', 11223, 'user', 'stalker')
 
         when:
         client.query('GET', '/any', 200, null, null)
@@ -184,7 +184,7 @@ class USApiClientTest extends Specification {
 
     def 'test that query of invalid link throws'() {
         given:
-        def client = new USApiClient('localhost', 11223)
+        def client = new USApiClient('localhost', 11223, 'user', 'stalker')
 
         when:
         client.query('GET', 'any', 200, null, null)

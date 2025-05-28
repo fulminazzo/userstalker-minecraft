@@ -84,6 +84,8 @@ public class MockAPIClient extends USAsyncApiClient {
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> serverData = new HashMap<>();
         serverData.put("address", "localhost");
+        serverData.put("username", "user");
+        serverData.put("password", "stalker");
         data.put("userstalker-http-server", serverData);
         return new MockFileConfiguration(data);
     }

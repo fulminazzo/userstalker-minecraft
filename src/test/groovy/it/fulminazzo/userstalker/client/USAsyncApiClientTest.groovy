@@ -250,7 +250,9 @@ class USAsyncApiClientTest extends Specification {
         def configuration = new MockFileConfiguration([
                 'userstalker-http-server': [
                         'address': host,
-                        'port'   : PORT
+                        'port'   : PORT,
+                        'username': 'user',
+                        'password': 'stalker'
                 ]
         ])
 

@@ -25,10 +25,10 @@ class USApiClientBuilderTest extends Specification {
 
         where:
         logger                                  | settings
-        null                                    | ['address': 'http://localhost']
-        null                                    | ['address': 'http://localhost', 'port': 22525]
-        Logger.getLogger(getClass().simpleName) | ['address': 'http://localhost']
-        Logger.getLogger(getClass().simpleName) | ['address': 'http://localhost', 'port': 22525]
+        null                                    | ['address': 'http://localhost', 'username': 'user', 'password': 'stalker']
+        null                                    | ['address': 'http://localhost', 'port': 22525, 'username': 'user', 'password': 'stalker']
+        Logger.getLogger(getClass().simpleName) | ['address': 'http://localhost', 'username': 'user', 'password': 'stalker']
+        Logger.getLogger(getClass().simpleName) | ['address': 'http://localhost', 'port': 22525, 'username': 'user', 'password': 'stalker']
     }
 
     def 'test that build without ip throws'() {
