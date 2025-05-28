@@ -6,6 +6,10 @@ on:
     branches:
       - master
 
+concurrency:
+  group: sync-master-dev
+  cancel-in-progress: true
+
 jobs:
   sync:
     runs-on: ubuntu-latest
