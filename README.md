@@ -108,3 +108,153 @@ Therefore, manual modifications of the **UserStalker database** (using PostMan w
 direct access...) are **highly discouraged**.  
 
 ### GUI Manager
+
+The **GUI Manager** is the heart of **UserStalker**: it provides the previously described modules
+to retrieve data from the server and displaying it to the players, without halting the server in the process.
+
+Upon first load of the plugin, the manager will create and populate a `guis.yml` file containing all the GUIs
+available for customization.
+
+Here is an example of such document with explanations using YAML comments:
+
+```yaml
+guis:
+  # The main menu shown when issuing /userstalker opengui
+  main-menu:
+    title: '&cUserStalker Main Menu'
+    contents: [ ... ]
+    movable-slots: []
+    variables: {}
+    type: DEFAULT
+    size: 54
+  # The menu that displays a list of users with their accesses, sorted from highest to lowest 
+  top-users-logins:
+    title: '&cTop users logins'
+    contents: [ ... ]
+    movable-slots: []
+    variables: {}
+    type: DATA
+    size: 54
+    gui-type: DEFAULT
+    pages: 1
+    previous_page: { ... }
+    next_page: { ... }
+  # The menu that displays a list of users with their accesses, sorted from highest to lowest, based on the current month
+  monthly-users-logins:
+    title: '&cMonthly users logins'
+    contents: [ ... ]
+    movable-slots: []
+    variables: {}
+    type: DATA
+    size: 45
+    gui-type: DEFAULT
+    pages: 1
+    previous_page: { ... }
+    next_page: { ... }
+  # The menu that displays the accesses on the server, sorted from most recent. 
+  newest-users-logins:
+    title: '&cNewest users logins'
+    contents: [ ... ]
+    movable-slots: []
+    variables: {}
+    type: DATA
+    size: 45
+    gui-type: DEFAULT
+    pages: 1
+    previous_page: { ... }
+    next_page: { ... }
+  # The menu shown upon clicking on one login entry of the previous GUIs, or
+  # when issuing the command /userstalker opengui <username>
+  user-logins:
+    title: '&c<username>''s logins'
+    contents: [ ... ]
+    movable-slots: []
+    variables: {}
+    type: DATA
+    size: 54
+    gui-type: DEFAULT
+    pages: 1
+    previous_page: { ... }
+    next_page: { ... }
+items:
+  # The item used to display the data entries in the top-users-logins GUI
+  top-users-logins:
+    item:
+      material: player_head
+      amount: 1
+      durability: 0
+      display-name: '&fName: &b<username>'
+      lore:
+        - '&fNumber of accesses: &e<login_count>'
+      enchantments: []
+      item-flags: []
+      unbreakable: false
+      custom-model-data: 0
+    priority: 0
+    variables: {}
+    type: ITEM
+  # The item used to display the data entries in the monthly-users-logins GUI
+  monthly-users-logins:
+    item:
+      material: player_head
+      amount: 1
+      durability: 0
+      display-name: '&fName: &b<username>'
+      lore:
+        - '&fNumber of accesses: &e<login_count>'
+      enchantments: []
+      item-flags: []
+      unbreakable: false
+      custom-model-data: 0
+    priority: 0
+    variables: {}
+    type: ITEM
+  # The item used to display the data entries in the newest-users-logins GUI
+  newest-users-logins:
+    item:
+      material: player_head
+      amount: 1
+      durability: 0
+      display-name: '&fName: &b<username>'
+      lore:
+        - '&fIp: &c<ip>'
+        - '&fLogin date: &a<login_date>'
+      enchantments: []
+      item-flags: []
+      unbreakable: false
+      custom-model-data: 0
+    priority: 0
+    variables: {}
+    type: ITEM
+  # The item used to display the data entries in the user-logins GUI
+  user-logins:
+    item:
+      material: book
+      amount: 1
+      durability: 0
+      display-name: '&fIp: &c<ip>'
+      lore:
+        - '&fLogin date: &a<login_date>'
+      enchantments: []
+      item-flags: []
+      unbreakable: false
+      custom-model-data: 0
+    type: ITEM
+  # The item used to go to the previous GUI.
+  back:
+    item:
+      material: barrier
+      amount: 1
+      durability: 0
+      display-name: '&cBack'
+      lore: []
+      enchantments: []
+      item-flags: []
+      unbreakable: false
+      custom-model-data: 0
+    type: ITEM
+misc:
+  # The offset slot of the back item.
+  # The slot is calculated using GUI.size + back.offset for EVERY GUI
+  back-offset: -9
+```
