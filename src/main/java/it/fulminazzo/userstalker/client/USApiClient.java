@@ -47,7 +47,7 @@ public final class USApiClient {
                                 final @NotNull InetSocketAddress ip) throws APIClientException {
         UserLogin userLogin = UserLogin.builder()
                 .username(username)
-                .ip(ip.getHostName())
+                .ip(ip.getAddress().getHostAddress())
                 .loginDate(LocalDateTime.now())
                 .build();
         query("POST", "", HttpURLConnection.HTTP_CREATED, null, userLogin);
