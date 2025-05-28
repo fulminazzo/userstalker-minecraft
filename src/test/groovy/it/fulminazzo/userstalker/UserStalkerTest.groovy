@@ -144,6 +144,9 @@ class UserStalkerTest extends Specification {
         def plugin = Mock(UserStalker)
 
         and:
+        UserStalker.instance = null
+
+        and:
         plugin."$methodName"() >> { callRealMethod() }
 
         when:
