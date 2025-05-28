@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker
 
 import it.fulminazzo.fulmicollection.objects.Refl
+import it.fulminazzo.userstalker.client.MockHttpServer
 import it.fulminazzo.userstalker.command.USCommand
 import it.fulminazzo.userstalker.listener.PlayerListener
 import it.fulminazzo.yamlparser.utils.FileUtils
@@ -8,6 +9,8 @@ import org.bukkit.Bukkit
 import org.bukkit.Server
 import org.bukkit.command.PluginCommand
 import org.bukkit.plugin.PluginManager
+import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.scheduler.BukkitScheduler
 import spock.lang.Specification
 
 import java.util.logging.Logger
@@ -28,10 +31,17 @@ class UserStalkerIntegrationTest extends Specification {
 
         mockPluginManager = Mock(PluginManager)
 
+        def scheduler = Mock(BukkitScheduler)
+        scheduler.runTaskAsynchronously(_ as JavaPlugin, _ as Runnable) >> { args ->
+            Runnable runnable = args[1]
+            runnable.run()
+        }
+
         def server = Mock(Server)
         server.logger >> Logger.getLogger(getClass().simpleName)
         server.getPluginCommand(_ as String) >> mockCommand
         server.pluginManager >> mockPluginManager
+        server.scheduler >> scheduler
 
         if (Bukkit.server == null) Bukkit.server = server
     }
@@ -99,6 +109,30 @@ class UserStalkerIntegrationTest extends Specification {
         refl.getFieldObject('apiClient') == null
         refl.getFieldObject('profileCache') == null
         refl.getFieldObject('guiManager') == null
+    }
+
+    def 'test that api client sends correct request'() {
+        given:
+        def server = new MockHttpServer(8080)
+        server.start()
+
+        and:
+        def plugin = new UserStalker()
+
+        and:
+        plugin.onEnable()
+
+        and:
+        def client = plugin.apiClient
+
+        when:
+        client.notifyUserLogin('Fulminazzo', new InetSocketAddress('127.0.0.1', 12345))
+
+        then:
+        server.userLogins.find { it.username == 'Fulminazzo' } != null
+
+        and:
+        server.stop()
     }
 
 }
