@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.client;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -63,15 +64,30 @@ public class MockHttpServer implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String method = httpExchange.getRequestMethod();
-        String path = httpExchange.getRequestURI().getPath();
-        if (path.startsWith(API_PATH)) {
-            path = path.substring(API_PATH.length());
-            if (method.equals("GET")) handleGet(httpExchange, path);
-            else if (method.equals("POST")) handlePost(httpExchange, path);
-            else httpExchange.sendResponseHeaders(405, 0);
-        } else httpExchange.sendResponseHeaders(404, 0);
-        httpExchange.close();
+        try {
+            String method = httpExchange.getRequestMethod();
+            String path = httpExchange.getRequestURI().getPath();
+
+            Headers headers = httpExchange.getRequestHeaders();
+            if (headers.containsKey("Authorization")) {
+                String auth = headers.getFirst("Authorization");
+                if (auth.startsWith("Basic ")) {
+                    String authentication = auth.substring("Basic ".length());
+                    if (isAuthenticationValid(authentication)) {
+                        if (path.startsWith(API_PATH)) {
+                            path = path.substring(API_PATH.length());
+                            if (method.equals("GET")) handleGet(httpExchange, path);
+                            else if (method.equals("POST")) handlePost(httpExchange, path);
+                            else httpExchange.sendResponseHeaders(405, 0);
+                        } else httpExchange.sendResponseHeaders(404, 0);
+                        return;
+                    }
+                }
+            }
+            httpExchange.sendResponseHeaders(401, 0);
+        } finally {
+            httpExchange.close();
+        }
     }
 
     public void handleGet(HttpExchange httpExchange, String path) throws IOException {
