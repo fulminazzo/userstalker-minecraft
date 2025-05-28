@@ -32,6 +32,8 @@ public final class USApiClient {
 
     private final @NotNull String address;
     private final int port;
+    private final @NotNull String username;
+    private final @NotNull String password;
 
     /**
      * Notifies the API of a new user login.

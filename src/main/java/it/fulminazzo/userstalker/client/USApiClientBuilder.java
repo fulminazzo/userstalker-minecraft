@@ -21,7 +21,9 @@ public final class USApiClientBuilder extends ConfiguredBuilder<USApiClient, USA
     public @NotNull USApiClient build() throws APIClientException {
         String ip = getConfigurationValue("address", String.class, null);
         int port = getConfigurationValue("port", Integer.class, DEFAULT_PORT);
-        return new USApiClient(ip, port);
+        String username = getConfigurationValue("username", String.class, null);
+        String password = getConfigurationValue("password", String.class, null);
+        return new USApiClient(ip, port, username, password);
     }
 
     @Override
