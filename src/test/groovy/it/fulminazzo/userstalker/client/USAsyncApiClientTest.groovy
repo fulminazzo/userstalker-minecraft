@@ -161,22 +161,16 @@ class USAsyncApiClientTest extends Specification {
         ['Alex', 'Fulminazzo'] || ['Alex', 'Fulminazzo']
     }
 
-    def 'test getUsernames does not throw on getUsernamesAndThen error'() {
+    def 'test getUsernames sets usernames to null on error'() {
         given:
-        def client = Mock(USAsyncApiClient)
-
-        and:
-        client.usernames >> { callRealMethod() }
-        client.getUsernamesAndThen(_ as Consumer, _ as Runnable) >> { args ->
-            Runnable runnable = args[1]
-            runnable.run()
-        }
+        def client = newClient('invalid')
 
         when:
         client.usernames
 
         then:
         noExceptionThrown()
+        new Refl<>(client).getFieldObject('usernames') == null
     }
 
     def 'test getUsernamesAndThen executes given function'() {

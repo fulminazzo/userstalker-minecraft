@@ -125,7 +125,10 @@ public abstract class USAsyncApiClient {
     public @NotNull List<String> getUsernames() {
         if (usernames == null) {
             usernames = new ArrayList<>();
-            getUsernamesAndThen(l -> usernames.addAll(l), () -> {});
+            getUsernamesAndThen(
+                    l -> usernames.addAll(l),
+                    () -> usernames = null
+            );
         }
         return usernames;
     }
