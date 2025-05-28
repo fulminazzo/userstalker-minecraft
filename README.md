@@ -50,6 +50,42 @@ All the messages can be edited in the `messages.yml`.
 
 ### Skin Cache
 
+When displaying [player heads](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html#PLAYER_HEAD)
+with skins, Minecraft queries
+the [Mojang API](https://sessionserver.mojang.com/session/minecraft/profile/UUID_HERE?unsigned=false)
+to get the texture and signature values and update them for the item.
+
+To avoid sending numerous requests to the endpoint, **UserStalker** provides a **skin cache** to store the results
+with an expiry date.
+
+This cache is totally independent of its usage, so it might also be used to set a player's skin (after some rework,
+as every request is **synchronous**).
+
+The [`config.yml`](./blob/master/src/main/resources/config.yml) section that the **skin cache** uses for setup is
+`skin-cache`:
+
+```yaml
+skin-cache:
+  type: JSON
+  expire-time: 86400
+  blacklist-time: 86400
+  # Only valid if type = SQL
+  address: "localhost"
+  database-type: "mysql"
+  database: "userstalker"
+  username: "sa"
+  password: ""
+```
+
+- `type`: specifies the type of the cache. Accepted values are `JSON`, `YAML`, `TOML`, `XML` or `SQL`.
+  In case the type is `SQL`, the parameters `address`, `database-type`, `database`, `username` and `password`
+  will be required. For **everything else**, a _skin_cache_ file with the proper extension will be created
+  inside the **plugin folder**;
+- `expire-time`: specifies after how much time (in seconds) the cached skin value should expire;
+- `blacklist-time`: when querying the API for a user's skin, if it is not present (aka the user is not premium),
+  it will enter a **blacklist** to prevent further (useless) queries. In this section it is possible to specify
+  after how much time the user should be removed from the blacklist.
+
 ### API Client
 
 ### GUI Manager
