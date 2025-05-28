@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -143,6 +144,9 @@ public final class USApiClient {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(method);
             connection.setDoOutput(true);
+            connection.setRequestProperty("Authorization", "Basic " +
+                    Base64.getEncoder().encodeToString((username + ":" + password).getBytes())
+            );
 
             if (input != null) {
                 connection.setRequestProperty("Content-Type", "application/json");
