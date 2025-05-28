@@ -88,4 +88,23 @@ skin-cache:
 
 ### API Client
 
+The **API Client** issues queries to the **UserStalker** REST API endpoints **asynchronously**.
+
+The [`config.yml`](./blob/master/src/main/resources/config.yml) section that it uses for setup is
+`userstalker-http-server` (self-explanatory):
+
+```yaml
+userstalker-http-server:
+  address: "http://localhost"
+  port: 8080
+```
+
+**NOTE:** when requesting **usernames** to the endpoint (for example, when issuing the
+[`/userstalker opengui <username>`](#commands) command), the plugin will **temporarily store**
+the results to avoid further queries. 
+The cache is updated only upon **plugin reload** or when a **player enters the server**.
+
+Therefore, manual modifications of the **UserStalker database** (using PostMan with the endpoints, 
+direct access...) are **highly discouraged**.  
+
 ### GUI Manager
