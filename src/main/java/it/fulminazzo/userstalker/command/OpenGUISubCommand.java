@@ -20,7 +20,7 @@ final class OpenGUISubCommand extends USSubCommand {
      * @param plugin the plugin
      */
     public OpenGUISubCommand(final @NotNull UserStalker plugin) {
-        super(plugin, "opengui", Messages.HELP_OPEN_GUI, "opengui", "open", "gui");
+        super(plugin, "opengui", Messages.HELP_OPEN_GUI, "<username> ", "opengui", "open", "gui");
     }
 
     @Override

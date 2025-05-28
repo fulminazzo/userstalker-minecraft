@@ -14,7 +14,7 @@ final class HelpSubCommand extends USSubCommand {
     private final @NotNull USCommand command;
 
     public HelpSubCommand(@NotNull UserStalker plugin, @NotNull USCommand command) {
-        super(plugin, "help", Messages.HELP_HELP, "help", "?");
+        super(plugin, "help", Messages.HELP_HELP, "<subcommand> ", "help", "?");
         this.command = command;
     }
 
