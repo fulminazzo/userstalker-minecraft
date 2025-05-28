@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker
 import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.userstalker.command.USCommand
 import it.fulminazzo.userstalker.listener.PlayerListener
+import it.fulminazzo.yamlparser.utils.FileUtils
 import org.bukkit.Bukkit
 import org.bukkit.Server
 import org.bukkit.command.PluginCommand
@@ -39,6 +40,10 @@ class UserStalkerIntegrationTest extends Specification {
         given:
         def plugin = new UserStalker()
         def refl = new Refl(plugin)
+
+        and:
+        if (plugin.dataFolder.exists())
+            FileUtils.deleteFolder(plugin.dataFolder)
 
         when:
         plugin.onEnable()
