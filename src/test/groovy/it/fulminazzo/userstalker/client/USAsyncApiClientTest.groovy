@@ -6,6 +6,7 @@ import it.fulminazzo.userstalker.utils.GsonUtils
 import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
 
+import java.util.function.Consumer
 import java.util.logging.Logger
 
 class USAsyncApiClientTest extends Specification {
@@ -149,7 +150,7 @@ class USAsyncApiClientTest extends Specification {
         new Refl<>(client).setFieldObject('usernames', usernames)
 
         when:
-        def actualUsernames = client.getUsernames()
+        def actualUsernames = client.usernames
 
         then:
         actualUsernames == expected
@@ -158,6 +159,24 @@ class USAsyncApiClientTest extends Specification {
         expected               || usernames
         ['Alex', 'Fulminazzo'] || null
         ['Alex', 'Fulminazzo'] || ['Alex', 'Fulminazzo']
+    }
+
+    def 'test getUsernames does not throw on getUsernamesAndThen error'() {
+        given:
+        def client = Mock(USAsyncApiClient)
+
+        and:
+        client.usernames >> { callRealMethod() }
+        client.getUsernamesAndThen(_ as Consumer, _ as Runnable) >> { args ->
+            Runnable runnable = args[1]
+            runnable.run()
+        }
+
+        when:
+        client.usernames
+
+        then:
+        noExceptionThrown()
     }
 
     def 'test getUsernamesAndThen executes given function'() {
