@@ -1,0 +1,33 @@
+# Synchronizes the master branch with dev by pushing any commits on the former.
+name: Sync master to dev
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Configure Git
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+
+      - name: Fetch dev branch (if it exists)
+        run: |
+          git fetch origin dev || true
+
+      - name: Merge master into dev (and push)
+        run: |
+          git checkout -b dev origin/dev || git checkout -b dev # Checkout dev, or create it if it doesn't exist
+          git merge master 
+          git push origin dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
