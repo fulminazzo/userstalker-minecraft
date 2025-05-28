@@ -13,6 +13,8 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions: write-all
+
     steps:
       - name: Checkout master branch
         uses: actions/checkout@v4
@@ -22,8 +24,8 @@ jobs:
 
       - name: Update branches
         run: |
-          git config --global user.name github-actions[bot]
-          git config --global user.email github-actions[bot]@users.noreply.github.com
+          git config user.name "GitHub Actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout dev
           git merge origin/master --no-edit
           git push origin dev
