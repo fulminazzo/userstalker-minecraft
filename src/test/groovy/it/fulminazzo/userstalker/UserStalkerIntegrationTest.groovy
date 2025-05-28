@@ -36,7 +36,7 @@ class UserStalkerIntegrationTest extends Specification {
         if (Bukkit.server == null) Bukkit.server = server
     }
 
-    def 'test full cycle load'() {
+    def 'test full cycle load and reload'() {
         given:
         def plugin = new UserStalker()
         def refl = new Refl(plugin)
@@ -49,15 +49,46 @@ class UserStalkerIntegrationTest extends Specification {
         plugin.onEnable()
 
         then:
-        plugin.configuration != null
-        plugin.messages != null
-        plugin.apiClient != null
-        plugin.profileCache != null
-        plugin.getGUIManager() != null
+        def configuration1 = plugin.configuration
+        configuration1 != null
+
+        def messages1 = plugin.messages
+        messages1 != null
+
+        def apiClient1 = plugin.apiClient
+        apiClient1 != null
+
+        def profileCache1 = plugin.profileCache
+        profileCache1 != null
+
+        def guiManager1 = plugin.getGUIManager()
+        guiManager1 != null
 
         and:
         1 * mockCommand.setExecutor(_ as USCommand)
         1 * mockPluginManager.registerEvents(_ as PlayerListener, _ as UserStalker)
+
+        when:
+        plugin.reload()
+
+        then:
+        def configuration2 = plugin.configuration
+        configuration2 != null
+
+        def messages2 = plugin.messages
+        messages2 != null
+
+        def apiClient2 = plugin.apiClient
+        apiClient2 != apiClient1
+        apiClient2 != null
+
+        def profileCache2 = plugin.profileCache
+        profileCache2 != profileCache1
+        profileCache2 != null
+
+        def guiManager2 = plugin.getGUIManager()
+        guiManager2 != guiManager1
+        guiManager2 != null
 
         when:
         plugin.onDisable()
