@@ -31,7 +31,11 @@ final class OpenGUISubCommand extends USSubCommand {
 
     @Override
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
-        return new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        if (sender instanceof Player) {
+            if (args.length == 1) list.addAll(plugin.getApiClient().getUsernames());
+        }
+        return list;
     }
 
 }
