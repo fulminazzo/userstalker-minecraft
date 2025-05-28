@@ -25,6 +25,7 @@ public enum Messages implements DefaultFulmiMessages {
     SUBCOMMAND_NOT_FOUND("error.subcommand-not-found", "<prefix>&cNo such subcommand: &4<subcommand>"),
     NOT_ENOUGH_ARGUMENTS("error.not-enough-arguments", "<prefix>&cYou did not specify enough arguments"),
     NOT_ENOUGH_PERMISSIONS("error.not-enough-permissions", "<prefix>&cYou do not have enough permissions to execute that subcommand"),
+    USER_NOT_FOUND("error.user-not-found", "<prefix>&cCould not find user: &4<user>" ),
 
     HELP_RELOAD("help.reload", "Reloads the plugin configurations"),
     HELP_OPEN_GUI("help.open-gui", "Opens the main plugin GUI. If a username is specified, opens the user latest accesses"),
