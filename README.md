@@ -27,6 +27,7 @@ customized player heads.
 | [GUI Manager](#gui-manager) |
 
 The plugin generates four files upon loading:
+
 - [`config.yml`](./blob/master/src/main/resources/config.yml), to configure the plugin behaviour;
 - `messages.yml`, to edit all the messages sent by the plugin;
 - `skin_cache`, the [skin cache](#skin-cache) (if set to file in the `config.yml`);
@@ -36,6 +37,16 @@ In the following section every module of the plugin will be described, along wit
 `config.yml` required to configure it.
 
 ### Commands
+
+The following are all the commands with usages and permissions of the plugin.
+All the messages can be edited in the `messages.yml`.
+
+| **Command usage**                 | **Permission**                | **Aliases**               | **Description**                                                                                                                                                                          |
+|-----------------------------------|-------------------------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `/userstalker <subcommand>`       | _userstalker.command_         | `users`, `ustalker`, `us` | The main command of the plugin. Requires a subcommand to be specified.                                                                                                                   |
+| `/userstalker reload`             | _userstalker.command.reload_  |                           | Reloads the plugin configuration files and managers. If an error occurs, it is shown in console and the plugin disabled.                                                                 |
+| `/userstalker opengui <username>` | _userstalker.command.opengui_ | `open`, `gui`             | Opens the main GUI of the plugin. If a username is specified, a GUI displaying the accesses of that user will be used.                                                                   |
+| `/userstalker help <subcommand>`  | _userstalker.command.help_    | `?`                       | Shows description and usage for all the available subcommands (if the issuer has permission). If an argument is specified, all the subcommands that contain that argument will be shown. |
 
 ### Skin Cache
 
