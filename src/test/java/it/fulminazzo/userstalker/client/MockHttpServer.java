@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 public class MockHttpServer implements HttpHandler {
@@ -141,6 +142,17 @@ public class MockHttpServer implements HttpHandler {
         try (OutputStream outputStream = httpExchange.getResponseBody()) {
             outputStream.write(rawResponse.getBytes());
         }
+    }
+
+    private static boolean isAuthenticationValid(String base64) {
+        String decoded = new String(Base64.getDecoder().decode(base64));
+        if (decoded.contains(":")) {
+            String[] tmp = decoded.split(":");
+            String username = tmp[0];
+            String password = tmp[1];
+            return username.equals(DEFAULT_USERNAME) && password.equals(DEFAULT_PASSWORD);
+        }
+        return false;
     }
 
 }
