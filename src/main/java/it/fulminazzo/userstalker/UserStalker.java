@@ -106,10 +106,18 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     void disable() throws ProfileCacheException {
         getLogger().info("Starting shutdown process");
 
+        configuration = null;
+        messages = null;
+
+        apiClient = null;
+
         if (profileCache != null) {
             getLogger().info("Shutting down skin cache");
             profileCache.close();
+            profileCache = null;
         }
+
+        guiManager = null;
 
         getLogger().info("Shutdown complete. Goodbye");
     }
