@@ -132,8 +132,12 @@ guis:
     type: DATA
     size: 54
     gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
-    previous_page: { ... }
-    next_page: { ... }
+    previous_page:
+      slot: 47
+      content: { ... }
+    next_page:
+      slot: 51
+      content: { ... }
   # The menu that displays a list of users with their accesses, sorted from highest to lowest, based on the current month
   monthly-users-logins:
     title: '&cMonthly users logins'
@@ -141,8 +145,12 @@ guis:
     type: DATA
     size: 45
     gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
-    previous_page: { ... }
-    next_page: { ... }
+    previous_page:
+      slot: 38
+      content: { ... }
+    next_page:
+      slot: 42
+      content: { ... }
   # The menu that displays the accesses on the server, sorted from most recent. 
   newest-users-logins:
     title: '&cNewest users logins'
@@ -150,8 +158,12 @@ guis:
     type: DATA
     size: 45
     gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
-    previous_page: { ... }
-    next_page: { ... }
+    previous_page:
+      slot: 38
+      content: { ... }
+    next_page:
+      slot: 42
+      content: { ... }
   # The menu shown upon clicking on one login entry of the previous GUIs, or
   # when issuing the command /userstalker opengui <username>
   user-logins:
@@ -160,8 +172,12 @@ guis:
     type: DATA
     size: 54
     gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
-    previous_page: { ... }
-    next_page: { ... }
+    previous_page:
+      slot: 47
+      content: { ... }
+    next_page:
+      slot: 51
+      content: { ... }
 items:
   # The item used to display the data entries in the top-users-logins GUI
   # Available variables:
