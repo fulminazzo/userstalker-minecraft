@@ -182,6 +182,8 @@ guis:
     gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
     size: 54
   # The menu that displays a list of users with their accesses, sorted from highest to lowest 
+  # When clicking on a content that represents a user login, 
+  # the user-logins GUI for that user will be opened.
   top-users-logins:
     title: '&cTop users logins'
     contents: [ ... ]
@@ -195,6 +197,8 @@ guis:
       slot: 51
       content: { ... }
   # The menu that displays a list of users with their accesses, sorted from highest to lowest, based on the current month
+  # When clicking on a content that represents a user login, 
+  # the user-logins GUI for that user will be opened.
   monthly-users-logins:
     title: '&cMonthly users logins'
     contents: [ ... ]
@@ -208,6 +212,8 @@ guis:
       slot: 42
       content: { ... }
   # The menu that displays the accesses on the server, sorted from most recent. 
+  # When clicking on a content that represents a user login, 
+  # the user-logins GUI for that user will be opened.
   newest-users-logins:
     title: '&cNewest users logins'
     contents: [ ... ]
