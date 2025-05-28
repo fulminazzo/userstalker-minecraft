@@ -22,6 +22,7 @@ class USSubCommandTest extends Specification {
         plugin = Mock(UserStalker)
         plugin.messages >> new MockFileConfiguration([:])
         plugin.logger >> Logger.getLogger(getClass().simpleName)
+        plugin.name >> 'UserStalker'
 
         sender = Mock(CommandSender)
 
