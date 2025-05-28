@@ -93,7 +93,6 @@ class USSubCommandTest extends Specification {
         subcommand.execute(player, arguments.toArray(new String[0]))
 
         then:
-        noExceptionThrown()
         if (arguments.size() == 0)
             1 * guiManager.openMainMenuGUI(player)
         else
@@ -104,6 +103,31 @@ class USSubCommandTest extends Specification {
                 [],
                 ['Fulminazzo']
         ]
+    }
+
+    def 'test that OpenGUISubCommand sends error message for invalid username'() {
+        given:
+        def subcommand = new OpenGUISubCommand(plugin)
+
+        and:
+        def player = Mock(Player)
+
+        and:
+        def guiManager = Mock(USGUIManager)
+        plugin.getGUIManager() >> guiManager
+
+        and:
+        def apiClient = Mock(USAsyncApiClient)
+        apiClient.usernames >> ['fulminazzo']
+        plugin.apiClient >> apiClient
+
+        when:
+        subcommand.execute(player, new String[]{'notexisting'})
+
+        then:
+        noExceptionThrown()
+        1 * player.sendMessage(_ as String)
+        0 * guiManager.openUserLoginsGUI(player, _ as String)
     }
 
     def 'test that OpenGUISubCommand refutes for non-player senders'() {
