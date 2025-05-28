@@ -30,7 +30,7 @@ public enum Messages implements DefaultFulmiMessages {
     HELP_OPEN_GUI("help.open-gui", "Opens the main plugin GUI. If a username is specified, opens the user latest accesses"),
     HELP_HELP("help.help", "Shows descriptions for the requested subcommands"),
 
-    HELP_DESCRIPTION("help.description", "&c/<command> <name> &8- &e<description>")
+    HELP_DESCRIPTION("help.description", "&c/<command> <usage> &8- &e<description>")
 
     ;
 
