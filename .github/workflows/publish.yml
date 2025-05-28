@@ -55,5 +55,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "build/libs/${{ github.event.repository.name }}.jar"
+          source: "build/libs/userstalker-plugin.jar"
           target: "minecraft/plugins"

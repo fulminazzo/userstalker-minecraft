@@ -64,7 +64,7 @@ shadowJar {
     relocate('it.fulminazzo.fulmicollection', "it.fulminazzo.${project.name}.fulmicollection")
     relocate('com.google.gson', "it.fulminazzo.${project.name}.gson")
     relocate('com.moandjiezana.toml', "it.fulminazzo.${project.name}.toml")
-    archiveFileName = "$project.name-${project.version}.jar"
+    archiveFileName = "${project.name}-plugin.jar"
 }
 
 jar {
