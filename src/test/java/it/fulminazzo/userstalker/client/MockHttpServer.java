@@ -40,6 +40,9 @@ public class MockHttpServer implements HttpHandler {
             UserLoginCount.builder().username("Steve").loginCount(7).build()
     );
 
+    private static final String DEFAULT_USERNAME = "userstalker";
+    private static final String DEFAULT_PASSWORD = "shouldbechangedtoyourliking";
+
     private static final String API_PATH = "/api/v1/userlogins";
 
     private final HttpServer server;
