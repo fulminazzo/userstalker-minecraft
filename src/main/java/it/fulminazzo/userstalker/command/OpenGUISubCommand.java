@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Opens the main menu of the plugin GUI.
@@ -45,7 +46,9 @@ final class OpenGUISubCommand extends USSubCommand {
         if (sender instanceof Player) {
             if (args.length == 1) list.addAll(plugin.getApiClient().getUsernames());
         }
-        return list;
+        return list.stream()
+                .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
+                .collect(Collectors.toList());
     }
 
 }
