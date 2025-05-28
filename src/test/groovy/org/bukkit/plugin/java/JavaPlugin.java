@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public abstract class JavaPlugin {
     private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
-    private final File dataFolder = new File("build/resources/test");
+    private final File dataFolder = new File("build/resources/userstalker");
 
     public String getName() {
         return "UserStalker";
