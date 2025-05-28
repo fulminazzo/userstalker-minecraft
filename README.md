@@ -10,6 +10,8 @@
     <img src="https://img.shields.io/badge/They%20are-spying%20on%20us-aa0000?style=for-the-badge" alt="" />
 </p>
 
+<img src="images/demo.gif" alt="" />
+
 **UserStalker** is a **statistic plugin** created for **Bukkit 1.13+** (it may work on lower versions, but it has not
 been tested).
 
