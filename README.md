@@ -122,7 +122,63 @@ guis:
   # The main menu shown when issuing /userstalker opengui
   main-menu:
     title: '&cUserStalker Main Menu'
-    contents: [ ... ]
+    # The contents specified in this GUI are special.
+    # They can have an "action" as variable, which can be one of the following:
+    # - open-gui-top : opens the top-users-logins GUI 
+    # - open-gui-monthly : opens the monthly-users-logins GUI 
+    # - open-gui-newest : opens the newest-users-logins GUI
+    # - close : closes this GUI
+    contents:
+      # ...
+      '22':
+        - item:
+            material: diamond_block
+            amount: 1
+            display-name: '&bTop users logins'
+            lore:
+              - '&eShows the number of logins per user,'
+              - '&esorted from highest to lowest.'
+            custom-model-data: 0
+          variables:
+            action: open-gui-top
+          type: ITEM
+      # ...
+      '30':
+        - item:
+            material: emerald_block
+            amount: 1
+            display-name: '&2Newest users logins'
+            lore:
+              - '&eShows the latest users logins'
+              - '&esorted by newest.'
+            custom-model-data: 0
+          variables:
+            action: open-gui-newest
+          type: ITEM
+      '32':
+        - item:
+            material: gold_block
+            amount: 1
+            display-name: '&6Monthly users logins'
+            lore:
+              - '&eShows the number of logins per user,'
+              - '&esorted from highest to lowest'
+              - '&eof the current month.'
+            custom-model-data: 0
+          variables:
+            action: open-gui-monthly
+          type: ITEM
+      # ...
+      '45':
+        - item:
+            material: barrier
+            amount: 1
+            display-name: '&cClose'
+            lore: []
+          variables:
+            action: close
+          type: ITEM
+      # ...
     gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
     size: 54
   # The menu that displays a list of users with their accesses, sorted from highest to lowest 
