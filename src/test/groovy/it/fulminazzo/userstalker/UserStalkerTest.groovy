@@ -10,6 +10,7 @@ import it.fulminazzo.userstalker.client.APIClientException
 import it.fulminazzo.userstalker.gui.MockProfileCache
 import org.bukkit.Bukkit
 import org.bukkit.Server
+import org.bukkit.command.PluginCommand
 import org.bukkit.plugin.PluginManager
 import org.mockito.Mockito
 import spock.lang.Specification
@@ -43,6 +44,7 @@ class UserStalkerTest extends Specification {
         plugin.enable() >> { callRealMethod() }
         plugin.onDisable() >> { callRealMethod() }
         plugin.disable() >> { callRealMethod() }
+        plugin.getCommand(_) >> Mock(PluginCommand)
     }
 
     def 'test that onEnable does not throw if an error happens during #method'() {
