@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpServer;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.userstalker.utils.GsonUtils;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +14,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,6 +41,9 @@ public class MockHttpServer implements HttpHandler {
     private static final String API_PATH = "/api/v1/userlogins";
 
     private final HttpServer server;
+
+    @Getter
+    private final List<UserLogin> userLogins = new ArrayList<>();
 
     private List<?> usernames;
     private boolean showUsersLogins = true;
@@ -90,7 +95,8 @@ public class MockHttpServer implements HttpHandler {
             if (userLogin.equals(USER_LOGIN)) sendResponse(httpExchange, 201, "OK");
             else sendResponse(httpExchange, 400, "NOT_OK");
         } else if (path.equalsIgnoreCase("")) {
-            readInputBody(httpExchange, UserLogin.class);
+            UserLogin userLogin = readInputBody(httpExchange, UserLogin.class);
+            userLogins.add(userLogin);
             sendResponse(httpExchange, 201, null);
         } else if (path.equalsIgnoreCase("/usernames")) {
             usernames = readInputBody(httpExchange, List.class);

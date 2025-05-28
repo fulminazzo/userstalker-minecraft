@@ -142,10 +142,12 @@ public final class USApiClient {
             connection.setRequestMethod(method);
             connection.setDoOutput(true);
 
-            if (input != null)
+            if (input != null) {
+                connection.setRequestProperty("Content-Type", "application/json");
                 try (OutputStream outputStream = connection.getOutputStream()) {
                     outputStream.write(gson.toJson(input).getBytes());
                 }
+            }
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) return null;

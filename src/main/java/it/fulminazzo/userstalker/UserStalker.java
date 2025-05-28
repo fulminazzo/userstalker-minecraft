@@ -7,6 +7,7 @@ import it.fulminazzo.userstalker.cache.ProfileCache;
 import it.fulminazzo.userstalker.cache.ProfileCacheException;
 import it.fulminazzo.userstalker.client.APIClientException;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
+import it.fulminazzo.userstalker.command.USCommand;
 import it.fulminazzo.userstalker.gui.USGUIManager;
 import it.fulminazzo.userstalker.listener.PlayerListener;
 import it.fulminazzo.yagl.parsers.GUIYAGLParser;
@@ -43,60 +44,111 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     @Override
     public void onEnable() {
         try {
-            getLogger().info("Starting setup process");
-
-            getLogger().info("Loading config.yml file");
-            configuration = setupConfiguration();
-
-            getLogger().info("Loading messages.yml file");
-            messages = setupMessages(Messages.values());
-
-            getLogger().info("Setting up skin cache");
-            try {
-                profileCache = setupProfileCache();
-            } catch (ProfileCacheException e) {
-                getLogger().warning("An error occurred while setting up the skin cache");
-                getLogger().warning(e.getMessage());
-                getLogger().warning("Continuing setup without skin cache. Heads skins will not be available");
-            }
-
-            getLogger().info("Setting up internal API client");
-            apiClient = setupApiClient();
-
-            getLogger().info("Setting up GUI manager");
-            guiManager = setupGUIManager();
+            enable();
         } catch (ConfigurationException | APIClientException e) {
             getLogger().severe(e.getMessage());
-            disable();
+            forceDisable();
             return;
         }
+
+        getCommand("userstalker").setExecutor(new USCommand(this));
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
 
         getLogger().info("UserStalker setup complete");
     }
 
+    /**
+     * Executes the plugin enabling process.
+     *
+     * @throws ConfigurationException in case any errors occur
+     * @throws APIClientException     in case any errors occur
+     */
+    void enable() throws ConfigurationException, APIClientException {
+        getLogger().info("Starting setup process");
+
+        getLogger().info("Loading config.yml file");
+        configuration = setupConfiguration();
+
+        getLogger().info("Loading messages.yml file");
+        messages = setupMessages(Messages.values());
+
+        getLogger().info("Setting up skin cache");
+        try {
+            profileCache = setupProfileCache();
+        } catch (ProfileCacheException e) {
+            getLogger().warning("An error occurred while setting up the skin cache");
+            getLogger().warning(e.getMessage());
+            getLogger().warning("Continuing setup without skin cache. Heads skins will not be available");
+        }
+
+        getLogger().info("Setting up internal API client");
+        apiClient = setupApiClient();
+
+        getLogger().info("Setting up GUI manager");
+        guiManager = setupGUIManager();
+    }
+
     @Override
     public void onDisable() {
         try {
-            getLogger().info("Starting shutdown process");
-
-            if (profileCache != null) {
-                getLogger().info("Shutting down skin cache");
-                profileCache.close();
-            }
-
-            getLogger().info("Shutdown complete. Goodbye");
+            disable();
         } catch (ProfileCacheException e) {
             getLogger().severe(e.getMessage());
         }
     }
 
     /**
+     * Executes the plugin disabling process.
+     *
+     * @throws ProfileCacheException in case any errors occur
+     */
+    void disable() throws ProfileCacheException {
+        getLogger().info("Starting shutdown process");
+
+        configuration = null;
+        messages = null;
+
+        apiClient = null;
+
+        if (profileCache != null) {
+            getLogger().info("Shutting down skin cache");
+            profileCache.close();
+            profileCache = null;
+        }
+
+        guiManager = null;
+
+        getLogger().info("Shutdown complete. Goodbye");
+    }
+
+    /**
+     * Reloads the plugin.
+     *
+     * @throws ProfileCacheException  in case any errors occur
+     * @throws ConfigurationException in case any errors occur
+     * @throws APIClientException     in case any errors occur
+     */
+    public void reload() throws ProfileCacheException, ConfigurationException, APIClientException {
+        disable();
+        enable();
+    }
+
+    /**
      * Disables the plugin.
      */
-    void disable() {
+    void forceDisable() {
         getServer().getPluginManager().disablePlugin(this);
+    }
+
+    /**
+     * Gets gui manager.
+     *
+     * @return the gui manager
+     */
+    public @NotNull USGUIManager getGUIManager() {
+        if (guiManager == null) throw new IllegalStateException("GUI manager not yet initialized");
+        return guiManager;
     }
 
     /**

@@ -15,8 +15,24 @@ import org.jetbrains.annotations.NotNull;
 public enum Messages implements DefaultFulmiMessages {
     PREFIX("prefix", "&6User&cStalker &8» &f"),
 
-    INTERNAL_ERROR_OCCURRED("internal-error", "<prefix>&cAn internal error occurred. " +
-            "Please notify an administrator about this");
+    RELOAD_SUCCESSFUL("general.reload-successful", "<prefix>&aPlugin reload completed successfully"),
+
+    INTERNAL_ERROR_OCCURRED("error.internal-error", "<prefix>&cAn internal error occurred. " +
+            "Please notify an administrator about this"),
+    CONSOLE_CANNOT_EXECUTE("error.console-cannot-execute", "<prefix>&cConsole cannot execute this command."),
+    RELOAD_UNSUCCESSFUL("general.reload-unsuccessful", "<prefix>&cPlugin reload failed with error: &4<error>&c. " +
+            "Check console for more details"),
+    SUBCOMMAND_NOT_FOUND("error.subcommand-not-found", "<prefix>&cNo such subcommand: &4<subcommand>"),
+    NOT_ENOUGH_ARGUMENTS("error.not-enough-arguments", "<prefix>&cYou did not specify enough arguments"),
+    NOT_ENOUGH_PERMISSIONS("error.not-enough-permissions", "<prefix>&cYou do not have enough permissions to execute that subcommand"),
+
+    HELP_RELOAD("help.reload", "Reloads the plugin configurations"),
+    HELP_OPEN_GUI("help.open-gui", "Opens the main plugin GUI"),
+    HELP_HELP("help.help", "Shows descriptions for the requested subcommands"),
+
+    HELP_DESCRIPTION("help.description", "&c/<command> <name> &8- &e<description>")
+
+    ;
 
     private final String path;
     private final String defaultMessage;
