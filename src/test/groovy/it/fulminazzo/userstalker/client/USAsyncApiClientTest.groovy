@@ -157,7 +157,7 @@ class USAsyncApiClientTest extends Specification {
 
         where:
         expected               || usernames
-        ['Alex', 'Fulminazzo'] || null
+        []                     || null
         ['Alex', 'Fulminazzo'] || ['Alex', 'Fulminazzo']
     }
 

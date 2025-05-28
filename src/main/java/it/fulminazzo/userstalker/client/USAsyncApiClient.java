@@ -129,8 +129,8 @@ public abstract class USAsyncApiClient {
                     l -> usernames.addAll(l),
                     () -> usernames = null
             );
-        }
-        return usernames;
+            return new ArrayList<>();
+        } else return usernames;
     }
 
     /**
