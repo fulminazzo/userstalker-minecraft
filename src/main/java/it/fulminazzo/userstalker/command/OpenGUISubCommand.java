@@ -25,7 +25,17 @@ final class OpenGUISubCommand extends USSubCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (sender instanceof Player) plugin.getGUIManager().openMainMenuGUI((Player) sender);
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (args.length == 1) {
+                String username = args[0];
+                @NotNull List<String> usernames = plugin.getApiClient().getUsernames();
+                if (usernames.stream().anyMatch(s -> s.equalsIgnoreCase(username)))
+                    plugin.getGUIManager().openUserLoginsGUI(player, username);
+                else sender.sendMessage(Messages.USER_NOT_FOUND.getMessage()
+                        .replace("<user>", username));
+            } else plugin.getGUIManager().openMainMenuGUI(player);
+        }
         else sender.sendMessage(Messages.CONSOLE_CANNOT_EXECUTE.getMessage());
     }
 
