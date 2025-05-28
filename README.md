@@ -123,44 +123,33 @@ guis:
   main-menu:
     title: '&cUserStalker Main Menu'
     contents: [ ... ]
-    movable-slots: []
-    variables: {}
-    type: DEFAULT
+    gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
     size: 54
   # The menu that displays a list of users with their accesses, sorted from highest to lowest 
   top-users-logins:
     title: '&cTop users logins'
     contents: [ ... ]
-    movable-slots: []
-    variables: {}
     type: DATA
     size: 54
-    gui-type: DEFAULT
-    pages: 1
+    gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
     previous_page: { ... }
     next_page: { ... }
   # The menu that displays a list of users with their accesses, sorted from highest to lowest, based on the current month
   monthly-users-logins:
     title: '&cMonthly users logins'
     contents: [ ... ]
-    movable-slots: []
-    variables: {}
     type: DATA
     size: 45
-    gui-type: DEFAULT
-    pages: 1
+    gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
     previous_page: { ... }
     next_page: { ... }
   # The menu that displays the accesses on the server, sorted from most recent. 
   newest-users-logins:
     title: '&cNewest users logins'
     contents: [ ... ]
-    movable-slots: []
-    variables: {}
     type: DATA
     size: 45
-    gui-type: DEFAULT
-    pages: 1
+    gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
     previous_page: { ... }
     next_page: { ... }
   # The menu shown upon clicking on one login entry of the previous GUIs, or
@@ -168,12 +157,9 @@ guis:
   user-logins:
     title: '&c<username>''s logins'
     contents: [ ... ]
-    movable-slots: []
-    variables: {}
     type: DATA
     size: 54
-    gui-type: DEFAULT
-    pages: 1
+    gui-type: DEFAULT # Can use custom types like CHEST, DISPENSER, ANVIL and more
     previous_page: { ... }
     next_page: { ... }
 items:
