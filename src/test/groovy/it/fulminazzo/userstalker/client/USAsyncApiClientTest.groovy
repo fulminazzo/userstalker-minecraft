@@ -6,7 +6,6 @@ import it.fulminazzo.userstalker.utils.GsonUtils
 import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
 
-import java.util.function.Consumer
 import java.util.logging.Logger
 
 class USAsyncApiClientTest extends Specification {
@@ -270,6 +269,7 @@ class USAsyncApiClientTest extends Specification {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection()
         connection.setRequestMethod(method)
         connection.setDoOutput(true)
+        connection.setRequestProperty('Authorization', 'Basic dXNlcnN0YWxrZXI6c2hvdWxkYmVjaGFuZ2VkdG95b3VybGlraW5n')
 
         if (input != null)
             connection.outputStream << gson.toJson(input).getBytes()
