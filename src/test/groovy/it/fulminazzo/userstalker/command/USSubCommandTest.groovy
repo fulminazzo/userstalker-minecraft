@@ -122,6 +122,27 @@ class USSubCommandTest extends Specification {
         1 * sender.sendMessage(_ as String)
     }
 
+    def 'test that OpenGUISubCommand tabComplete returns #expected for #sender'() {
+        given:
+        def subcommand = new OpenGUISubCommand(plugin)
+
+        and:
+        def apiClient = Mock(USAsyncApiClient)
+        apiClient.usernames >> ['fulminazzo']
+        plugin.apiClient >> apiClient
+
+        when:
+        def list = subcommand.tabComplete(sender, new String[1])
+
+        then:
+        list == expected
+
+        where:
+        sender              || expected
+        Mock(CommandSender) || []
+        Mock(Player)        || ['fulminazzo']
+    }
+
     def 'test that ReloadSubCommand executes correctly'() {
         given:
         def subcommand = new ReloadSubCommand(plugin)
