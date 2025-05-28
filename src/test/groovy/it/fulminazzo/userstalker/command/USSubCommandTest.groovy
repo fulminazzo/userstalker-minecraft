@@ -156,7 +156,7 @@ class USSubCommandTest extends Specification {
         plugin.apiClient >> apiClient
 
         when:
-        def list = subcommand.tabComplete(sender, new String[1])
+        def list = subcommand.tabComplete(sender, new String[1]{''})
 
         then:
         list == expected
