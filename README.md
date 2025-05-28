@@ -101,11 +101,11 @@ userstalker-http-server:
 
 **NOTE:** when requesting **usernames** to the endpoint (for example, when issuing the
 [`/userstalker opengui <username>`](#commands) command), the plugin will **temporarily store**
-the results to avoid further queries. 
+the results to avoid further queries.
 The cache is updated only upon **plugin reload** or when a **player enters the server**.
 
-Therefore, manual modifications of the **UserStalker database** (using PostMan with the endpoints, 
-direct access...) are **highly discouraged**.  
+Therefore, manual modifications of the **UserStalker database** (using PostMan with the endpoints,
+direct access...) are **highly discouraged**.
 
 ### GUI Manager
 
@@ -115,7 +115,11 @@ to retrieve data from the server and displaying it to the players, without halti
 Upon first load of the plugin, the manager will create and populate a `guis.yml` file containing all the GUIs
 available for customization.
 
-Here is an example of such document with explanations using YAML comments:
+It uses the [YAGL library](https://github.com/fulminazzo/YAGL) to serialize and deserialize GUIs,
+so it is highly suggested to take a look at it before editing any entry.
+
+Here is an example of `guis.yml` with explanations using YAML comments,
+stripped to highlight the important parts:
 
 ```yaml
 guis:
@@ -174,7 +178,7 @@ guis:
             material: barrier
             amount: 1
             display-name: '&cClose'
-            lore: []
+            lore: [ ]
           variables:
             action: close
           type: ITEM
@@ -297,7 +301,7 @@ items:
     item:
       material: barrier
       display-name: '&cBack'
-      lore: []
+      lore: [ ]
       custom-model-data: 0
     type: ITEM
 misc:
