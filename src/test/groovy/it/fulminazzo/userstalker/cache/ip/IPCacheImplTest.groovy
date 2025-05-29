@@ -1,15 +1,20 @@
 package it.fulminazzo.userstalker.cache.ip
 
 import it.fulminazzo.userstalker.cache.domain.IPInfo
+import it.fulminazzo.userstalker.cache.exception.CacheException
+import it.fulminazzo.userstalker.cache.utils.HttpUtils
 import spock.lang.Specification
 
 import java.util.logging.Logger
 
 class IPCacheImplTest extends Specification {
 
+    private static boolean run
+
     private IPCacheImpl cache
 
     void setup() {
+        run = false
         cache = new IPCacheImpl(Logger.getLogger(getClass().simpleName))
     }
 
@@ -27,20 +32,38 @@ class IPCacheImplTest extends Specification {
         and:
         cache.cache.put('127.0.0.1', info)
 
-        and:
-        def run = false
-
         when:
         cache.lookupIPInfoAnd(ip, i -> run = true, () -> { })
 
         then:
-        run == true
+        run
 
         where:
         ip << [
                 '127.0.0.1',
                 '24.48.0.1',
                 'invalid'
+        ]
+    }
+
+    def 'test that lookupIPInfoAnd does not throw'() {
+        given:
+        SpyStatic(HttpUtils)
+        HttpUtils.getJsonFromURL(_ as String, _ as String) >> {
+            throw new CacheException('Cache')
+        }
+
+        when:
+        cache.lookupIPInfoAnd('127.0.0.1', ip -> { }, runnable)
+
+        then:
+        noExceptionThrown()
+        run || runnable == null
+
+        where:
+        runnable << [
+                null,
+                () -> run = true
         ]
     }
 
