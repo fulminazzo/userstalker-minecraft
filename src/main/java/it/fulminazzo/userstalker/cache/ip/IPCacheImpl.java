@@ -16,7 +16,8 @@ import java.util.logging.Logger;
  * An implementation of {@link IPCache} that uses a {@link ConcurrentHashMap} as cache.
  */
 class IPCacheImpl implements IPCache {
-    private static final String IP_LOOKUP = "http://ip-api.com/json/%s";
+    private static final String IP_LOOKUP = "http://ip-api.com/json/%s?" +
+            "fields=status,message,country,countryCode,regionName,city,isp,mobile,proxy,query";
 
     private final @NotNull Map<String, IPInfo> cache;
     private final @NotNull Logger logger;
@@ -64,6 +65,8 @@ class IPCacheImpl implements IPCache {
                     .region(jsonObject.get("regionName").getAsString())
                     .city(jsonObject.get("city").getAsString())
                     .isp(jsonObject.get("isp").getAsString())
+                    .mobile(jsonObject.get("mobile").getAsBoolean())
+                    .proxy(jsonObject.get("proxy").getAsBoolean())
                     .build();
         });
         ipInfo.ifPresent(info -> cache.put(ip, info));
