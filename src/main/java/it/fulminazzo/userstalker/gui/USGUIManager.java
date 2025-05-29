@@ -191,8 +191,7 @@ public final class USGUIManager {
                         newestUsersLoginsGUI,
                         l,
                         newestUsersLoginsGUIContent,
-                        (v, g, c) ->
-                                openUserLoginsGUI(viewer, Objects.requireNonNull(c.getVariable("username")), g)
+                        null
                 ).open(viewer),
                 () -> viewer.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
         );
