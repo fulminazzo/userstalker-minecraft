@@ -34,6 +34,13 @@ class USGUIManagerTest extends Specification {
         BukkitUtils.setupServer()
         Mockito.when(Bukkit.getServer().isPrimaryThread()).thenReturn(true)
         Mockito.when(Bukkit.getServer().getItemFactory()).thenReturn(new SMMockItemFactory())
+        Mockito.when(Bukkit.getServer().dispatchCommand(Mockito.any(), Mockito.any())).thenAnswer { a -> {
+            def sender = a.getArgument(0)
+            def command = a.getArgument(1)
+            if (sender instanceof Player)
+                ((Player) sender).performCommand(command)
+            else throw new UnsupportedOperationException()
+        }}
 
         def messages = new MockFileConfiguration([
                 'error': [
