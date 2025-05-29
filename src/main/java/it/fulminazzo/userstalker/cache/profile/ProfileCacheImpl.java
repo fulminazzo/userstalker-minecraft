@@ -3,15 +3,10 @@ package it.fulminazzo.userstalker.cache.profile;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.fulminazzo.userstalker.cache.exception.CacheException;
-import it.fulminazzo.userstalker.utils.GsonUtils;
+import it.fulminazzo.userstalker.cache.utils.HttpUtils;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -54,7 +49,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
         if (!uuid.isPresent()) return Optional.empty();
 
         String rawUUID = ProfileCacheUtils.toString(uuid.get());
-        Optional<JsonObject> result = getJsonFromURL(String.format(MOJANG_API_SKIN, rawUUID),
+        Optional<JsonObject> result = HttpUtils.getJsonFromURL(String.format(MOJANG_API_SKIN, rawUUID),
                 String.format("querying Mojang API for user \"%s\"'s skin", username));
         if (!result.isPresent()) updateFetchBlacklist(username);
         return result
@@ -90,7 +85,7 @@ abstract class ProfileCacheImpl implements ProfileCache {
     @Override
     public @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) throws CacheException {
         if (isInFetchBlacklist(username)) return Optional.empty();
-        Optional<JsonObject> result = getJsonFromURL(String.format(MOJANG_API_UUID, username),
+        Optional<JsonObject> result = HttpUtils.getJsonFromURL(String.format(MOJANG_API_UUID, username),
                 String.format("querying Mojang API for user \"%s\"'s UUID", username));
         if (!result.isPresent()) updateFetchBlacklist(username);
         return result
@@ -102,39 +97,6 @@ abstract class ProfileCacheImpl implements ProfileCache {
     @Override
     public void close() throws CacheException {
         // By default, do nothing
-    }
-
-    /**
-     * Navigates the given URL and returns a {@link JsonObject} from the returned body.
-     *
-     * @param url    the url
-     * @param action the action to display when throwing {@link CacheException}
-     * @return the json object if the server did not respond with a 404 status code
-     * @throws CacheException a wrapper exception for any error
-     */
-    @NotNull Optional<JsonObject> getJsonFromURL(final @NotNull String url,
-                                                 final @NotNull String action) throws CacheException {
-        HttpURLConnection connection = null;
-        try {
-            URL actualUrl = new URL(url);
-            connection = (HttpURLConnection) actualUrl.openConnection();
-            connection.setRequestMethod("GET");
-
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_NOT_FOUND)
-                return Optional.empty();
-            else if (responseCode != HttpURLConnection.HTTP_OK)
-                throw new CacheException(String.format("Invalid response code when %s: %s", action, responseCode));
-
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-            return Optional.of(GsonUtils.getGson().fromJson(reader, JsonObject.class));
-        } catch (MalformedURLException e) {
-            throw new CacheException("Invalid URL provided: " + url);
-        } catch (IOException e) {
-            throw new CacheException(action, e);
-        } finally {
-            if (connection != null) connection.disconnect();
-        }
     }
 
     /**
