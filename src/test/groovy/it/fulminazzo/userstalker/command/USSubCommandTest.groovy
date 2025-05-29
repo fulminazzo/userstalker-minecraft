@@ -46,9 +46,9 @@ class USSubCommandTest extends Specification {
         where:
         number || args
         1      || ['notexisting']
-        2      || ['o']
+        3      || ['o']
         1      || ['?']
-        3      || []
+        4      || []
     }
 
     def 'test that HelpSubCommand tabComplete returns #expected for #args'() {

@@ -78,16 +78,16 @@ class USCommandTest extends Specification {
         where:
         args            || expected
         []              || []
-        ['']            || ['opengui', 'open', 'gui', 'reload', 'help', '?']
+        ['']            || ['opengui', 'open', 'gui', 'reload', 'lookup', 'fetch', 'help', '?']
         ['op']          || ['opengui', 'open']
         ['opengui', ''] || []
         ['open', '']    || []
         ['gui', '']     || []
         ['reload', '']  || []
-        ['help', '']    || ['opengui', 'open', 'gui', 'reload', 'help', '?']
+        ['help', '']    || ['opengui', 'open', 'gui', 'reload', 'lookup', 'fetch', 'help', '?']
         ['help', 'op']  || ['opengui', 'open']
-        ['help', 'o']   || ['opengui', 'open', 'reload']
-        ['?', '']       || ['opengui', 'open', 'gui', 'reload', 'help', '?']
+        ['help', 'o']   || ['opengui', 'open', 'reload', 'lookup']
+        ['?', '']       || ['opengui', 'open', 'gui', 'reload', 'lookup', 'fetch', 'help', '?']
     }
 
 }
