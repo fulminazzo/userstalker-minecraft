@@ -28,6 +28,7 @@ public final class USCommand implements TabExecutor {
         this.subCommands = Arrays.asList(
                 new OpenGUISubCommand(plugin),
                 new ReloadSubCommand(plugin),
+                new LookupSubCommand(plugin),
                 new HelpSubCommand(plugin, this)
         );
     }
