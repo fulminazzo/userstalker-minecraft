@@ -3,6 +3,7 @@ package it.fulminazzo.userstalker;
 import it.fulminazzo.fulmicommands.FulmiException;
 import it.fulminazzo.fulmicommands.FulmiMessagesPlugin;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
+import it.fulminazzo.userstalker.cache.ip.IPCache;
 import it.fulminazzo.userstalker.cache.profile.ProfileCache;
 import it.fulminazzo.userstalker.cache.exception.CacheException;
 import it.fulminazzo.userstalker.client.APIClientException;
@@ -29,7 +30,9 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     private @Nullable FileConfiguration messages;
 
     private @Nullable USAsyncApiClient apiClient;
+
     private @Nullable ProfileCache profileCache;
+    private @Nullable IPCache ipCache;
 
     private @Nullable USGUIManager guiManager;
 
@@ -82,6 +85,9 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
             getLogger().warning("Continuing setup without skin cache. Heads skins will not be available");
         }
 
+        getLogger().info("Setting up IP cache");
+        ipCache = IPCache.newCache(getLogger());
+
         getLogger().info("Setting up internal API client");
         apiClient = setupApiClient();
 
@@ -109,13 +115,15 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         configuration = null;
         messages = null;
 
-        apiClient = null;
-
         if (profileCache != null) {
             getLogger().info("Shutting down skin cache");
             profileCache.close();
             profileCache = null;
         }
+
+        ipCache = null;
+
+        apiClient = null;
 
         guiManager = null;
 
@@ -180,6 +188,16 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
                 .pluginDirectory(getPluginDirectory())
                 .configuration(getConfiguration())
                 .build();
+    }
+
+    /**
+     * Gets ip cache.
+     *
+     * @return the ip cache
+     */
+    public @NotNull IPCache getIpCache() {
+        if (ipCache == null) throw new IllegalStateException("IP cache not yet initialized");
+        return ipCache;
     }
 
     /**
