@@ -4,6 +4,7 @@ package it.fulminazzo.userstalker.command
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.userstalker.UserStalker
+import it.fulminazzo.userstalker.cache.domain.IPInfo
 import it.fulminazzo.userstalker.cache.exception.CacheException
 import it.fulminazzo.userstalker.cache.ip.IPCache
 import it.fulminazzo.userstalker.client.APIClientException
@@ -38,11 +39,10 @@ class USSubCommandTest extends Specification {
         def subcommand = new LookupSubCommand(plugin)
 
         and:
-        def actualCache = IPCache.newCache(plugin.logger)
-        def cache = Mock(actualCache.class)
+        def cache = Mock(IPCache.newCache(plugin.logger).class)
         cache.lookupIPInfoAnd(_ as String, _ as Consumer, _ as Runnable) >> { args ->
             if (args[0] == 'error') args[2].run()
-            else actualCache.lookupIPInfoAnd(args[0], args[1], args[2])
+            else args[1].accept(ipInfo)
         }
         plugin.ipCache >> cache
 
@@ -57,7 +57,14 @@ class USSubCommandTest extends Specification {
         1 * sender.sendMessage(_)
 
         where:
-        ip << [null, 'invalid', '24.48.0.1', 'error']
+        ip                   || ipInfo
+        null                 || null
+        'invalid'            || null
+        'valid'              || mockIpInfo(false, false)
+        'valid_mobile'       || mockIpInfo(true, false)
+        'valid_proxy'        || mockIpInfo(false, true)
+        'valid_mobile_proxy' || mockIpInfo(true, true)
+        'error'              || null
     }
 
     def 'test that LookupSubCommand tabComplete returns #expected for arguments #args'() {
@@ -249,6 +256,19 @@ class USSubCommandTest extends Specification {
                 new APIClientException('Api client'),
                 new ConfigurationException('Configuration')
         ]
+    }
+
+    private static IPInfo mockIpInfo(boolean mobile, boolean proxy) {
+        return IPInfo.builder()
+                .ip('ip')
+                .country('country')
+                .countryCode('country_code')
+                .region('region')
+                .city('city')
+                .isp('isp')
+                .mobile(mobile)
+                .proxy(proxy)
+                .build()
     }
 
 }
