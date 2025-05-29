@@ -44,7 +44,7 @@ public final class LookupSubCommand extends USSubCommand {
                                 .replace("<proxy>", (i.isProxy() ? Messages.YES : Messages.NO).getMessage())
                         );
                     },
-                    () -> sender.sendMessage(Messages.CANNOT_IP_LOOKUP.getMessage())
+                    () -> sender.sendMessage(Messages.INTERNAL_ERROR_OCCURRED.getMessage())
             );
         }
     }
