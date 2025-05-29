@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'it.fulminazzo'
-version = '1.0'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
@@ -76,7 +76,7 @@ shadowJar {
     relocate('it.fulminazzo.yagl', "it.fulminazzo.${project.name}.yagl")
     relocate('com.google.gson', "it.fulminazzo.${project.name}.gson")
     relocate('com.moandjiezana.toml', "it.fulminazzo.${project.name}.toml")
-    archiveFileName = "${project.name}-plugin.jar"
+    archiveFileName = "${project.name}-minecraft.jar"
 }
 
 jar {
