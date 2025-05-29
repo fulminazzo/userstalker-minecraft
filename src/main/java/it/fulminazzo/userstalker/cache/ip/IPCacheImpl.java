@@ -30,7 +30,13 @@ class IPCacheImpl implements IPCache {
     public void lookupIPInfoAnd(@NotNull String ip,
                                 @NotNull Consumer<IPInfo> then,
                                 @Nullable Runnable orElse) {
-
+        try {
+            @NotNull Optional<IPInfo> info = lookupIPInfo(ip);
+            if (!info.isPresent()) info = fetchIPInfo(ip);
+            then.accept(info.orElse(null));
+        } catch (CacheException e) {
+            if (orElse != null) orElse.run();
+        }
     }
 
     /**
