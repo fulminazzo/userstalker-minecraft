@@ -34,13 +34,15 @@ class USGUIManagerTest extends Specification {
         BukkitUtils.setupServer()
         Mockito.when(Bukkit.getServer().isPrimaryThread()).thenReturn(true)
         Mockito.when(Bukkit.getServer().getItemFactory()).thenReturn(new SMMockItemFactory())
-        Mockito.when(Bukkit.getServer().dispatchCommand(Mockito.any(), Mockito.any())).thenAnswer { a -> {
-            def sender = a.getArgument(0)
-            def command = a.getArgument(1)
-            if (sender instanceof Player)
-                ((Player) sender).performCommand(command)
-            else throw new UnsupportedOperationException()
-        }}
+        Mockito.when(Bukkit.getServer().dispatchCommand(Mockito.any(), Mockito.any())).thenAnswer { a ->
+            {
+                def sender = a.getArgument(0)
+                def command = a.getArgument(1)
+                if (sender instanceof Player)
+                    ((Player) sender).performCommand(command)
+                else throw new UnsupportedOperationException()
+            }
+        }
 
         def messages = new MockFileConfiguration([
                 'error': [
@@ -227,7 +229,10 @@ class USGUIManagerTest extends Specification {
         def player = getNewPlayer()
 
         when:
-        manager."$methodName"(player)
+        if (args.size() == 0)
+            manager."$methodName"(player)
+        else
+            manager."$methodName"(player, *args)
 
         then:
         def guiViewer = GUIManager.getOpenGUIViewer(player)
@@ -245,9 +250,9 @@ class USGUIManagerTest extends Specification {
         1 * player.performCommand(_ as String)
 
         where:
-        methodName << [
-                'openNewestUsersLoginsGUI',
-        ]
+        methodName                 | args
+        'openNewestUsersLoginsGUI' | []
+        'openUserLoginsGUI'        | ['Fulminazzo']
     }
 
     def 'test that openUserLoginsGUI of valid opens GUI'() {
