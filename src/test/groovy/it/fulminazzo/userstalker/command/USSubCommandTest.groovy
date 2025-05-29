@@ -30,6 +30,22 @@ class USSubCommandTest extends Specification {
         UserStalker.instance = plugin
     }
 
+    def 'test that LookupSubCommand tabComplete returns #expected for arguments #args'() {
+        given:
+        def subcommand = new LookupSubCommand(plugin)
+
+        when:
+        def result = subcommand.tabComplete(sender, args.toArray(new String[0]))
+
+        then:
+        result == expected
+
+        where:
+        args || expected
+        []   || []
+        [''] || ['<ip>']
+    }
+
     def 'test that HelpSubCommand sends #number messages for arguments #args'() {
         given:
         def subcommand = new HelpSubCommand(plugin, new USCommand(plugin))
