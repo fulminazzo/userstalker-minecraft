@@ -3,7 +3,7 @@ package it.fulminazzo.userstalker.utils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import it.fulminazzo.fulmicollection.objects.Refl;
-import it.fulminazzo.userstalker.cache.profile.Skin;
+import it.fulminazzo.userstalker.cache.domain.Skin;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.inventory.meta.SkullMeta;

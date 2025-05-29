@@ -2,6 +2,7 @@ package it.fulminazzo.userstalker.cache.profile;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.fulminazzo.userstalker.cache.domain.Skin;
 import it.fulminazzo.userstalker.cache.exception.CacheException;
 import it.fulminazzo.userstalker.cache.utils.HttpUtils;
 import lombok.RequiredArgsConstructor;

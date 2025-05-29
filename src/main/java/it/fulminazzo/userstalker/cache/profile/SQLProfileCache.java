@@ -2,6 +2,7 @@ package it.fulminazzo.userstalker.cache.profile;
 
 import it.fulminazzo.fulmicollection.interfaces.functions.FunctionException;
 import it.fulminazzo.fulmicollection.interfaces.functions.SupplierException;
+import it.fulminazzo.userstalker.cache.domain.Skin;
 import it.fulminazzo.userstalker.cache.exception.CacheException;
 import org.jetbrains.annotations.NotNull;
 

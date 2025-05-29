@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.cache.profile;
 
+import it.fulminazzo.userstalker.cache.domain.Skin;
 import it.fulminazzo.yamlparser.configuration.ConfigurationSection;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import org.jetbrains.annotations.NotNull;

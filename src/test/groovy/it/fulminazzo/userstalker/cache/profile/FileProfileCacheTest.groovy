@@ -1,6 +1,6 @@
 package it.fulminazzo.userstalker.cache.profile
 
-
+import it.fulminazzo.userstalker.cache.domain.Skin
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils
 import spock.lang.Specification

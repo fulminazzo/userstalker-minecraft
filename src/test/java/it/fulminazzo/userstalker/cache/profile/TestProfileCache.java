@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.cache.profile;
 
+import it.fulminazzo.userstalker.cache.domain.Skin;
 import it.fulminazzo.userstalker.cache.exception.CacheException;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;

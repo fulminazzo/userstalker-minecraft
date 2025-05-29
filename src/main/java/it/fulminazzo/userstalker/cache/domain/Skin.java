@@ -1,4 +1,4 @@
-package it.fulminazzo.userstalker.cache.profile;
+package it.fulminazzo.userstalker.cache.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

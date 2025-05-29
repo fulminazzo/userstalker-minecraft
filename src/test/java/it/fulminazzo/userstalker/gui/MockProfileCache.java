@@ -2,7 +2,7 @@ package it.fulminazzo.userstalker.gui;
 
 import it.fulminazzo.userstalker.cache.profile.ProfileCache;
 import it.fulminazzo.userstalker.cache.exception.CacheException;
-import it.fulminazzo.userstalker.cache.profile.Skin;
+import it.fulminazzo.userstalker.cache.domain.Skin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
