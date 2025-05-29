@@ -41,7 +41,22 @@ class IPCacheImpl implements IPCache {
      * @throws CacheException a wrapper for any exception
      */
     public @NotNull Optional<IPInfo> fetchIPInfo(@NotNull String ip) throws CacheException {
-        Optional<IPInfo> ipInfo = HttpUtils.getJsonFromURL(String.format(IP_LOOKUP, ip), String.format("querying ip-api.com for IP \"%s\"", ip));
+        Optional<IPInfo> ipInfo = HttpUtils.getJsonFromURL(
+                String.format(IP_LOOKUP, ip),
+                String.format("querying ip-api.com for IP \"%s\"", ip)
+        ).map(jsonObject -> {
+            String status = jsonObject.get("status").getAsString();
+            if (!status.equals("success")) return null;
+            return IPInfo.builder()
+                    .ip(jsonObject.get("query").getAsString())
+                    .continent(jsonObject.get("continent").getAsString())
+                    .country(jsonObject.get("country").getAsString())
+                    .countryCode(jsonObject.get("countryCode").getAsString())
+                    .region(jsonObject.get("regionName").getAsString())
+                    .city(jsonObject.get("city").getAsString())
+                    .isp(jsonObject.get("isp").getAsString())
+                    .build();
+        });
         ipInfo.ifPresent(info -> cache.put(ip, info));
         return ipInfo;
     }
