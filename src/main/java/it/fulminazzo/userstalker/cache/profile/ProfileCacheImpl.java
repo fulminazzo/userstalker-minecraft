@@ -8,6 +8,7 @@ import it.fulminazzo.userstalker.cache.utils.HttpUtils;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +52,8 @@ abstract class ProfileCacheImpl implements ProfileCache {
 
         String rawUUID = ProfileCacheUtils.toString(uuid.get());
         Optional<JsonObject> result = HttpUtils.getJsonFromURL(String.format(MOJANG_API_SKIN, rawUUID),
-                String.format("querying Mojang API for user \"%s\"'s skin", username));
+                String.format("querying Mojang API for user \"%s\"'s skin", username),
+                HttpURLConnection.HTTP_NO_CONTENT);
         if (!result.isPresent()) updateFetchBlacklist(username);
         return result
                 .map(j -> j.getAsJsonArray("properties"))
