@@ -15,6 +15,8 @@ import java.util.function.Consumer;
  * An implementation of {@link IPCache} that uses a {@link ConcurrentHashMap} as cache.
  */
 class IPCacheImpl implements IPCache {
+    private static final String IP_LOOKUP = "http://ip-api.com/json/%s";
+
     private final Map<String, IPInfo> cache;
 
     /**
@@ -39,7 +41,9 @@ class IPCacheImpl implements IPCache {
      * @throws CacheException a wrapper for any exception
      */
     public @NotNull Optional<IPInfo> fetchIPInfo(@NotNull String ip) throws CacheException {
-        return HttpUtils.getJsonFromURL(ip, "");
+        Optional<IPInfo> ipInfo = HttpUtils.getJsonFromURL(String.format(IP_LOOKUP, ip), String.format("querying ip-api.com for IP \"%s\"", ip));
+        ipInfo.ifPresent(info -> cache.put(ip, info));
+        return ipInfo;
     }
 
     /**
