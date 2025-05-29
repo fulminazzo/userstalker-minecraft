@@ -1,4 +1,4 @@
-package it.fulminazzo.userstalker.cache
+package it.fulminazzo.userstalker.cache.profile
 
 import com.google.gson.JsonObject
 import it.fulminazzo.fulmicollection.objects.Refl

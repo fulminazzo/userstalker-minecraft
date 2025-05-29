@@ -1,4 +1,5 @@
-package it.fulminazzo.userstalker.cache
+package it.fulminazzo.userstalker.cache.profile
+
 
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils

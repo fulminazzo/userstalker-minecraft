@@ -1,7 +1,7 @@
 package it.fulminazzo.userstalker.gui
 
 import it.fulminazzo.jbukkit.BukkitUtils
-import it.fulminazzo.userstalker.cache.ProfileCache
+import it.fulminazzo.userstalker.cache.profile.ProfileCache
 import it.fulminazzo.userstalker.domain.UserLogin
 import it.fulminazzo.userstalker.domain.UserLoginCount
 import it.fulminazzo.userstalker.meta.ProfiledSkullMeta

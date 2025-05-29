@@ -1,4 +1,4 @@
-package it.fulminazzo.userstalker.cache;
+package it.fulminazzo.userstalker.cache.profile;
 
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,8 @@
 package it.fulminazzo.userstalker.gui;
 
-import it.fulminazzo.userstalker.cache.ProfileCache;
-import it.fulminazzo.userstalker.cache.ProfileCacheException;
-import it.fulminazzo.userstalker.cache.Skin;
+import it.fulminazzo.userstalker.cache.profile.ProfileCache;
+import it.fulminazzo.userstalker.cache.profile.ProfileCacheException;
+import it.fulminazzo.userstalker.cache.profile.Skin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

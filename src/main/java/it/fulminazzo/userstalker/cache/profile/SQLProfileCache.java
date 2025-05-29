@@ -1,4 +1,4 @@
-package it.fulminazzo.userstalker.cache;
+package it.fulminazzo.userstalker.cache.profile;
 
 import it.fulminazzo.fulmicollection.interfaces.functions.FunctionException;
 import it.fulminazzo.fulmicollection.interfaces.functions.SupplierException;

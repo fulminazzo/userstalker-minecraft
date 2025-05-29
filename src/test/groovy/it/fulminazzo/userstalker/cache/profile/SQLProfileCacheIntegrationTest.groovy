@@ -1,4 +1,5 @@
-package it.fulminazzo.userstalker.cache
+package it.fulminazzo.userstalker.cache.profile
+
 
 import spock.lang.Specification
 

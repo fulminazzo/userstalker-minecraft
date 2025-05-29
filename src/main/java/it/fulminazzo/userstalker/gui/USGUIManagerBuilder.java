@@ -4,7 +4,7 @@ import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationType;
 import it.fulminazzo.fulmicommands.configuration.Configurator;
 import it.fulminazzo.userstalker.builder.LoggedBuilder;
-import it.fulminazzo.userstalker.cache.ProfileCache;
+import it.fulminazzo.userstalker.cache.profile.ProfileCache;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;

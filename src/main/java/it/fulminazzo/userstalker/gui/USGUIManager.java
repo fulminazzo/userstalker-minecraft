@@ -1,7 +1,7 @@
 package it.fulminazzo.userstalker.gui;
 
 import it.fulminazzo.userstalker.Messages;
-import it.fulminazzo.userstalker.cache.ProfileCache;
+import it.fulminazzo.userstalker.cache.profile.ProfileCache;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
