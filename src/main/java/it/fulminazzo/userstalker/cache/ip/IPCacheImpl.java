@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 /**
  * An implementation of {@link IPCache} that uses a {@link ConcurrentHashMap} as cache.
@@ -17,12 +18,14 @@ import java.util.function.Consumer;
 class IPCacheImpl implements IPCache {
     private static final String IP_LOOKUP = "http://ip-api.com/json/%s";
 
-    private final Map<String, IPInfo> cache;
+    private final @NotNull Map<String, IPInfo> cache;
+    private final @NotNull Logger logger;
 
     /**
      * Instantiates a new Ip cache.
      */
-    public IPCacheImpl() {
+    public IPCacheImpl(@NotNull Logger logger) {
+        this.logger = logger;
         this.cache = new ConcurrentHashMap<>();
     }
 
@@ -35,6 +38,7 @@ class IPCacheImpl implements IPCache {
             if (!info.isPresent()) info = fetchIPInfo(ip);
             then.accept(info.orElse(null));
         } catch (CacheException e) {
+            logger.warning(e.getMessage());
             if (orElse != null) orElse.run();
         }
     }
