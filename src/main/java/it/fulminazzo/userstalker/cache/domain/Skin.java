@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.util.UUID;
 
+/**
+ * Represents all the information required about a skin.
+ */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
