@@ -4,7 +4,7 @@ import it.fulminazzo.fulmicommands.FulmiException;
 import it.fulminazzo.fulmicommands.FulmiMessagesPlugin;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
 import it.fulminazzo.userstalker.cache.profile.ProfileCache;
-import it.fulminazzo.userstalker.cache.profile.ProfileCacheException;
+import it.fulminazzo.userstalker.cache.exception.CacheException;
 import it.fulminazzo.userstalker.client.APIClientException;
 import it.fulminazzo.userstalker.client.USAsyncApiClient;
 import it.fulminazzo.userstalker.command.USCommand;
@@ -76,7 +76,7 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
         getLogger().info("Setting up skin cache");
         try {
             profileCache = setupProfileCache();
-        } catch (ProfileCacheException e) {
+        } catch (CacheException e) {
             getLogger().warning("An error occurred while setting up the skin cache");
             getLogger().warning(e.getMessage());
             getLogger().warning("Continuing setup without skin cache. Heads skins will not be available");
@@ -93,7 +93,7 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     public void onDisable() {
         try {
             disable();
-        } catch (ProfileCacheException e) {
+        } catch (CacheException e) {
             getLogger().severe(e.getMessage());
         }
     }
@@ -101,9 +101,9 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     /**
      * Executes the plugin disabling process.
      *
-     * @throws ProfileCacheException in case any errors occur
+     * @throws CacheException in case any errors occur
      */
-    void disable() throws ProfileCacheException {
+    void disable() throws CacheException {
         getLogger().info("Starting shutdown process");
 
         configuration = null;
@@ -125,11 +125,11 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
     /**
      * Reloads the plugin.
      *
-     * @throws ProfileCacheException  in case any errors occur
+     * @throws CacheException  in case any errors occur
      * @throws ConfigurationException in case any errors occur
      * @throws APIClientException     in case any errors occur
      */
-    public void reload() throws ProfileCacheException, ConfigurationException, APIClientException {
+    public void reload() throws CacheException, ConfigurationException, APIClientException {
         disable();
         enable();
     }
@@ -172,9 +172,9 @@ public final class UserStalker extends JavaPlugin implements FulmiMessagesPlugin
      * Sets up a new Profile cache.
      *
      * @return profile cache
-     * @throws ProfileCacheException in case any errors occur
+     * @throws CacheException in case any errors occur
      */
-    @NotNull ProfileCache setupProfileCache() throws ProfileCacheException {
+    @NotNull ProfileCache setupProfileCache() throws CacheException {
         return ProfileCache.builder()
                 .logger(getLogger())
                 .pluginDirectory(getPluginDirectory())

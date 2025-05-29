@@ -2,6 +2,7 @@ package it.fulminazzo.userstalker.cache.profile;
 
 import it.fulminazzo.fulmicollection.interfaces.functions.FunctionException;
 import it.fulminazzo.fulmicollection.interfaces.functions.SupplierException;
+import it.fulminazzo.userstalker.cache.exception.CacheException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
@@ -30,7 +31,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws CacheException {
         checkProfileTableExists();
         return Optional.ofNullable(executeStatement(
                 () -> connection.prepareStatement("SELECT uuid, username, skin, signature FROM profile_cache " +
@@ -50,7 +51,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeUserSkin(@NotNull Skin skin) throws ProfileCacheException {
+    public void storeUserSkin(@NotNull Skin skin) throws CacheException {
         String username = skin.getUsername();
         @NotNull Optional<?> storedData = lookupUserSkin(username);
         if (!storedData.isPresent()) storedData = lookupUserUUID(username);
@@ -73,7 +74,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws CacheException {
         checkProfileTableExists();
         return Optional.ofNullable(executeStatement(
                 () -> connection.prepareStatement("SELECT uuid FROM profile_cache WHERE username = ?"),
@@ -87,7 +88,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
+    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws CacheException {
         @NotNull Optional<UUID> storedUUID = lookupUserUUID(username);
         String query = storedUUID.isPresent() ?
                 "UPDATE profile_cache SET uuid = ? WHERE username = ?" :
@@ -106,9 +107,9 @@ final class SQLProfileCache extends ProfileCacheImpl {
     /**
      * Checks if the profile_cache table exists, if not it creates it.
      *
-     * @throws ProfileCacheException an exception thrown in case an error occurs
+     * @throws CacheException an exception thrown in case an error occurs
      */
-    void checkProfileTableExists() throws ProfileCacheException {
+    void checkProfileTableExists() throws CacheException {
         executeStatement(
                 () -> connection.prepareStatement("CREATE TABLE IF NOT EXISTS profile_cache (" +
                         "username VARCHAR(16) PRIMARY KEY," +
@@ -122,11 +123,11 @@ final class SQLProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public void close() throws ProfileCacheException {
+    public void close() throws CacheException {
         try {
             connection.close();
         } catch (SQLException e) {
-            throw new ProfileCacheException("closing connection to database", e);
+            throw new CacheException("closing connection to database", e);
         }
     }
 
@@ -138,16 +139,16 @@ final class SQLProfileCache extends ProfileCacheImpl {
      * @param statementProvider the statement provider
      * @param function          the function to execute
      * @return the returned value
-     * @throws ProfileCacheException a wrapper exception for any error
+     * @throws CacheException a wrapper exception for any error
      */
     <S extends Statement, T> T executeStatement(
             final @NotNull SupplierException<S, SQLException> statementProvider,
             final @NotNull FunctionException<S, T, SQLException> function
-    ) throws ProfileCacheException {
+    ) throws CacheException {
         try (S statement = statementProvider.get()) {
             return function.apply(statement);
         } catch (SQLException e) {
-            throw new ProfileCacheException("querying database", e);
+            throw new CacheException("querying database", e);
         }
     }
 

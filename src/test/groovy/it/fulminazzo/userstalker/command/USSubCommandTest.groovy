@@ -3,7 +3,7 @@ package it.fulminazzo.userstalker.command
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.userstalker.UserStalker
-import it.fulminazzo.userstalker.cache.profile.ProfileCacheException
+import it.fulminazzo.userstalker.cache.exception.CacheException
 import it.fulminazzo.userstalker.client.APIClientException
 import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.userstalker.gui.USGUIManager
@@ -199,7 +199,7 @@ class USSubCommandTest extends Specification {
 
         where:
         exception << [
-                new ProfileCacheException('Profile cache'),
+                new CacheException('Profile cache'),
                 new APIClientException('Api client'),
                 new ConfigurationException('Configuration')
         ]

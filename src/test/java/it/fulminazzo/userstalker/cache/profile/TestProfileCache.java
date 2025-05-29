@@ -1,5 +1,6 @@
 package it.fulminazzo.userstalker.cache.profile;
 
+import it.fulminazzo.userstalker.cache.exception.CacheException;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,12 +31,12 @@ public class TestProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws ProfileCacheException {
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws CacheException {
         return Optional.ofNullable(uuidCache.get(username));
     }
 
     @Override
-    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws ProfileCacheException {
+    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws CacheException {
         uuidCache.put(username, uuid);
     }
 

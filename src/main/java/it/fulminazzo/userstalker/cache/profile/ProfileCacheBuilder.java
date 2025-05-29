@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker.cache.profile;
 
 import it.fulminazzo.userstalker.builder.ConfiguredBuilder;
+import it.fulminazzo.userstalker.cache.exception.CacheException;
 import it.fulminazzo.yamlparser.configuration.FileConfiguration;
 import it.fulminazzo.yamlparser.utils.FileUtils;
 import lombok.AccessLevel;
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  * the given configuration.
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, ProfileCacheBuilder, ProfileCacheException> {
+public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, ProfileCacheBuilder, CacheException> {
     private static final String FILE_NAME = "skin_cache";
 
     private static final CacheType DEFAULT_TYPE = CacheType.JSON;
@@ -47,10 +48,10 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
      * Builds the {@link ProfileCache} from the configurations in the config file.
      *
      * @return the profile cache
-     * @throws ProfileCacheException an exception thrown in case of errors
+     * @throws CacheException an exception thrown in case of errors
      */
     @Override
-    public @NotNull ProfileCache build() throws ProfileCacheException {
+    public @NotNull ProfileCache build() throws CacheException {
         CacheType cacheType = loadCacheType();
         File cacheFile = new File(getPluginDirectory(), FILE_NAME + "." + cacheType.name().toLowerCase());
         switch (cacheType) {
@@ -73,7 +74,7 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
                     Connection connection = DriverManager.getConnection(jdbcPath, username, password);
                     return new SQLProfileCache(connection, getExpiryTimeout(), getBlacklistTimeout());
                 } catch (SQLException e) {
-                    throw new ProfileCacheException(String.format("connecting to database \"%s\" (%s:%s)",
+                    throw new CacheException(String.format("connecting to database \"%s\" (%s:%s)",
                             jdbcPath, username, password), e);
                 }
             }
@@ -84,10 +85,10 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
      * Gets plugin directory.
      *
      * @return the plugin directory
-     * @throws ProfileCacheException an exception thrown in case the plugin directory has not been provided
+     * @throws CacheException an exception thrown in case the plugin directory has not been provided
      */
-    @NotNull File getPluginDirectory() throws ProfileCacheException {
-        if (pluginDirectory == null) throw new ProfileCacheException("No plugin directory specified");
+    @NotNull File getPluginDirectory() throws CacheException {
+        if (pluginDirectory == null) throw new CacheException("No plugin directory specified");
         return pluginDirectory;
     }
 
@@ -107,14 +108,14 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
      * If no value is provided, it will fall back to {@link #DEFAULT_TYPE}.
      *
      * @return the cache type
-     * @throws ProfileCacheException thrown in case an invalid type is provided
+     * @throws CacheException thrown in case an invalid type is provided
      */
-    @NotNull CacheType loadCacheType() throws ProfileCacheException {
+    @NotNull CacheType loadCacheType() throws CacheException {
         String type = getConfigurationValue("type", String.class, DEFAULT_TYPE.name());
         return Arrays.stream(CacheType.values())
                 .filter(t -> t.name().equalsIgnoreCase(type))
                 .findFirst()
-                .orElseThrow(() -> new ProfileCacheException(
+                .orElseThrow(() -> new CacheException(
                         String.format("Invalid configuration detected: unknown cache type \"%s\"", type)
                 ));
     }
@@ -124,9 +125,9 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
      * If no value is provided, it will fall back to {@link #DEFAULT_EXPIRY_TIMEOUT}.
      *
      * @return the expiry timeout
-     * @throws ProfileCacheException an exception thrown in case {@link #getConfiguration()} fails
+     * @throws CacheException an exception thrown in case {@link #getConfiguration()} fails
      */
-    long getExpiryTimeout() throws ProfileCacheException {
+    long getExpiryTimeout() throws CacheException {
         return getConfigurationValue("expire-time", Long.class, DEFAULT_EXPIRY_TIMEOUT) * 1000;
     }
 
@@ -135,9 +136,9 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
      * If no value is provided, it will fall back to {@link #DEFAULT_BLACKLIST_TIMEOUT}.
      *
      * @return the expiry timeout
-     * @throws ProfileCacheException an exception thrown in case {@link #getConfiguration()} fails
+     * @throws CacheException an exception thrown in case {@link #getConfiguration()} fails
      */
-    long getBlacklistTimeout() throws ProfileCacheException {
+    long getBlacklistTimeout() throws CacheException {
         return getConfigurationValue("blacklist-time", Long.class, DEFAULT_BLACKLIST_TIMEOUT) * 1000;
     }
 
@@ -146,9 +147,9 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
      *
      * @param path the path
      * @return the string value
-     * @throws ProfileCacheException thrown in case no value is provided
+     * @throws CacheException thrown in case no value is provided
      */
-    @NotNull String getConfigurationString(final @NotNull String path) throws ProfileCacheException {
+    @NotNull String getConfigurationString(final @NotNull String path) throws CacheException {
         return getConfigurationValue(path, String.class, null);
     }
 
@@ -158,8 +159,8 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
     }
 
     @Override
-    protected @NotNull ProfileCacheException newException(@NotNull String message) {
-        return new ProfileCacheException(message);
+    protected @NotNull CacheException newException(@NotNull String message) {
+        return new CacheException(message);
     }
 
     /**
@@ -167,14 +168,14 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
      * If not, it is created.
      *
      * @param cacheFile the cache file
-     * @throws ProfileCacheException an exception thrown in case of errors
+     * @throws CacheException an exception thrown in case of errors
      */
-    static void checkFileExists(final @NotNull File cacheFile) throws ProfileCacheException {
+    static void checkFileExists(final @NotNull File cacheFile) throws CacheException {
         if (!cacheFile.exists())
             try {
                 FileUtils.createNewFile(cacheFile);
             } catch (IOException e) {
-                throw new ProfileCacheException(e.getMessage());
+                throw new CacheException(e.getMessage());
             }
     }
 

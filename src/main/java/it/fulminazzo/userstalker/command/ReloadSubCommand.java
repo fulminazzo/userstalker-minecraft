@@ -4,7 +4,7 @@ import it.fulminazzo.fulmicollection.objects.Refl;
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException;
 import it.fulminazzo.userstalker.Messages;
 import it.fulminazzo.userstalker.UserStalker;
-import it.fulminazzo.userstalker.cache.profile.ProfileCacheException;
+import it.fulminazzo.userstalker.cache.exception.CacheException;
 import it.fulminazzo.userstalker.client.APIClientException;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ final class ReloadSubCommand extends USSubCommand {
         try {
             plugin.reload();
             sender.sendMessage(Messages.RELOAD_SUCCESSFUL.getMessage());
-        } catch (ProfileCacheException | APIClientException | ConfigurationException e) {
+        } catch (CacheException | APIClientException | ConfigurationException e) {
             plugin.getLogger().severe(e.getMessage());
             sender.sendMessage(Messages.RELOAD_UNSUCCESSFUL.getMessage()
                     .replace("<error>", e.getMessage()));

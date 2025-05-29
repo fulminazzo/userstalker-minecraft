@@ -5,7 +5,7 @@ import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.fulmicommands.configuration.ConfigurationType
 import it.fulminazzo.jbukkit.BukkitUtils
 import it.fulminazzo.userstalker.cache.profile.ProfileCache
-import it.fulminazzo.userstalker.cache.profile.ProfileCacheException
+import it.fulminazzo.userstalker.cache.exception.CacheException
 import it.fulminazzo.userstalker.client.APIClientException
 import it.fulminazzo.userstalker.gui.MockProfileCache
 import org.bukkit.Bukkit
@@ -72,7 +72,7 @@ class UserStalkerTest extends Specification {
     def 'test that onEnable does not throw if an error happens during setupProfileCache'() {
         given:
         plugin.setupProfileCache() >> {
-            throw new ProfileCacheException('Profile cache')
+            throw new CacheException('Profile cache')
         }
 
         when:

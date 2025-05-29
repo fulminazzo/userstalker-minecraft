@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker.cache.profile
 
 import it.fulminazzo.userstalker.MockFileConfiguration
+import it.fulminazzo.userstalker.cache.exception.CacheException
 import it.fulminazzo.yamlparser.configuration.FileConfiguration
 import it.fulminazzo.yamlparser.utils.FileUtils
 import org.h2.tools.Server
@@ -51,7 +52,7 @@ class ProfileCacheBuilderTest extends Specification {
         builder.build()
 
         then:
-        def e = thrown(ProfileCacheException)
+        def e = thrown(CacheException)
         e.message == 'SQLException when connecting to database ' +
                 '"jdbc:unknown://localhost:3306/userstalker" (username:password): ' +
                 'No suitable driver found for jdbc:unknown://localhost:3306/userstalker'
@@ -70,7 +71,7 @@ class ProfileCacheBuilderTest extends Specification {
         builder.build()
 
         then:
-        thrown(ProfileCacheException)
+        thrown(CacheException)
 
         where:
         dbAddress   | dbType | dbName | dbUsername | dbPassword
@@ -227,7 +228,7 @@ class ProfileCacheBuilderTest extends Specification {
         builder.loadCacheType()
 
         then:
-        thrown(ProfileCacheException)
+        thrown(CacheException)
     }
 
     def 'test that getPluginDirectory throws if null'() {
@@ -238,7 +239,7 @@ class ProfileCacheBuilderTest extends Specification {
         builder.pluginDirectory
 
         then:
-        thrown(ProfileCacheException)
+        thrown(CacheException)
     }
 
     def 'test that getConfiguration throws if null'() {
@@ -249,7 +250,7 @@ class ProfileCacheBuilderTest extends Specification {
         builder.configuration
 
         then:
-        thrown(ProfileCacheException)
+        thrown(CacheException)
     }
 
     def 'test that checkFileExists throws wrapped ProfileCacheException'() {
@@ -264,7 +265,7 @@ class ProfileCacheBuilderTest extends Specification {
         ProfileCacheBuilder.checkFileExists(file)
 
         then:
-        def e = thrown(ProfileCacheException)
+        def e = thrown(CacheException)
         e.message == 'There was an error while creating file "file.txt"!'
     }
 

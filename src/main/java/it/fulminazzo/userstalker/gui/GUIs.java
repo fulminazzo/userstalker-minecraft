@@ -3,7 +3,7 @@ package it.fulminazzo.userstalker.gui;
 import it.fulminazzo.fulmicollection.objects.Refl;
 import it.fulminazzo.fulmicollection.utils.StringUtils;
 import it.fulminazzo.userstalker.cache.profile.ProfileCache;
-import it.fulminazzo.userstalker.cache.profile.ProfileCacheException;
+import it.fulminazzo.userstalker.cache.exception.CacheException;
 import it.fulminazzo.userstalker.domain.UserLogin;
 import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.userstalker.utils.ItemMetaUtils;
@@ -201,7 +201,7 @@ public final class GUIs {
                 SkullMeta skullMeta = (SkullMeta) itemMeta;
                 try {
                     cache.getUserSkin(username).ifPresent(skin -> ItemMetaUtils.setSkin(skullMeta, skin));
-                } catch (ProfileCacheException e) {
+                } catch (CacheException e) {
                     JavaPlugin.getProvidingPlugin(GUIs.class).getLogger().warning(e.getMessage());
                 }
             }

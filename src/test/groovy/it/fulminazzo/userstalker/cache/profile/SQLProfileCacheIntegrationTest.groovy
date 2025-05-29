@@ -1,6 +1,6 @@
 package it.fulminazzo.userstalker.cache.profile
 
-
+import it.fulminazzo.userstalker.cache.exception.CacheException
 import spock.lang.Specification
 
 import java.sql.Connection
@@ -146,7 +146,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         cache.executeStatement(() -> connection.prepareStatement('INVALID'), s -> null)
 
         then:
-        def e = thrown(ProfileCacheException)
+        def e = thrown(CacheException)
         e.message == 'JdbcSQLSyntaxErrorException when querying database: ' +
                 'Syntax error in SQL statement "[*]INVALID"; expected "INSERT"; ' +
                 'SQL statement:\nINVALID [42001-224]'
@@ -174,7 +174,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
         cache.close()
 
         then:
-        def e = thrown(ProfileCacheException)
+        def e = thrown(CacheException)
         e.message == 'SQLException when closing connection to database: '
     }
 
