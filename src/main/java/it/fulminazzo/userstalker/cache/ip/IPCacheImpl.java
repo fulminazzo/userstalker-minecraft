@@ -59,7 +59,6 @@ class IPCacheImpl implements IPCache {
             if (!status.equals("success")) return null;
             return IPInfo.builder()
                     .ip(jsonObject.get("query").getAsString())
-                    .continent(jsonObject.get("continent").getAsString())
                     .country(jsonObject.get("country").getAsString())
                     .countryCode(jsonObject.get("countryCode").getAsString())
                     .region(jsonObject.get("regionName").getAsString())

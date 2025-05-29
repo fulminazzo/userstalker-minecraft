@@ -15,8 +15,6 @@ public final class IPInfo {
 
     private final String ip;
 
-    private final String continent;
-
     private final String country;
     private final String countryCode;
 
