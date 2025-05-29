@@ -19,7 +19,7 @@ public final class LookupSubCommand extends USSubCommand {
      * @param plugin the plugin
      */
     public LookupSubCommand(@NotNull UserStalker plugin) {
-        super(plugin, "lookup", Messages.HELP_LOOKUP, "<ip>", "fetch");
+        super(plugin, "lookup", Messages.HELP_LOOKUP, "<ip>", "lookup", "fetch");
     }
 
     @Override
