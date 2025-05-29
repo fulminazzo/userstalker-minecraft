@@ -32,12 +32,12 @@ public class TestProfileCache extends ProfileCacheImpl {
     }
 
     @Override
-    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws CacheException {
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) {
         return Optional.ofNullable(uuidCache.get(username));
     }
 
     @Override
-    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws CacheException {
+    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) {
         uuidCache.put(username, uuid);
     }
 

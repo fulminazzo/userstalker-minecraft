@@ -23,37 +23,37 @@ public class MockProfileCache implements ProfileCache {
     }
 
     @Override
-    public @NotNull Optional<Skin> fetchUserSkin(@NotNull String username) throws CacheException {
+    public @NotNull Optional<Skin> fetchUserSkin(@NotNull String username) {
         return Optional.empty();
     }
 
     @Override
-    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) throws CacheException {
+    public @NotNull Optional<Skin> lookupUserSkin(@NotNull String username) {
         return Optional.empty();
     }
 
     @Override
-    public void storeUserSkin(@NotNull Skin skin) throws CacheException {
+    public void storeUserSkin(@NotNull Skin skin) {
 
     }
 
     @Override
-    public @NotNull Optional<UUID> getUserUUID(@NotNull String username) throws CacheException {
+    public @NotNull Optional<UUID> getUserUUID(@NotNull String username) {
         return Optional.empty();
     }
 
     @Override
-    public @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) throws CacheException {
+    public @NotNull Optional<UUID> fetchUserUUID(@NotNull String username) {
         return Optional.empty();
     }
 
     @Override
-    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) throws CacheException {
+    public @NotNull Optional<UUID> lookupUserUUID(@NotNull String username) {
         return Optional.empty();
     }
 
     @Override
-    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) throws CacheException {
+    public void storeUserUUID(@NotNull String username, @NotNull UUID uuid) {
 
     }
 

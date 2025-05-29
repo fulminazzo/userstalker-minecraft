@@ -4,7 +4,6 @@ import com.google.gson.JsonObject
 import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.userstalker.cache.utils.HttpUtils
 import it.fulminazzo.userstalker.utils.GsonUtils
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class ProfileCacheImplTest extends Specification {
