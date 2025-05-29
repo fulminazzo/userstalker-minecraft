@@ -28,6 +28,7 @@ public enum Messages implements DefaultFulmiMessages {
     USER_NOT_FOUND("error.user-not-found", "<prefix>&cCould not find user: &4<user>" ),
 
     HELP_RELOAD("help.reload", "Reloads the plugin configurations"),
+    HELP_LOOKUP("help.lookup", "Fetches information for the given IP"),
     HELP_OPEN_GUI("help.open-gui", "Opens the main plugin GUI. If a username is specified, opens the user latest accesses"),
     HELP_HELP("help.help", "Shows descriptions for the requested subcommands"),
 
