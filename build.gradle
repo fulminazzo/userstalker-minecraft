@@ -108,4 +108,3 @@ processResources {
         expand props
     }
 }
-
