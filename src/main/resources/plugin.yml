@@ -19,6 +19,9 @@ permissions:
   ${name_lower}.command.reload:
     description: Permission for /${name_lower} reload command
     default: op
+  ${name_lower}.command.lookup:
+    description: Permission for /${name_lower} lookup command
+    default: op
   ${name_lower}.command.opengui:
     description: Permission for /${name_lower} opengui command
     default: op
@@ -29,5 +32,6 @@ permissions:
     description: Wildcard permission
     ${name_lower}.command: true
     ${name_lower}.command.reload: true
+    ${name_lower}.command.lookup: true
     ${name_lower}.command.opengui: true
     ${name_lower}.command.help: true
