@@ -1,9 +1,11 @@
 package it.fulminazzo.userstalker.command
 
+
 import it.fulminazzo.fulmicommands.configuration.ConfigurationException
 import it.fulminazzo.userstalker.MockFileConfiguration
 import it.fulminazzo.userstalker.UserStalker
 import it.fulminazzo.userstalker.cache.exception.CacheException
+import it.fulminazzo.userstalker.cache.ip.IPCache
 import it.fulminazzo.userstalker.client.APIClientException
 import it.fulminazzo.userstalker.client.USAsyncApiClient
 import it.fulminazzo.userstalker.gui.USGUIManager
@@ -11,6 +13,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import spock.lang.Specification
 
+import java.util.function.Consumer
 import java.util.logging.Logger
 
 class USSubCommandTest extends Specification {
@@ -28,6 +31,33 @@ class USSubCommandTest extends Specification {
         sender = Mock(CommandSender)
 
         UserStalker.instance = plugin
+    }
+
+    def 'test that LookupSubCommand works for ip #ip'() {
+        given:
+        def subcommand = new LookupSubCommand(plugin)
+
+        and:
+        def actualCache = IPCache.newCache(plugin.logger)
+        def cache = Mock(actualCache.class)
+        cache.lookupIPInfoAnd(_ as String, _ as Consumer, _ as Runnable) >> { args ->
+            if (args[0] == 'error') args[2].run()
+            else actualCache.lookupIPInfoAnd(args[0], args[1], args[2])
+        }
+        plugin.ipCache >> cache
+
+        and:
+        def args = []
+        if (ip != null) args.add(ip)
+
+        when:
+        subcommand.execute(sender, args.toArray(new String[0]))
+
+        then:
+        1 * sender.sendMessage(_)
+
+        where:
+        ip << [null, 'invalid', '24.48.0.1', 'error']
     }
 
     def 'test that LookupSubCommand tabComplete returns #expected for arguments #args'() {
