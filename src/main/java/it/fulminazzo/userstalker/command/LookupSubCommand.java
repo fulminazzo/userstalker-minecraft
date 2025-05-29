@@ -26,8 +26,27 @@ public final class LookupSubCommand extends USSubCommand {
     public void execute(@NotNull CommandSender sender, @NotNull String[] args) {
         if (args.length < 1)
             sender.sendMessage(Messages.NOT_ENOUGH_ARGUMENTS.getMessage());
-        else;
-        //TODO:
+        else {
+            final String ip = args[0];
+            plugin.getIpCache().lookupIPInfoAnd(ip,
+                    i -> {
+                        if (i == null)
+                            sender.sendMessage(Messages.INVALID_IP.getMessage()
+                                    .replace("<ip>", ip));
+                        else sender.sendMessage(Messages.IP_INFO.getMessage()
+                                .replace("<ip>", i.getIp())
+                                .replace("<country>", i.getCountry())
+                                .replace("<country_code>", i.getCountryCode())
+                                .replace("<region>", i.getRegion())
+                                .replace("<city>", i.getCity())
+                                .replace("<isp>", i.getIsp())
+                                .replace("<mobile>", (i.isMobile() ? Messages.YES : Messages.NO).getMessage())
+                                .replace("<proxy>", (i.isProxy() ? Messages.YES : Messages.NO).getMessage())
+                        );
+                    },
+                    () -> sender.sendMessage(Messages.CANNOT_IP_LOOKUP.getMessage())
+            );
+        }
     }
 
     @Override
