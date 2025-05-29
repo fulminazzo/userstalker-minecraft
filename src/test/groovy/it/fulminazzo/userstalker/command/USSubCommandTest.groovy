@@ -199,7 +199,7 @@ class USSubCommandTest extends Specification {
         1 * sender.sendMessage(_ as String)
     }
 
-    def 'test that OpenGUISubCommand tabComplete returns #expected for #sender'() {
+    def 'test that OpenGUISubCommand tabComplete returns #expected for #sender and #args'() {
         given:
         def subcommand = new OpenGUISubCommand(plugin)
 
@@ -209,15 +209,17 @@ class USSubCommandTest extends Specification {
         plugin.apiClient >> apiClient
 
         when:
-        def list = subcommand.tabComplete(sender, new String[]{''})
+        def list = subcommand.tabComplete(sender, args.toArray(new String[0]))
 
         then:
         list == expected
 
         where:
-        sender              || expected
-        Mock(CommandSender) || []
-        Mock(Player)        || ['fulminazzo']
+        sender              | args || expected
+        Mock(CommandSender) | []   || []
+        Mock(CommandSender) | [''] || []
+        Mock(Player)        | []   || []
+        Mock(Player)        | [''] || ['fulminazzo']
     }
 
     def 'test that ReloadSubCommand executes correctly'() {
