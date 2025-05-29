@@ -212,6 +212,33 @@ class USGUIManagerTest extends Specification {
         methodName << [
                 'openTopUsersLoginsGUI',
                 'openMonthlyUsersLoginsGUI',
+        ]
+    }
+
+    def 'test that #methodName executes lookup upon click on content'() {
+        given:
+        def player = getNewPlayer()
+
+        when:
+        manager."$methodName"(player)
+
+        then:
+        def guiViewer = GUIManager.getOpenGUIViewer(player)
+        guiViewer.isPresent()
+        def gui = guiViewer.value
+
+        def content = gui.getContents(10).get(0)
+        def action = content.clickItemAction()
+        action.isPresent()
+
+        when:
+        action.get().execute(guiViewer.key, gui, content)
+
+        then:
+        1 * player.performCommand(_ as String)
+
+        where:
+        methodName << [
                 'openNewestUsersLoginsGUI',
         ]
     }
