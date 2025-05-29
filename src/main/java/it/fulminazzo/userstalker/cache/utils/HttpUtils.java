@@ -30,6 +30,21 @@ public final class HttpUtils {
      */
     public static @NotNull Optional<JsonObject> getJsonFromURL(final @NotNull String url,
                                                                final @NotNull String action) throws CacheException {
+        return getJsonFromURL(url, action, HttpURLConnection.HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Navigates the given URL and returns a {@link JsonObject} from the returned body.
+     *
+     * @param url                the url
+     * @param action             the action to display when throwing {@link CacheException}
+     * @param notFoundStatusCode the status code that will force a return of an empty optional
+     * @return the json object
+     * @throws CacheException a wrapper exception for any error
+     */
+    public static @NotNull Optional<JsonObject> getJsonFromURL(final @NotNull String url,
+                                                               final @NotNull String action,
+                                                               final int notFoundStatusCode) throws CacheException {
         HttpURLConnection connection = null;
         try {
             URL actualUrl = new URL(url);
@@ -37,7 +52,7 @@ public final class HttpUtils {
             connection.setRequestMethod("GET");
 
             int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_NOT_FOUND)
+            if (responseCode == notFoundStatusCode)
                 return Optional.empty();
             else if (responseCode != HttpURLConnection.HTTP_OK)
                 throw new CacheException(String.format("Invalid response code when %s: %s", action, responseCode));
