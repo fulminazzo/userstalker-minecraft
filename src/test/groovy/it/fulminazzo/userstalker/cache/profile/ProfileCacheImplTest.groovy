@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import it.fulminazzo.fulmicollection.objects.Refl
 import it.fulminazzo.userstalker.cache.utils.HttpUtils
 import it.fulminazzo.userstalker.utils.GsonUtils
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class ProfileCacheImplTest extends Specification {
@@ -51,7 +52,7 @@ class ProfileCacheImplTest extends Specification {
 
         and:
         SpyStatic(HttpUtils)
-        HttpUtils.getJsonFromURL(_ as String, _ as String) >> Optional.of(jsonObject)
+        HttpUtils.getJsonFromURL(_ as String, _ as String, _) >> Optional.of(jsonObject)
 
         when:
         def skin = skinCache.fetchUserSkin('Notch')
