@@ -16,6 +16,16 @@ public enum Messages implements DefaultFulmiMessages {
     PREFIX("prefix", "&6User&cStalker &8» &f"),
 
     RELOAD_SUCCESSFUL("general.reload-successful", "<prefix>&aPlugin reload completed successfully"),
+    IP_INFO("general.ip-info", "&fIp: &b<ip>\n" +
+            "&fCountry: &c<country>\n" +
+            "&fCountry code: &c<country_code>\n" +
+            "&fRegion: &e<region>\n" +
+            "&fCity: &a<city>\n" +
+            "&fISP: &9<isp>\n" +
+            "&fMobile: <mobile>\n" +
+            "&fProxy: <proxy>"),
+    YES("general.yes", "&aYes"),
+    NO("general.no", "&cNo"),
 
     INTERNAL_ERROR_OCCURRED("error.internal-error", "<prefix>&cAn internal error occurred. " +
             "Please notify an administrator about this"),
@@ -26,6 +36,7 @@ public enum Messages implements DefaultFulmiMessages {
     NOT_ENOUGH_ARGUMENTS("error.not-enough-arguments", "<prefix>&cYou did not specify enough arguments"),
     NOT_ENOUGH_PERMISSIONS("error.not-enough-permissions", "<prefix>&cYou do not have enough permissions to execute that subcommand"),
     USER_NOT_FOUND("error.user-not-found", "<prefix>&cCould not find user: &4<user>" ),
+    INVALID_IP("error.invalid-ip", "<prefix>&cInvalid IP: &4<ip>"),
 
     HELP_RELOAD("help.reload", "Reloads the plugin configurations"),
     HELP_LOOKUP("help.lookup", "Fetches information for the given IP"),
