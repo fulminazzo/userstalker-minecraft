@@ -9,6 +9,7 @@ import it.fulminazzo.userstalker.domain.UserLoginCount;
 import it.fulminazzo.userstalker.utils.ItemMetaUtils;
 import it.fulminazzo.userstalker.utils.TimeUtils;
 import it.fulminazzo.yagl.Metadatable;
+import it.fulminazzo.yagl.actions.GUIItemCommand;
 import it.fulminazzo.yagl.contents.GUIContent;
 import it.fulminazzo.yagl.contents.ItemGUIContent;
 import it.fulminazzo.yagl.guis.DataGUI;
@@ -72,7 +73,8 @@ public final class GUIs {
     public static @NotNull GUIContent defaultNamedUserLoginItem() {
         return ItemGUIContent.newInstance(Material.PLAYER_HEAD.name().toLowerCase())
                 .setDisplayName("&fName: &b<username>")
-                .setLore("&fIp: &c<ip>", "&fLogin date: &a<login_date>");
+                .setLore("&fIp: &c<ip>", "&fLogin date: &a<login_date>")
+                .onClickItem(new GUIItemCommand("us lookup <ip>"));
     }
 
     /**
@@ -83,7 +85,8 @@ public final class GUIs {
     public static @NotNull GUIContent defaultUserLoginItem() {
         return ItemGUIContent.newInstance(Material.BOOK.name().toLowerCase())
                 .setDisplayName("&fIp: &c<ip>")
-                .setLore("&fLogin date: &a<login_date>");
+                .setLore("&fLogin date: &a<login_date>")
+                .onClickItem(new GUIItemCommand("us lookup <ip>"));
     }
 
     /**
