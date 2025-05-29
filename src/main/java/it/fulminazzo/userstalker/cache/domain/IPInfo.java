@@ -1,15 +1,14 @@
 package it.fulminazzo.userstalker.cache.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 /**
  * Represents all the information about a given IP.
  */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
+@ToString
 @Builder
 public final class IPInfo {
 
