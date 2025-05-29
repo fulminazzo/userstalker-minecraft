@@ -159,6 +159,7 @@ class UserStalkerTest extends Specification {
         methodName         | exception
         'getGUIManager'    | IllegalStateException
         'getApiClient'     | IllegalStateException
+        'getIpCache'       | IllegalStateException
         'getConfiguration' | FulmiException
         'getMessages'      | FulmiException
         'getInstance'      | IllegalStateException

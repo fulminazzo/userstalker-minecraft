@@ -72,6 +72,9 @@ class UserStalkerIntegrationTest extends Specification {
         def profileCache1 = plugin.profileCache
         profileCache1 != null
 
+        def ipCache1 = plugin.ipCache
+        ipCache1 != null
+
         def guiManager1 = plugin.getGUIManager()
         guiManager1 != null
 
@@ -97,6 +100,10 @@ class UserStalkerIntegrationTest extends Specification {
         profileCache2 != profileCache1
         profileCache2 != null
 
+        def ipCache2 = plugin.ipCache
+        ipCache2 != ipCache1
+        ipCache2 != null
+
         def guiManager2 = plugin.getGUIManager()
         guiManager2 != guiManager1
         guiManager2 != null
@@ -108,6 +115,7 @@ class UserStalkerIntegrationTest extends Specification {
         refl.getFieldObject('configuration') == null
         refl.getFieldObject('messages') == null
         refl.getFieldObject('apiClient') == null
+        refl.getFieldObject('ipCache') == null
         refl.getFieldObject('profileCache') == null
         refl.getFieldObject('guiManager') == null
     }
