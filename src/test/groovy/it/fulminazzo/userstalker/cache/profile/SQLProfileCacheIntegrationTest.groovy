@@ -161,6 +161,17 @@ class SQLProfileCacheIntegrationTest extends Specification {
         connection.closed
     }
 
+    def 'test that close does not close connection if already closed'() {
+        given:
+        connection.close()
+
+        when:
+        cache.close()
+
+        then:
+        noExceptionThrown()
+    }
+
     def 'simulate close error'() {
         given:
         def connection = Mock(Connection)
