@@ -67,6 +67,31 @@ class SQLProfileCacheIntegrationTest extends Specification {
         result == 'skin'
     }
 
+    def 'test that executeStatement throws exception when connection#isClosed throws'() {
+        given:
+        def mockConnection = Mock(Connection)
+        mockConnection.closed >> {
+            throw new SQLException('Not expected')
+        }
+        mockConnection.prepareStatement(_ as String) >> {
+            throw new SQLException('Expected')
+        }
+
+        and:
+        def cache = new SQLProfileCache(() -> connection, 100 * 1000, 0)
+        cache.connection = mockConnection
+
+        when:
+        cache.executeStatement(
+                c -> c.prepareStatement('INVALID'),
+                s -> null
+        )
+
+        then:
+        def e = thrown(CacheException)
+        e.message == 'SQLException when querying database: Expected'
+    }
+
     def 'test that retryExecuteStatement does not recursively throw'() {
         given:
         def mockConnection = Mock(Connection)
