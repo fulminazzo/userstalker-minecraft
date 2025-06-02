@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -70,13 +69,14 @@ public final class ProfileCacheBuilder extends ConfiguredBuilder<ProfileCache, P
                 String username = getConfigurationString("username");
                 String password = getConfigurationString("password");
                 String jdbcPath = String.format("jdbc:%s://%s/%s", databaseType, address, database);
-                try {
-                    Connection connection = DriverManager.getConnection(jdbcPath, username, password);
-                    return new SQLProfileCache(connection, getExpiryTimeout(), getBlacklistTimeout());
-                } catch (SQLException e) {
-                    throw new CacheException(String.format("connecting to database \"%s\" (%s:%s)",
-                            jdbcPath, username, password), e);
-                }
+                return new SQLProfileCache(() -> {
+                    try {
+                        return DriverManager.getConnection(jdbcPath, username, password);
+                    } catch (SQLException e) {
+                        throw new CacheException(String.format("connecting to database \"%s\" (%s:%s)",
+                                jdbcPath, username, password), e);
+                    }
+                }, getExpiryTimeout(), getBlacklistTimeout());
             }
         }
     }
