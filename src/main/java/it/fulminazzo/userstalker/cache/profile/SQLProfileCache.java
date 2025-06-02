@@ -1,6 +1,7 @@
 package it.fulminazzo.userstalker.cache.profile;
 
 import it.fulminazzo.fulmicollection.interfaces.functions.FunctionException;
+import it.fulminazzo.fulmicollection.interfaces.functions.SupplierException;
 import it.fulminazzo.userstalker.cache.domain.Skin;
 import it.fulminazzo.userstalker.cache.exception.CacheException;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * An implementation of {@link ProfileCache} that uses a SQL database as cache.
@@ -21,13 +23,28 @@ final class SQLProfileCache extends ProfileCacheImpl {
      * @param connection            the connection
      * @param skinExpireTimeout     the skin expire timeout in milliseconds
      * @param fetchBlacklistTimeout the fetch blacklist timeout in milliseconds
+     * @throws CacheException in case of any error
      */
     public SQLProfileCache(final @NotNull Connection connection,
                            final long skinExpireTimeout,
                            final long fetchBlacklistTimeout
-    ) {
+    ) throws CacheException {
+        this(() -> connection, skinExpireTimeout, fetchBlacklistTimeout);
+    }
+
+    /**
+     * Instantiates a new Sql profile cache.
+     *
+     * @param connectionSupplier    the connection supplier
+     * @param skinExpireTimeout     the skin expire timeout in milliseconds
+     * @param fetchBlacklistTimeout the fetch blacklist timeout in milliseconds
+     * @throws CacheException in case of any error
+     */
+    public SQLProfileCache(final @NotNull SupplierException<Connection, CacheException> connectionSupplier,
+                           final long skinExpireTimeout,
+                           final long fetchBlacklistTimeout) throws CacheException {
         super(skinExpireTimeout, fetchBlacklistTimeout);
-        this.connection = connection;
+        this.connection = connectionSupplier.get();
     }
 
     @Override
