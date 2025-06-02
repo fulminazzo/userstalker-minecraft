@@ -4,10 +4,7 @@ import it.fulminazzo.userstalker.cache.domain.Skin
 import it.fulminazzo.userstalker.cache.exception.CacheException
 import spock.lang.Specification
 
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.SQLException
-import java.sql.Timestamp
+import java.sql.*
 
 class SQLProfileCacheIntegrationTest extends Specification {
     private static final String DB_URL = 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=0'
@@ -41,6 +38,33 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
     void cleanup() {
         connection.close()
+    }
+
+    def 'test that executeStatement reopens connection after close'() {
+        given:
+        def mockConnection = Mock(Connection)
+        mockConnection.closed >> true
+        mockConnection.prepareStatement(_ as String) >> {
+            throw new SQLTransientConnectionException('Transient connection exception')
+        }
+
+        and:
+        def cache = new SQLProfileCache(() -> connection, 100 * 1000, 0)
+        cache.connection = mockConnection
+
+        when:
+        def result = cache.executeStatement(
+                c -> c.prepareStatement('SELECT skin FROM profile_cache WHERE username = \'Jeb\''),
+                s -> {
+                    def resultSet = s.executeQuery()
+                    if (resultSet.next())
+                        return resultSet.getString('skin')
+                    else return null
+                }
+        )
+
+        then:
+        result == 'skin'
     }
 
     def 'test that lookupUserSkin of #username returns correct value'() {
