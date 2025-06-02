@@ -9,12 +9,12 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 /**
  * An implementation of {@link ProfileCache} that uses a SQL database as cache.
  */
 final class SQLProfileCache extends ProfileCacheImpl {
+    private final @NotNull SupplierException<Connection, CacheException> connectionSupplier;
     private @NotNull Connection connection;
 
     /**
@@ -44,6 +44,7 @@ final class SQLProfileCache extends ProfileCacheImpl {
                            final long skinExpireTimeout,
                            final long fetchBlacklistTimeout) throws CacheException {
         super(skinExpireTimeout, fetchBlacklistTimeout);
+        this.connectionSupplier = connectionSupplier;
         this.connection = connectionSupplier.get();
     }
 
@@ -162,6 +163,36 @@ final class SQLProfileCache extends ProfileCacheImpl {
             final @NotNull FunctionException<Connection, S, SQLException> statementProvider,
             final @NotNull FunctionException<S, T, SQLException> function
     ) throws CacheException {
+        try (S statement = statementProvider.apply(connection)) {
+            return function.apply(statement);
+        } catch (SQLException e) {
+            try {
+                if (connection.isClosed()) return retryExecuteStatement(statementProvider, function);
+                else throw new CacheException("querying database", e);
+            } catch (SQLException ex) {
+                throw new CacheException("querying database", e);
+            }
+        }
+    }
+
+    /**
+     * After a failed {@link #executeStatement(FunctionException, FunctionException)},
+     * tries to get the connection from the supplier once again and re-execute the query.
+     * <br>
+     * If after this try, the query fails again, the exception is thrown.
+     *
+     * @param <S>               the type parameter
+     * @param <T>               the type returned
+     * @param statementProvider the statement provider
+     * @param function          the function to execute
+     * @return the returned value
+     * @throws CacheException a wrapper exception for any error
+     */
+    <S extends Statement, T> T retryExecuteStatement(
+            final @NotNull FunctionException<Connection, S, SQLException> statementProvider,
+            final @NotNull FunctionException<S, T, SQLException> function
+    ) throws CacheException {
+        connection = connectionSupplier.get();
         try (S statement = statementProvider.apply(connection)) {
             return function.apply(statement);
         } catch (SQLException e) {
