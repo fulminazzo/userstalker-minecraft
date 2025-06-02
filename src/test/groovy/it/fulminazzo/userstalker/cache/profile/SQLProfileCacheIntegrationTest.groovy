@@ -67,6 +67,28 @@ class SQLProfileCacheIntegrationTest extends Specification {
         result == 'skin'
     }
 
+    def 'test that retryExecuteStatement does not recursively throw'() {
+        given:
+        def mockConnection = Mock(Connection)
+        mockConnection.closed >> true
+        mockConnection.prepareStatement(_ as String) >> {
+            throw new SQLTransientConnectionException('Transient connection exception')
+        }
+
+        and:
+        def cache = new SQLProfileCache(() -> connection, 100 * 1000, 0)
+        cache.connection = mockConnection
+
+        when:
+        cache.executeStatement(
+                c -> c.prepareStatement('INVALID'),
+                s -> null
+        )
+
+        then:
+        thrown(CacheException)
+    }
+
     def 'test that lookupUserSkin of #username returns correct value'() {
         given:
         def skin = Skin.builder()
