@@ -144,7 +144,7 @@ class SQLProfileCacheIntegrationTest extends Specification {
 
     def 'test that executeStatement wraps any exception in ProfileCacheException'() {
         when:
-        cache.executeStatement(() -> connection.prepareStatement('INVALID'), s -> null)
+        cache.executeStatement(c -> c.prepareStatement('INVALID'), s -> null)
 
         then:
         def e = thrown(CacheException)
