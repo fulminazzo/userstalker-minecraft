@@ -110,7 +110,7 @@ public final class GUIs {
         return GUI.newGUI(54)
                 .setTitle("&cUserStalker Main Menu")
                 .setAllSides(border)
-                .setContents(9, border)
+                .setContents(10, border)
                 .setContents(16, border)
                 .setContents(37, border)
                 .setContents(43, border)
